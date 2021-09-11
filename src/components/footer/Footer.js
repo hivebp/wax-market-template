@@ -22,12 +22,6 @@ const companyLinks = [{
     label: 'FAQ',
     href: '/faq',
 }, {
-    label: 'Support',
-    href: 'https://support.yoshidrops.com/hc/en-us',
-}, {
-    label: 'LTMs',
-    href: 'https://get.yoshidrops.com/',
-}, {
     label: 'Terms of Use',
     href: '/tou',
 }, {

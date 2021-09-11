@@ -4,7 +4,7 @@ module.exports = {
     return config
   },
   env: {
-    version: '3.2.8',
+    version: '0.0.1',
   },
 };
 

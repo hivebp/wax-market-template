@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 
-export default function PopupContent(
+export default function WindowContent(
     {image, video, collection, schema}
 ) {
     return (

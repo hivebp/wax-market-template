@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import cn from "classnames";
-import PopupButton from './PopupButton';
-import PopupContent from './PopupContent';
+import WindowButton from './WindowButton';
+import WindowContent from './WindowContent';
 import Input from '../common/util/input/Input';
 
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../common/util/ErrorMessage";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import config from "../../config.json";
 
-function TransferPopup(props) {
+function TransferWindow(props) {
     const asset = props['asset'];
 
     const {collection, schema, name, data} = asset;
@@ -93,7 +93,7 @@ function TransferPopup(props) {
         )}>
             <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4" onClick={cancel} src="/close_btn.svg" alt="X" />
             <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
-            <PopupContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
+            <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
             <div className="text-lg text-left my-4">
                 {`Are you sure you want to transfer ${name} to ${receiver}?`}
             </div>
@@ -137,8 +137,8 @@ function TransferPopup(props) {
                 'relative m-auto mt-5 h-20 lg:h-8',
                 'flex flex-row justify-evenly flex-wrap lg:justify-end'
             )}>
-                <PopupButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                <PopupButton text="Transfer" onClick={transfer} disabled={!receiver} />
+                <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
+                <WindowButton text="Transfer" onClick={transfer} disabled={!receiver} />
             </div>
 
 
@@ -149,4 +149,4 @@ function TransferPopup(props) {
     );
 }
 
-export default TransferPopup;
+export default TransferWindow;

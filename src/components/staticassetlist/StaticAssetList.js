@@ -3,7 +3,7 @@ import cn from "classnames";
 
 import {Context} from "../marketwrapper";
 
-import AssetPreview from "../assetpreview/AssetPreview";
+import AssetCard from "../assetcard/AssetCard";
 import {getAssets, getListings, getSales} from "../api/Api";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 
@@ -92,7 +92,7 @@ const StaticAssetList = (props) => {
             )}>
             {
                 listings && listings['success'] ? listings['data'].map((listing, index) =>
-                    <AssetPreview
+                    <AssetCard
                         {...props}
                         index={index}
                         listing={listing}
@@ -102,7 +102,7 @@ const StaticAssetList = (props) => {
             }
             {
                 assets && assets['success'] ? assets['data'].map((asset, index) =>
-                    <AssetPreview
+                    <AssetCard
                         {...props}
                         index={index}
                         assets={[asset]}
@@ -111,7 +111,7 @@ const StaticAssetList = (props) => {
             }
                 {
                     sales && sales['success'] ? sales['data'].map((sale, index) =>
-                        <AssetPreview
+                        <AssetCard
                             {...props}
                             index={index}
                             sale={sale}

@@ -108,12 +108,14 @@ export default function MarketButtons(props) {
         dispatch({ type: 'SET_ASSET', payload: listing});
         dispatch({ type: 'SET_CALLBACK', payload: (bought) => handleBought(bought) });
         dispatch({ type: 'SET_ACTION', payload: 'buy' });
+        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const bid = async () => {
         dispatch({type: 'SET_ASSET', payload: listing});
         dispatch({type: 'SET_CALLBACK', payload: (bid) => handleBidPlaced(bid)});
         dispatch({type: 'SET_ACTION', payload: 'bid'});
+        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const sell = async () => {
@@ -121,6 +123,7 @@ export default function MarketButtons(props) {
         dispatch({ type: 'SET_ASSET', payload: asset });
         dispatch({ type: 'SET_CALLBACK', payload: (sellInfo) => handleList(sellInfo) });
         dispatch({ type: 'SET_ACTION', payload: 'sell' });
+        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const Container = ({ children, className}) => {
@@ -144,7 +147,7 @@ export default function MarketButtons(props) {
                     'flex flex-col',
                     'bg-primary py-1 px-8 text-secondary mt-3 mb-3 mx-auto',
                     'cursor-pointer text-sm font-bold leading-relaxed uppercase',
-                    'rounded-3xl outline-none',
+                    'rounded-sm outline-none',
                 )}
                 onClick={onClick}
             >

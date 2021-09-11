@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {GetPrices} from "../api/Api";
 import {formatNumber} from "../helpers/Helpers";
 
-function PreviewDetailsTable(props) {
+function CardDetails(props) {
     const asset = props['asset'];
     const update = props['update'];
 
@@ -77,4 +77,4 @@ function PreviewDetailsTable(props) {
     );
 }
 
-export default PreviewDetailsTable;
+export default CardDetails;

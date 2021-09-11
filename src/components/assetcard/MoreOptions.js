@@ -30,6 +30,7 @@ function MoreOptions(props) {
         dispatch({ type: 'SET_ASSET', payload: asset });
         dispatch({ type: 'SET_CALLBACK', payload: (info) => handleTransfer(info) });
         dispatch({ type: 'SET_ACTION', payload: 'transfer' });
+        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const auction = async () => {
@@ -37,6 +38,7 @@ function MoreOptions(props) {
         dispatch({ type: 'SET_ASSET', payload: asset });
         dispatch({ type: 'SET_CALLBACK', payload: (sellInfo) => handleAuction(sellInfo) });
         dispatch({ type: 'SET_ACTION', payload: 'auction' });
+        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const forSale = asset.sales && asset.sales.length > 0;
@@ -49,7 +51,7 @@ function MoreOptions(props) {
             className={cn(
                 'absolute right-0 top-0 w-28 h-auto',
                 'px-2 py-4 flex-wrap rounded-lg z-20',
-                'bg-gradient-to-br from-gray-400 via-gray-600 to-gray-700',
+                'bg-gray-700',
                 'transition-opacity duration-200',
                 {'z-20 opacity-100' : showMenu},
                 {'-z-10 opacity-0 hidden' : !showMenu}

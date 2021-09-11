@@ -1,4 +1,4 @@
-import SharePopup from "../popups/SharePopup";
+import ShareWindow from "../windows/ShareWindow";
 import React, {useState} from "react";
 import cn from "classnames";
 
@@ -30,7 +30,7 @@ function ShareButton(props) {
                 </div>
                 <div>Share</div>
             </div>
-            {showPopup ? <SharePopup link={link} callBack={share}/> : '' }
+            {showPopup ? <ShareWindow link={link} callBack={share}/> : '' }
         </div>) : (<div>
             <div
                 className={cn(
@@ -42,7 +42,7 @@ function ShareButton(props) {
             >
                 <div><img src="/share-outline.svg" alt="share"/></div>
             </div>
-            {showPopup ? <SharePopup link={link} callBack={share}/> : '' }
+            {showPopup ? <ShareWindow link={link} callBack={share}/> : '' }
         </div>
     );
 }

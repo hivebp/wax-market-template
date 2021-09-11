@@ -8,7 +8,7 @@ import Footer from "../components/footer";
 import Navigation from "../components/navigation/Navigation";
 import {Anchor} from "ual-anchor";
 import {Wax} from "@eosdacio/ual-wax";
-import PopupWrapper from "../components/popups/PopupWrapper";
+import WindowWrapper from "../components/windows/WindowWrapper";
 import {QueryClient, QueryClientProvider} from 'react-query'
 import React, {useContext, useEffect, useState} from 'react';
 import MarketWrapper, {Context} from "../components/marketwrapper";
@@ -93,7 +93,7 @@ function MyApp ({ Component, pageProps }) {
             )}
           >
               <Navigation {...props} />
-              <PopupWrapper {...props} />
+              <WindowWrapper {...props} />
               <Component {...props} />
               <Footer {...props} />
           </div>

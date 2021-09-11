@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import cn from "classnames";
-import PopupButton from './PopupButton';
-import PopupContent from './PopupContent';
+import WindowButton from './WindowButton';
+import WindowContent from './WindowContent';
 import config from '../../config.json'
 
 import {
@@ -10,7 +10,7 @@ import {
 
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 
-function BuyPopup(props) {
+function BuyWindow(props) {
     const listing = props['listing'];
 
     const ual = props['ual'] ? props['ual'] : {'activeUser': null};
@@ -94,7 +94,7 @@ function BuyPopup(props) {
         )}>
             <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4" onClick={cancel} src="/close_btn.svg" alt="X" />
             <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
-            <PopupContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
+            <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
             <div className="text-lg text-center my-4">
                 {`Do you want to buy this Item for ${formatNumber(quantity)} WAX?`}
             </div>
@@ -102,8 +102,8 @@ function BuyPopup(props) {
                 'relative m-auto mt-5 h-20 lg:h-8',
                 'flex justify-evenly flex-wrap lg:justify-end'
             )}>
-                <PopupButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                { userName !== seller ? <PopupButton text="Buy" onClick={buy} /> : '' }
+                <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
+                { userName !== seller ? <WindowButton text="Buy" onClick={buy} /> : '' }
             </div>
             {isLoading ? <div className="absolute t-0 w-full h-full backdrop-filter backdrop-blur-md">
                 <LoadingIndicator text="Loading Transaction" />
@@ -112,4 +112,4 @@ function BuyPopup(props) {
     );
 }
 
-export default BuyPopup;
+export default BuyWindow;

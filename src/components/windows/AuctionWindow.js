@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import cn from "classnames";
-import PopupButton from './PopupButton';
-import PopupContent from "./PopupContent";
+import WindowButton from './WindowButton';
+import WindowContent from "./WindowContent";
 import Input from '../common/util/input/Input';
 
 import {formatNumber} from '../helpers/Helpers'
 
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../common/util/ErrorMessage";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import config from "../../config.json";
 
 
-function AuctionPopup(props) {
+function AuctionWindow(props) {
     const asset = props['asset'];
 
     const {collection, schema, name, data, asset_id} = asset;
@@ -129,7 +129,7 @@ function AuctionPopup(props) {
         )}>
             <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4 " onClick={cancel} src="/close_btn.svg" alt="X" />
             <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
-            <PopupContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
+            <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
             <div className="text-lg text-left my-4">
                 {`Are you sure you want to auction ${name} for ${formatNumber(sellPrice)} WAX?`}
             </div>
@@ -249,8 +249,8 @@ function AuctionPopup(props) {
                     'relative m-auto mt-5 lg:mt-10 h-20 lg:h-8',
                     'flex justify-evenly flex-wrap lg:justify-end'
                 )}>
-                    <PopupButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                    <PopupButton
+                    <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
+                    <WindowButton
                         text="Auction"
                         onClick={auction}
                         disabled={!sellPrice || ((!days || days === '0') && (!hours || hours === '0') && (!minutes || minutes === '0')) ? 'disabled' : ''}
@@ -265,4 +265,4 @@ function AuctionPopup(props) {
     );
 }
 
-export default AuctionPopup;
+export default AuctionWindow;

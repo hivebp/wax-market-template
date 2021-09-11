@@ -6,7 +6,7 @@ import LazyLoad from "react-lazy-load";
 import Link from '../common/util/input/Link';
 import config from "../../config.json";
 
-function CollectionPreview(props) {
+function CollectionCard(props) {
     const collectionItem = props['collection'];
 
     const {name, img, collection_name} = collectionItem;
@@ -18,25 +18,6 @@ function CollectionPreview(props) {
                 'border border-paper',
                 'transition-opacity hover:opacity-80',
             )}>
-                <Link href={'/collection/' + collection_name}>
-                    <div
-                        className={cn(
-                            'relative flex w-40 h-4 m-2',
-                            'text-xs text-white',
-                            'cursor-pointer'
-                        )}
-                    >
-                        { img ? <div className="h-4 rounded-lg overflow-hidden">
-                            <img className="collection-img" src={config.ipfs + img} alt={collection_name} />
-                        </div> : '' }
-                        <div
-                            className={cn(
-                                "relative colletion-title-position h-5 my-0 mx-2",
-                                "lg:h-8 text-center font-bold"
-                            )}
-                        >{name}</div>
-                    </div>
-                </Link>
                 <div className={"h-60 cursor-pointer"}>
                     <Link href={`/collection/${collection_name}`}>
                         <div className="flex justify-center w-48 h-48 m-auto">
@@ -56,4 +37,4 @@ function CollectionPreview(props) {
     );
 }
 
-export default CollectionPreview;
+export default CollectionCard;

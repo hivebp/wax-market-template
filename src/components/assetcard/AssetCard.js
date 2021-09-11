@@ -9,11 +9,11 @@ import moment from 'moment';
 import {
     formatMintInfo
 } from "../helpers/Helpers";
-import PreviewDetailsTable from "./PreviewDetailsTable";
+import CardDetails from "./CardDetails";
 import Link from '../common/util/input/Link';
 import SvgIcon from '../common/util/SvgIcon'
 import MoreOptions from "./MoreOptions";
-import PreviewImage from "./PreviewImage";
+import CardImage from "./CardImage";
 import {getListingsById, getAsset, getAuctionsById} from "../api/Api";
 import cn from "classnames";
 
@@ -22,7 +22,7 @@ import {
   ArrowRight
 } from '@material-ui/icons'
 
-function AssetPreview(props) {
+function AssetCard(props) {
     const [listing, setListing] = useState(props['listing']);
 
     const [assets, setAssets] = useState(props['assets']);
@@ -288,7 +288,7 @@ function AssetPreview(props) {
                 isLoading={isLoading}
                 transferred={transferred}
             />
-            <PreviewDetailsTable
+            <CardDetails
                 visible={!frontVisible}
                 asset={asset}
                 update={update}
@@ -310,8 +310,8 @@ function AssetPreview(props) {
                     <img src={'/arrow-ios-back-outline.svg'} alt="<" />
                 </div>}
                 <Link href={sale_id ? `/listing/${sale_id}` : auction_id ? `/auction/${auction_id}` : `/asset/${asset_id}`}>
-                    <div className="flex flex-1 h-full">
-                        <PreviewImage {...props} asset={asset} />
+                    <div className="flex flex-1 justify-center h-full">
+                        <CardImage {...props} asset={asset} />
                     </div>
                 </Link>
                 {assets.length > 1 && <div className={cn(
@@ -395,4 +395,4 @@ function AssetPreview(props) {
     );
 }
 
-export default AssetPreview;
+export default AssetCard;

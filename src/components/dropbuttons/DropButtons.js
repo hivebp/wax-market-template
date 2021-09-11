@@ -32,6 +32,7 @@ const DropButtons = (props) => {
             dispatch({type: 'SET_AMOUNT', payload: claimAmount});
             dispatch({type: 'SET_CALLBACK', payload: (bought) => handleBought(bought)});
             dispatch({type: 'SET_ACTION', payload: 'buy_drop'});
+            dispatch({ type: 'SET_TRIGGERED', payload: true });
         }
     };
 

@@ -4,7 +4,7 @@ import cn from "classnames";
 import {Context} from "../marketwrapper";
 
 import {getAssets} from "../api/Api";
-import AssetPreview from "../assetpreview/AssetPreview";
+import AssetCard from "../assetcard/AssetCard";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import Pagination from "../pagination/Pagination";
 import Filters from "../filters/Filters";
@@ -69,7 +69,7 @@ function AssetList(props) {
                 >
                     {
                         assets && assets['success'] ? assets['data'].map((asset, index) =>
-                            <AssetPreview
+                            <AssetCard
                                 {...props}
                                 key={index}
                                 index={index}

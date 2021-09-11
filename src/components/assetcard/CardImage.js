@@ -2,7 +2,7 @@ import React from "react";
 import config from "../../config.json";
 
 
-function PreviewImage(props) {
+function CardImage(props) {
     const index = props['index'];
     const asset = props['asset'];
 
@@ -21,7 +21,7 @@ function PreviewImage(props) {
         <div className="flex content-center">
             {
                 image ?
-                    <img className="preview-img my-auto" src = {image} alt="none" /> :
+                    <img className="preview-img my-auto max-h-full" src = {image} alt="none" /> :
                 video ?
                     <video className="w-full" id={'video'+index} width="190" height="190" loop
                            autoPlay={true} muted={true} playsInline={true} poster={image ? image : ''}>
@@ -34,4 +34,4 @@ function PreviewImage(props) {
     );
 }
 
-export default PreviewImage;
+export default CardImage;

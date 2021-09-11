@@ -48,7 +48,7 @@ function OutsideAlerter(props) {
   return <div ref={wrapperRef}>{props.children}</div>;
 }
 
-function SharePopup(props) {
+function ShareWindow(props) {
     const link = props['link'];
     const callBack = props['callBack'];
 
@@ -126,4 +126,4 @@ function SharePopup(props) {
     );
 }
 
-export default SharePopup;
+export default ShareWindow;

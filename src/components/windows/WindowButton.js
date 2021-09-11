@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import Button from "../common/util/input/Button";
 
-export default function PopupButton(
+export default function WindowButton(
     {text, className, disabled, onClick}
 ) {
     return (

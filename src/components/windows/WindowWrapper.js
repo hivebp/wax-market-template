@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useRef} from 'react';
 
-import SellPopup from "./SellPopup";
-import BuyPopup from "./BuyPopup";
-import BuyDropPopup from "./BuyDropPopup";
-import TransferPopup from "./TransferPopup";
+import SellWindow from "./SellWindow";
+import BuyWindow from "./BuyWindow";
+import BuyDropWindow from "./BuyDropWindow";
+import TransferWindow from "./TransferWindow";
 import { Context } from "../marketwrapper";
-import BidPopup from "./BidPopup";
-import AuctionPopup from "./AuctionPopup";
+import BidWindow from "./BidWindow";
+import AuctionWindow from "./AuctionWindow";
 
-function PopupWrapper(props) {
+function WindowWrapper(props) {
     const ual = props['ual'] ? props['ual'] : {'activeUser': null};
 
     const [ state, dispatch ] = useContext(Context);
@@ -16,16 +16,18 @@ function PopupWrapper(props) {
     const asset = state.asset;
     const amount = state.amount;
 
+    const triggered = state.triggered;
+
     const action = state.action;
     const callBack = state.callBack;
 
-    function useOutsideAlerter(ref, callBack) {
+    function useOutsideAlerter(ref, callBack, triggered) {
       useEffect(() => {
         /**
          * Alert if clicked on outside of element
          */
         function handleClickOutside(event) {
-          if (ref.current && !ref.current.contains(event.target) && event.target['className'] !== 'Dropdown-option'
+          if (!triggered && ref.current && !ref.current.contains(event.target) && event.target['className'] !== 'Dropdown-option'
               && event.target['className'] !== 'Dropdown-option is-selected' && event.target['className'] !== 'ErrorIcon'
               && event.target['className'] !== 'ErrorMessage' && event.target['className'] !== 'ErrorItem') {
               dispatch({ type: 'SET_ACTION', payload: '' });
@@ -40,21 +42,23 @@ function PopupWrapper(props) {
           // Unbind the event listener on clean up
           document.removeEventListener("click", handleClickOutside);
         };
-      }, [ref]);
+      }, [action]);
     }
 
     function OutsideAlerter(props) {
         const wrapperRef = useRef(null);
         const callBack = props['callBack'];
-        useOutsideAlerter(wrapperRef, callBack);
+        const triggered = props['triggered'];
+        useOutsideAlerter(wrapperRef, callBack, triggered);
 
         return <div ref={wrapperRef}>{props.children}</div>;
     }
 
     const sellWindow = <OutsideAlerter
             callBack={callBack}
+            triggered={triggered}
         >
-        <SellPopup
+        <SellWindow
             asset={asset}
             ual={ual}
             closeCallBack={() => {
@@ -66,8 +70,9 @@ function PopupWrapper(props) {
 
     const buyWindow = <OutsideAlerter
         callBack={callBack}
+        triggered={triggered}
     >
-        <BuyPopup
+        <BuyWindow
             listing={asset}
             ual={ual}
             closeCallBack={() => {
@@ -79,8 +84,9 @@ function PopupWrapper(props) {
 
     const buyDropWindow = <OutsideAlerter
         callBack={callBack}
+        triggered={triggered}
     >
-        <BuyDropPopup
+        <BuyDropWindow
             drop={asset}
             amount={amount}
             ual={ual}
@@ -93,8 +99,9 @@ function PopupWrapper(props) {
 
     const auctionWindow = <OutsideAlerter
         callBack={callBack}
+        triggered={triggered}
     >
-        <AuctionPopup
+        <AuctionWindow
             asset={asset}
             ual={ual}
             closeCallBack={() => {
@@ -106,8 +113,9 @@ function PopupWrapper(props) {
 
     const bidWindow = <OutsideAlerter
         callBack={callBack}
+        triggered={triggered}
     >
-        <BidPopup
+        <BidWindow
             listing={asset}
             ual={ual}
             closeCallBack={() => {
@@ -119,8 +127,9 @@ function PopupWrapper(props) {
 
     const transferWindow = <OutsideAlerter
         callBack={callBack}
+        triggered={triggered}
     >
-        <TransferPopup
+        <TransferWindow
             asset={asset}
             ual={ual}
             closeCallBack={() => {
@@ -135,6 +144,7 @@ function PopupWrapper(props) {
     </OutsideAlerter>;
 
     useEffect(() => {
+        dispatch({ type: 'SET_TRIGGERED', payload: '' });
     }, [action]);
 
     return (
@@ -149,4 +159,4 @@ function PopupWrapper(props) {
     );
 }
 
-export default PopupWrapper;
+export default WindowWrapper;

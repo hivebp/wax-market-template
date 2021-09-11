@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import cn from "classnames";
-import PopupButton from './PopupButton';
+import WindowButton from './WindowButton';
 import config from '../../config.json'
 
 import {
@@ -10,7 +10,7 @@ import {
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import {getDelphiMedian} from "../api/Api";
 
-function BuyDropPopup(props) {
+function BuyDropWindow(props) {
     const drop = props['drop'];
     const amount = props['amount'];
 
@@ -147,8 +147,8 @@ function BuyDropPopup(props) {
                 'relative m-auto h-20 lg:h-8',
                 'flex justify-evenly flex-wrap lg:justify-end'
             )}>
-                <PopupButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                <PopupButton text={free ? "Claim" : "Purchase"} onClick={free ? claim : purchase} />
+                <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
+                <WindowButton text={free ? "Claim" : "Purchase"} onClick={free ? claim : purchase} />
             </div>
             {isLoading ? <div className="absolute t-0 w-full h-full backdrop-filter backdrop-blur-md">
                 <LoadingIndicator text="Loading Transaction" />
@@ -157,4 +157,4 @@ function BuyDropPopup(props) {
     );
 }
 
-export default BuyDropPopup;
+export default BuyDropWindow;

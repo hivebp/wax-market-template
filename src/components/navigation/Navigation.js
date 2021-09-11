@@ -9,7 +9,6 @@ import {getRefundBalance, getWaxBalance, post} from "../api/Api";
 import {formatNumber} from "../helpers/Helpers";
 import cn from "classnames";
 
-import config from "../../config.json";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 
 import {
@@ -164,7 +163,7 @@ const Navigation = React.memo(props => {
                                                 className={cn(
                                                 'flex justify-center items-center',
                                                 'px-1 py-px text-base',
-                                                'border border-primary rounded-lg',
+                                                'border border-primary rounded-sm',
                                                 'border-opacity-0 hover:border-opacity-75',
                                             )}>
                                                 <p>{userName}</p>
@@ -184,7 +183,7 @@ const Navigation = React.memo(props => {
                                         <Menu.Items className={cn(
                                             'z-100 absolute right-0 w-36 mt-1 origin-top-right',
                                             'text-white',
-                                            'bg-gray-700 divide-y divide-gray-100 rounded-xl shadow-lg',
+                                            'bg-gray-700 divide-y divide-gray-100 rounded-sm shadow-lg',
                                             'ring-1 ring-black ring-opacity-5 focus:outline-none'
                                         )}>
                                             <div className="py-4 text-center">

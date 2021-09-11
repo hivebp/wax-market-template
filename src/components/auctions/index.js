@@ -4,7 +4,7 @@ import {Context} from "../marketwrapper";
 
 import config from "../../config.json";
 
-import AssetPreview from "../assetpreview/AssetPreview";
+import AssetCard from "../assetcard/AssetCard";
 import {getAuctions} from "../api/Api";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import Pagination from "../pagination/Pagination";
@@ -103,7 +103,7 @@ const Market = (props) => {
                             "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
                         )}>
                             {listings && listings['success'] ? listings['data'].map((listing, index) =>
-                                <AssetPreview
+                                <AssetCard
                                     {...props}
                                     key={index}
                                     index={index}

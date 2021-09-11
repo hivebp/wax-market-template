@@ -15,6 +15,11 @@ const Reducer = (state, action) => {
                 ...state,
                 action: action.payload
             };
+        case 'SET_TRIGGERED':
+            return {
+                ...state,
+                triggered: action.payload
+            };
         case 'SET_SWITCHED_TAB':
             return {
                 ...state,
