@@ -17,7 +17,7 @@ export default function PopupContent(
                     <img className="w-48 h-48 lg:h-72 m-auto" src={image} alt="none" /> }
             </div>
             <div className={cn(
-                'my-2.5 lg:m-auto px-4 w-full lg:w-3/5',
+                'my-2.5 lg:m-auto px-8 w-full lg:w-3/5',
                 'text-base overflow-y-auto',
             )}>
                 <table className="w-full">

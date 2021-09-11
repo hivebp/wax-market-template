@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 
 import CollectionDetails from "./CollectionDetails";
 
-import Link from 'next/link';
+import Link from '../common/util/input/Link';
 import Header from "../common/util/Header"
 import Page from "../common/layout/Page"
 

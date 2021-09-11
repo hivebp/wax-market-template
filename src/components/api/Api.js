@@ -281,7 +281,6 @@ export const getPacks = async (filters) => {
 };
 
 export const getDrop = async (dropId) => {
-
     const body = {
         'code': config.drops_contract,
         'index_position': 'primary',
@@ -300,15 +299,13 @@ export const getDrop = async (dropId) => {
     const url = config.api_endpoint + '/v1/chain/get_table_rows';
     const res = await post(url, body);
 
-    const drops = [];
+    let result = null;
 
     if (res && res.status === 200 && res.data && res.data.rows) {
         res.data.rows.map(drop => {
             const displayData = JSON.parse(drop.display_data);
 
-            console.log(drop);
-
-            drops.push({
+            result = {
                 'collectionName': drop.collection_name,
                 'dropId': drop.drop_id,
                 'accountLimit': drop.account_limit,
@@ -319,14 +316,44 @@ export const getDrop = async (dropId) => {
                 'listingPrice': drop.listing_price,
                 'description': displayData.description,
                 'assetsToMint': drop.assets_to_mint,
-                'endTime': drop.end_time + 7536560,
-                'startTime': drop.start_time + 5536560
-            });
+                'endTime': drop.end_time,
+                'startTime': drop.start_time
+            };
+
             return null;
         });
     }
 
-    return drops;
+    return result;
+};
+
+export const getDelphiMedian = async () => {
+    const body = {
+        'code': 'delphioracle',
+        'index_position': 'primary',
+        'json': 'true',
+        'key_type': 'i64',
+        'limit': 1,
+        'lower_bound': '',
+        'reverse': 'true',
+        'scope': 'waxpusd',
+        'show_payer': 'false',
+        'table': 'datapoints',
+        'table_key': '',
+        'upper_bound': ''
+    };
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+    const res = await post(url, body);
+
+    if (res && res.status === 200 && res.data && res.data.rows) {
+        const row = res.data.rows[0];
+
+        if (row.median)
+            return row.median;
+    }
+
+    return null;
 };
 
 export const getDrops = async (filters) => {
@@ -370,8 +397,8 @@ export const getDrops = async (filters) => {
                 'listingPrice': drop.listing_price,
                 'description': displayData.description,
                 'assetsToMint': drop.assets_to_mint,
-                'endTime': drop.end_time + 7536560,
-                'startTime': drop.start_time + 5536560
+                'endTime': drop.end_time,
+                'startTime': drop.start_time
             });
             return null;
         });

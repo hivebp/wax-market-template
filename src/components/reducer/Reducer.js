@@ -5,6 +5,11 @@ const Reducer = (state, action) => {
                 ...state,
                 asset: action.payload
             };
+        case 'SET_AMOUNT':
+            return {
+                ...state,
+                amount: action.payload
+            };
         case 'SET_ACTION':
             return {
                 ...state,

@@ -3,6 +3,7 @@ import DropdownItem from "../collectiondropdown/DropdownItem";
 import React, {useContext, useEffect, useState} from "react";
 import {getValues} from "../helpers/Helpers";
 import {Context} from "../marketwrapper";
+import Input from '../common/util/input/Input';
 import qs from 'qs';
 import {useRouter} from "next/router";
 import cn from "classnames";
@@ -360,14 +361,24 @@ function Filters(props) {
                 value={sortBy}
             /> : '' }
             { searchPage === 'market' ?
-                <div>
-                    <input type="checkbox" className="mr-2" checked={seller === userName} onChange={checkMyListings} />
+                <div className="ml-1">
+                    <Input
+                        type="checkbox"
+                        className="mr-2"
+                        checked={seller === userName}
+                        onChange={checkMyListings}
+                    />
                         My Listings
                 </div> : ''
             }
             { searchPage === 'auctions' ?
-                <div>
-                    <input type="checkbox" className="mr-2" checked={seller === userName} onChange={checkMyListings} />
+                <div className="ml-1">
+                    <Input
+                        type="checkbox"
+                        className="mr-2"
+                        checked={seller === userName}
+                        onChange={checkMyListings}
+                    />
                         My Auctions
                 </div> : ''
             }

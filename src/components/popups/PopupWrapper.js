@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 
 import SellPopup from "./SellPopup";
 import BuyPopup from "./BuyPopup";
+import BuyDropPopup from "./BuyDropPopup";
 import TransferPopup from "./TransferPopup";
 import { Context } from "../marketwrapper";
 import BidPopup from "./BidPopup";
@@ -13,6 +14,8 @@ function PopupWrapper(props) {
     const [ state, dispatch ] = useContext(Context);
 
     const asset = state.asset;
+    const amount = state.amount;
+
     const action = state.action;
     const callBack = state.callBack;
 
@@ -74,6 +77,20 @@ function PopupWrapper(props) {
         />
     </OutsideAlerter>;
 
+    const buyDropWindow = <OutsideAlerter
+        callBack={callBack}
+    >
+        <BuyDropPopup
+            drop={asset}
+            amount={amount}
+            ual={ual}
+            closeCallBack={() => {
+                dispatch({ type: 'SET_ACTION', payload: '' });
+            }}
+            callBack={callBack}
+        />
+    </OutsideAlerter>;
+
     const auctionWindow = <OutsideAlerter
         callBack={callBack}
     >
@@ -123,6 +140,7 @@ function PopupWrapper(props) {
     return (
         <div className="relative">
             {action === 'buy' ? buyWindow : ''}
+            {action === 'buy_drop' ? buyDropWindow : ''}
             {action === 'auction' ? auctionWindow : ''}
             {action === 'bid' ? bidWindow : ''}
             {action === 'sell' ? sellWindow : ''}

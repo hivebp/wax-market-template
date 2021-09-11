@@ -1,5 +1,4 @@
 import React from 'react';
-import "regenerator-runtime/runtime";
 
 import Home from "../components/home";
 import qs from 'qs';

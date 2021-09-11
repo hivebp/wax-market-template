@@ -108,6 +108,7 @@ const Inventory = (props) => {
                                 assets && assets['success'] ? assets['data'].map((asset, index) =>
                                     <AssetPreview
                                         {...props}
+                                        key={index}
                                         index={index}
                                         assets={[asset]}
                                     />

@@ -2,7 +2,7 @@ import 'react-dropdown/style.css';
 import '../styles/Search.css';
 import '../styles/App.css';
 import '../styles/globals.css';
-
+import "regenerator-runtime/runtime";
 import {withUAL, UALProvider} from "ual-reactjs-renderer";
 import Footer from "../components/footer";
 import Navigation from "../components/navigation/Navigation";
@@ -72,7 +72,6 @@ const parseCollections = (dispatch, res) => {
 };
 
 function MyApp ({ Component, pageProps }) {
-
     const AppContainer = (props) => {
         const [ state, dispatch ] = useContext(Context);
 

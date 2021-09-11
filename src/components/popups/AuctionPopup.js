@@ -29,7 +29,7 @@ function AuctionPopup(props) {
 
     const userName = activeUser ? activeUser['accountName'] : null;
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(true);
+    const [error, setError] = useState();
     const closeCallBack = props['closeCallBack'];
     const [sellPrice, setSellPrice] = useState(0);
     const [days, setDays] = useState(1);
@@ -128,10 +128,10 @@ function AuctionPopup(props) {
             'backdrop-filter backdrop-blur-lg',
         )}>
             <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4 " onClick={cancel} src="/close_btn.svg" alt="X" />
-            <div className="text-3xl text-center">{name}</div>
+            <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
             <PopupContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
             <div className="text-lg text-left my-4">
-                {`Are you sure you want to auction ${name} for ${formatNumber(sellPrice)} WAX `}
+                {`Are you sure you want to auction ${name} for ${formatNumber(sellPrice)} WAX?`}
             </div>
             {
                 error ? <ErrorMessage error={error} /> : ''
@@ -139,7 +139,7 @@ function AuctionPopup(props) {
             <div className="relative">
                 <div className="flex flex-row">
                     <div className={cn(
-                        'relative l-0 m-auto lg:mb-4 h-20 lg:h-8 w-1/2 mr-4',
+                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2 mr-4',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Price</div>
@@ -151,7 +151,7 @@ function AuctionPopup(props) {
                         >
                             <Input
                                 type="text"
-                                className="bg-gray-700"
+                                className="w-full bg-gray-700"
                                 placeholder="Price"
                                 onChange={changePrice}
                                 value={sellPrice ? sellPrice : ''}
@@ -159,7 +159,7 @@ function AuctionPopup(props) {
                         </div>
                     </div>
                     <div className={cn(
-                        'relative l-0 m-auto lg:mb-4 h-20 lg:h-8 w-1/2',
+                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Days</div>
@@ -171,7 +171,7 @@ function AuctionPopup(props) {
                         >
                             <Input
                                 type="text"
-                                className="bg-gray-700"
+                                className="w-full bg-gray-700"
                                 placeholder="Days"
                                 onChange={changeDays}
                                 value={days ? days : ''}
@@ -181,7 +181,7 @@ function AuctionPopup(props) {
                 </div>
                 <div className="flex flex-row">
                     <div className={cn(
-                        'relative l-0 m-auto lg:mb-4 h-20 lg:h-8 w-1/2 mr-4',
+                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2 mr-4',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Hours</div>
@@ -193,7 +193,7 @@ function AuctionPopup(props) {
                         >
                             <Input
                                 type="text"
-                                className="bg-gray-700"
+                                className="w-full bg-gray-700"
                                 placeholder="Hours"
                                 onChange={changeHours}
                                 value={hours ? hours : ''}
@@ -201,7 +201,7 @@ function AuctionPopup(props) {
                         </div>
                     </div>
                     <div className={cn(
-                        'relative l-0 m-auto lg:mb-4 h-20 lg:h-8 w-1/2',
+                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Minutes</div>
@@ -213,7 +213,7 @@ function AuctionPopup(props) {
                         >
                             <Input
                                 type="text"
-                                className="bg-gray-700"
+                                className="w-full bg-gray-700"
                                 placeholder="Minutes"
                                 onChange={changeMinutes}
                                 value={minutes ? minutes : ''}
@@ -246,7 +246,7 @@ function AuctionPopup(props) {
                     </div> : <LoadingIndicator/>
                 }
                 <div className={cn(
-                    'relative l-0 m-auto mt-5 lg:mt-10 h-20 lg:h-8',
+                    'relative m-auto mt-5 lg:mt-10 h-20 lg:h-8',
                     'flex justify-evenly flex-wrap lg:justify-end'
                 )}>
                     <PopupButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
@@ -258,7 +258,7 @@ function AuctionPopup(props) {
                 </div>
             </div>
 
-            {isLoading ? <div className="absolute t-0 l-0 w-full h-full backdrop-filter backdrop-blur-md">
+            {isLoading ? <div className="absolute t-0 w-full h-full backdrop-filter backdrop-blur-md">
                 <LoadingIndicator text="Loading Transaction" />
             </div> : '' }
         </div>

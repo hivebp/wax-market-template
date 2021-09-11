@@ -1,7 +1,7 @@
 import React from "react";
 import moment from 'moment';
 import config from '../../config.json';
-import Link from "next/link";
+import Link from '../common/util/input/Link';
 
 const AssetDetails = (props) => {
     const asset = props.asset;
@@ -35,12 +35,10 @@ const AssetDetails = (props) => {
                     <td className="text-right overflow-x-auto leading-5 max-w-td">{asset_id}</td>
                 </tr>
                 <tr>
-                    <td className="text-left w-1/3">Total Supply</td>
+                    <td className="text-left w-1/3">Issued Supply:</td>
                     <td className="text-right overflow-x-auto leading-5 max-w-td">
                         <div className="inline-flex leading-6">
-                            <a className="text-white underline" data-tip={('asset.available')} target="_blank" href={`/explorer?tab=assets&template_id=${asset.template.template_id}`}>
-                                {asset.template.issued_supply}
-                            </a>
+                            asset.template.issued_supply
                         </div>
                     </td>
                 </tr>

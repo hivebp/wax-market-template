@@ -3,7 +3,7 @@ import cn from "classnames";
 
 import LazyLoad from "react-lazy-load";
 
-import Link from 'next/link';
+import Link from '../common/util/input/Link';
 import config from "../../config.json";
 
 function CollectionPreview(props) {

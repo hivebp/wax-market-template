@@ -10,7 +10,7 @@ import {
     formatMintInfo
 } from "../helpers/Helpers";
 import PreviewDetailsTable from "./PreviewDetailsTable";
-import Link from 'next/link';
+import Link from '../common/util/input/Link';
 import MoreOptions from "./MoreOptions";
 import PreviewImage from "./PreviewImage";
 import {getListingsById, getAsset, getAuctionsById} from "../api/Api";
