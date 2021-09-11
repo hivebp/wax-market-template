@@ -1,0 +1,81 @@
+/* ./styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply text-neutral;
+}
+
+.c-w-40 {
+    width: calc(100% - theme('spacing.40'));
+}
+
+.c-w-results {
+    width: calc(100% - 10rem);
+}
+
+.c-w-collection {
+    width: calc(100% - 130px);
+}
+
+.c-h-page-lg {
+    height: calc(100% - 105px);
+}
+
+.c-h-page {
+    height: calc(100% - 188px);
+}
+
+.collection-img {
+    max-width: 1rem;
+    max-height: 1rem;
+}
+
+.forward-button {
+    top: calc(100% - 2rem);
+    left: calc(100% - 2rem);
+}
+
+.back-button {
+    top: calc(100% - 2rem);
+    right: calc(100% - 2rem);
+}
+
+.error-note-size {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    max-width: 250px;
+    max-height: 100px;
+}
+
+.c-size-mint {
+    width: calc(100% - 0.6rem);
+    top: calc(100% - 10.6rem);
+}
+
+.mint-info-width {
+    width: fit-content;
+}
+
+.colletion-title-position {
+    top: -190px;
+    left: 60px;
+}
+
+.border-tabs {
+    justify-content: stretch;
+}
+
+.border-tabs > a {
+    flex: 1;
+    text-align: center;
+}
+
+.left-popup {
+    left: calc(50% - 15em);
+}
+
+.left-error {
+    left: calc(100% - 24em);
+}

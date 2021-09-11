@@ -1,0 +1,19 @@
+{
+    "ipfs": "https://ipfs.hivebp.io/ipfs/",
+    "atomic_api": "https://atomic.hivebp.io",
+    "market_name": "yoshimarkets",
+    "market_url": "https://yoshimarket.io",
+    "default_collection": "yoshidrops",
+    "api_endpoint": "https://api.hivebp.io",
+    "limit": 12,
+    "drops_contract": "neftyblocksd",
+    "packs_contract": "atomicpacksx",
+    "header_image": "QmUyU2diN3qHbGsNT4Ec3UdhDNAMfHapasuiMAjBahH7gr",
+    "telegram_link": "https://t.me/yoshidropsofficial",
+    "discord_link": "https://discord.com/invite/uZqTXhzqKR",
+    "twitter_link": "https://twitter.com/YoshiDrops",
+    "instagram_link": "https://www.instagram.com/yoshi_drops/",
+    "market_title": "WAX Market Template",
+    "market_description": "WAX Market for Dummy Listings",
+    "market_image": "/image.jpg"
+}

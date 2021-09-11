@@ -1,0 +1,94 @@
+{
+  "name": "wax-dummy-market",
+  "version": "2.2.5",
+  "proxy": "http://127.0.0.1:5000/",
+  "private": true,
+  "main": "index.js",
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
+  "node": {
+    "fs": "empty"
+  },
+  "dependencies": {
+    "@emotion/react": "11.4.1",
+    "@emotion/styled": "11.3.0",
+    "@eosdacio/ual-wax": "1.5.1",
+    "@google/model-viewer": "^1.6.0",
+    "@headlessui/react": "^1.4.1",
+    "@material-ui/core": "4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "4.0.0-alpha.60",
+    "@popperjs/core": "^2.10.0",
+    "axios": "0.21.1",
+    "classnames": "^2.3.1",
+    "core-js": "3.16.2",
+    "express": "4.17.1",
+    "http-proxy-middleware": "2.0.1",
+    "long": "4.0.0",
+    "moment": "2.29.1",
+    "next": "11.1.0",
+    "react": "17.0.2",
+    "react-async": "10.0.1",
+    "react-bootstrap": "1.6.1",
+    "react-cookie-consent": "6.3.0",
+    "react-counter-input": "0.2.1",
+    "react-countup": "^4.3.3",
+    "react-csv": "^2.0.3",
+    "react-dom": "17.0.2",
+    "react-dropdown": "1.9.2",
+    "react-i18next": "11.7.0",
+    "react-lazy-load": "3.1.13",
+    "react-markdown": "7.0.1",
+    "react-overlays": "^5.1.1",
+    "react-query": "3.21.0",
+    "react-render-as-image": "1.1.1",
+    "react-share": "4.4.0",
+    "react-tooltip": "4.2.10",
+    "regenerator-runtime": "^0.13.9",
+    "sass": "1.38.0",
+    "superagent": "*",
+    "swiper": "^7.0.3",
+    "ual-anchor": "^1.0.9",
+    "ual-reactjs-renderer": "^0.3.1",
+    "yarn": "1.22.11"
+  },
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@tailwindcss/aspect-ratio": "^0.2.1",
+    "autoprefixer": "^10.3.2",
+    "babel-eslint": "10.1.0",
+    "eslint": "7.32.0",
+    "eslint-config-react-app": "6.0.0",
+    "eslint-plugin-flowtype": "5.9.0",
+    "eslint-plugin-import": "2.24.1",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-react": "7.24.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.7"
+  }
+}
