@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 
 import Link from '../common/util/input/Link';
 import Logo from '../common/util/Logo';
+import SvgIcon from '../common/util/SvgIcon'
 import { useRouter } from 'next/router'
 import {getRefundBalance, getWaxBalance, post} from "../api/Api";
 import {formatNumber} from "../helpers/Helpers";
@@ -10,6 +11,11 @@ import cn from "classnames";
 
 import config from "../../config.json";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
+
+import {
+    AccountCircle,
+    ArrowDropDown
+  } from '@material-ui/icons'
 
 const Navigation = React.memo(props => {
     const router = useRouter()
@@ -114,12 +120,12 @@ const Navigation = React.memo(props => {
                  <Logo />
                 <div className={cn(
                     'flex flex-col gap-y-1 md:gap-x-4 md:flex-row flex-nowrap items-center',
-                    'uppercase font-bold text-base',                    
+                    'uppercase font-normal text-base',                    
                 )}>
                     <Link href={'/explorer'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/explorer') > -1 ? 'border-b-4 border-primary' : '',
+                            router.pathname.indexOf('/explorer') > -1 ? 'font-extrabold' : '',
                         )}>
                             Explorer
                         </span>
@@ -127,7 +133,7 @@ const Navigation = React.memo(props => {
                     <Link href={'/market'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/market') > -1 ? 'border-b-4 border-primary' : '',
+                            router.pathname.indexOf('/market') > -1 ? 'font-extrabold' : '',
                         )}>
                             Market
                         </span>
@@ -135,7 +141,7 @@ const Navigation = React.memo(props => {
                     <Link href={'/auctions'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/auctions') > -1 ? 'border-b-4 border-primary' : '',
+                            router.pathname.indexOf('/auctions') > -1 ? 'font-extrabold' : '',
                         )}>
                             Auctions
                         </span>
@@ -143,7 +149,7 @@ const Navigation = React.memo(props => {
                     <Link href={'/drops'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/drops') > -1 ? 'border-b-4 border-primary' : '',
+                            router.pathname.indexOf('/drops') > -1 ? 'font-extrabold' : '',
                         )}>
                             Drops
                         </span>
@@ -162,7 +168,7 @@ const Navigation = React.memo(props => {
                                                 'border-opacity-0 hover:border-opacity-75',
                                             )}>
                                                 <p>{userName}</p>
-                                                <img src="/arrow-drop-down.svg" className="w-5 h-5" alt="arrow-down" />
+                                                <SvgIcon icon={<ArrowDropDown />} />
                                             </div>
                                         </Menu.Button>
                                     </div>
@@ -187,7 +193,7 @@ const Navigation = React.memo(props => {
                                                         <span className={cn(
                                                             'pb-px',
                                                             'cursor-pointer',
-                                                            router.pathname.indexOf('/inventory') > -1 ? 'border-b-2 border-primary' : '',
+                                                            router.pathname.indexOf('/inventory') > -1 ? 'font-extrabold' : '',
                                                         )}>
                                                             Inventory
                                                         </span>
@@ -231,8 +237,8 @@ const Navigation = React.memo(props => {
                             )}
                             onClick={performLogin}
                         >
-                            <div className="mr-1" >
-                                <img src="/person-outline.svg" className="w-5 h-5" alt="Login" title={"Login"} />
+                            <div className="mr-1 text-white" >
+                                <SvgIcon icon={<AccountCircle />} />
                             </div>
                             <span className={cn(
                                 'hover:underline cursor-pointer',

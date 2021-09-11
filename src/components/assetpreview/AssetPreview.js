@@ -11,10 +11,16 @@ import {
 } from "../helpers/Helpers";
 import PreviewDetailsTable from "./PreviewDetailsTable";
 import Link from '../common/util/input/Link';
+import SvgIcon from '../common/util/SvgIcon'
 import MoreOptions from "./MoreOptions";
 import PreviewImage from "./PreviewImage";
 import {getListingsById, getAsset, getAuctionsById} from "../api/Api";
 import cn from "classnames";
+
+import {
+  ArrowLeft,
+  ArrowRight
+} from '@material-ui/icons'
 
 function AssetPreview(props) {
     const [listing, setListing] = useState(props['listing']);
@@ -228,13 +234,11 @@ function AssetPreview(props) {
     return (
         <div 
             className={cn(
-                'relative w-asset mx-auto rounded-md overflow-hidden',
+                'relative w-asset mx-auto overflow-hidden',
                 'flex flex-col',
                 'text-base break-words',
                 'backdrop-filter backdrop-blur-sm border border-paper',
                 'shadow-md bg-paper',
-                { 'rounded-br-2xl': frontVisible},
-                { 'rounded-bl-2xl': !frontVisible},
             )}
             id={'AssetPreview_'+index}
         >
@@ -376,8 +380,11 @@ function AssetPreview(props) {
                 )}
                 onClick={toggleFront}
             >
-                <img src={frontVisible ? '/arrow-left-outline.svg' : '/arrow-right-outline.svg'} alt={
-                    frontVisible ? '<' : '>'} />
+                { frontVisible?
+                    <SvgIcon icon={<ArrowLeft fontSize="large" />} />
+                    :
+                    <SvgIcon icon={<ArrowRight fontSize="large" />} />
+                }                
             </div>
             {auctionTimeLeft && !canceled && <div
                 className={cn('text-center')}

@@ -89,7 +89,7 @@ function MyApp ({ Component, pageProps }) {
           <div
             className={cn(
                 'bg-page min-h-screen',
-                'text-neutral text-base font-medium font-sans',
+                'text-neutral text-base font-medium font-main',
             )}
           >
               <Navigation {...props} />
