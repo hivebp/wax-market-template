@@ -103,14 +103,14 @@ const Navigation = React.memo(props => {
                  <Logo />
                 <div className={cn(
                     'flex flex-col gap-y-1 md:gap-x-4 md:flex-row flex-nowrap items-center',
-                    'uppercase font-normal text-base',                    
+                    'font-normal text-base',
                 )}>
                     <Link href={'/explorer'}>
                         <span className={cn(
                             'pb-px md:pb-2',
                             router.pathname.indexOf('/explorer') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
-                            Explorer
+                            EXPLORER
                         </span>
                     </Link>
                     <Link href={'/market'}>
@@ -118,7 +118,7 @@ const Navigation = React.memo(props => {
                             'pb-px md:pb-2',
                             router.pathname.indexOf('/market') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
-                            Market
+                            MARKET
                         </span>
                     </Link>
                     <Link href={'/auctions'}>
@@ -126,7 +126,7 @@ const Navigation = React.memo(props => {
                             'pb-px md:pb-2',
                             router.pathname.indexOf('/auctions') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
-                            Auctions
+                            AUCTIONS
                         </span>
                     </Link>
                     <Link href={'/drops'}>
@@ -134,7 +134,7 @@ const Navigation = React.memo(props => {
                             'pb-px md:pb-2',
                             router.pathname.indexOf('/drops') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
-                            Drops
+                            DROPS
                         </span>
                     </Link>
                     {isLoading ? <LoadingIndicator /> : userName ?
