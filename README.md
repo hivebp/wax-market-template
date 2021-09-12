@@ -36,3 +36,6 @@ Out of the box, the market uses a default WAX layout with default WAX collection
 
 ## Styling
 The main Styling options can be found in /tailwind.config.js. Edit this file to change the font, colors, basic dimensions etc. The rest of the application uses [Tailwindcss](https://tailwindcss.com/) inside the class files and can be edited there.
+
+## Demo
+Visit [waxdummymarket.com](https://waxdummymarket.com)
