@@ -29,6 +29,7 @@ function Filters(props) {
             case 'market': return 'date_desc';
             case 'assets': return 'created_desc';
             case 'auctions': return 'ending_asc';
+            default: return 'name_asc';
         }
     };
 
@@ -255,9 +256,7 @@ function Filters(props) {
     const onSelectSchema = (e) => {
         const query = values;
 
-        const schema = e ? e.value : '';
-
-        query['schema'] = schema;
+        query['schema'] = e ? e.value : '';
 
         delete query['name'];
         delete query['rarity'];
@@ -269,9 +268,7 @@ function Filters(props) {
     const onSelectName = (e) => {
         const query = values;
 
-        const name = e ? e.value : '';
-
-        query['name'] = name;
+        query['name'] = e ? e.value : '';
 
         pushQueryString(qs.stringify(query));
     };
@@ -279,9 +276,7 @@ function Filters(props) {
     const onSelectRarity = (e) => {
         const query = values;
 
-        const rarity = e ? e.value : '';
-
-        query['rarity'] = rarity;
+        query['rarity'] = e ? e.value : '';
 
         pushQueryString(qs.stringify(query));
     };
@@ -289,9 +284,7 @@ function Filters(props) {
     const onSelectVariant = (e) => {
         const query = values;
 
-        const variant = e ? e.value : '';
-
-        query['variant'] = variant;
+        query['variant'] = e ? e.value : '';
 
         pushQueryString(qs.stringify(query));
     };
@@ -299,9 +292,7 @@ function Filters(props) {
     const onSelectSorting = (e) => {
         const query = values;
 
-        const sort = e ? e.value : '';
-
-        query['sort'] = sort;
+        query['sort'] = e ? e.value : '';
 
         pushQueryString(qs.stringify(query));
     };

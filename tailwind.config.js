@@ -12,7 +12,7 @@ module.exports = {
         paper: '#3A3A3A',
       },
       fontFamily: {
-        'main': 'Kanit',
+        'main': 'Bebas Neue',
         'sans': ['Rubik', 'ui-sans-serif', 'system-ui']
       },
       fontSize: {

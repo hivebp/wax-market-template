@@ -9,6 +9,7 @@ import WindowContent from "./WindowContent";
 import Input from '../common/util/input/Input';
 import config from "../../config.json";
 import Bids from "../auctions/Bids";
+import {bidAction} from "../wax/Wax";
 
 function BidWindow(props) {
 
@@ -51,37 +52,7 @@ function BidWindow(props) {
         const quantity = parseFloat(sellPrice);
         setIsLoading(true);
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'eosio.token',
-                    name: 'transfer',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        from: userName,
-                        to: 'atomicmarket',
-                        memo: 'deposit',
-                        quantity: `${quantity.toFixed(8)} WAX`,
-                    },
-                }, {
-                    account: 'atomicmarket',
-                    name: 'auctionbid',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        auction_id: auction_id,
-                        bid: `${quantity.toFixed(8)} WAX`,
-                        bidder: userName,
-                        taker_marketplace: config.market_name
-                    },
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await bidAction(auction_id, quantity, activeUser);
             callBack({'bidPlaced': true});
         } catch (e) {
             setError(e.message);

@@ -9,6 +9,7 @@ import {
 
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import {getDelphiMedian} from "../api/Api";
+import {claimDropAction, purchaseDropAction} from "../wax/Wax";
 
 function BuyDropWindow(props) {
     const drop = props['drop'];
@@ -18,7 +19,6 @@ function BuyDropWindow(props) {
     const activeUser = ual['activeUser'];
     const callBack = props['callBack'];
     const closeCallBack = props['closeCallBack'];
-    const userName = activeUser ? activeUser['accountName'] : null;
     const [isLoading, setIsLoading] = useState(false);
     const [quantity, setQuantity] = useState(null);
     const [delphiMedian, setDelphiMedian] = useState(0);
@@ -48,39 +48,7 @@ function BuyDropWindow(props) {
         setIsLoading(true);
 
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'eosio.token',
-                    name: 'transfer',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        from: userName,
-                        to: config.drops_contract,
-                        quantity: `${quantity.toFixed(8)} WAX`,
-                        memo: 'deposit'
-                    },
-                }, {
-                    account: config.drops_contract,
-                    name: 'claimdrop',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        referrer: config.market_name,
-                        drop_id: drop.dropId,
-                        country: 'none',
-                        intended_delphi_median: delphiMedian ? delphiMedian : 0,
-                        amount: amount,
-                        claimer: userName
-                    }
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await purchaseDropAction(drop, quantity, delphiMedian, amount, activeUser);
 
             callBack({'bought': true});
         } catch (e) {
@@ -95,26 +63,7 @@ function BuyDropWindow(props) {
         setIsLoading(true);
 
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: config.drops_contract,
-                    name: 'claimdrop',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        referrer: config.market_name,
-                        drop_id: drop.dropId,
-                        country: 'none',
-                        intended_delphi_median: 0,
-                        amount: amount,
-                        claimer: userName
-                    }
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await claimDropAction(drop, amount, activeUser);
 
             callBack({'bought': true});
         } catch (e) {

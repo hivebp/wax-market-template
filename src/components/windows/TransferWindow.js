@@ -7,6 +7,7 @@ import Input from '../common/util/input/Input';
 import ErrorMessage from "../common/util/ErrorMessage";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import config from "../../config.json";
+import {transferAction} from "../wax/Wax";
 
 function TransferWindow(props) {
     const asset = props['asset'];
@@ -38,25 +39,7 @@ function TransferWindow(props) {
         setIsLoading(true);
 
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'atomicassets',
-                    name: 'transfer',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        from: userName,
-                        memo: memo,
-                        asset_ids: [asset.asset_id],
-                        to: receiver
-                    },
-                }]
-            }, {
-
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await transferAction(asset.asset_id, memo, receiver, activeUser);
             callBack({transferred: true, receiver: receiver});
         } catch (e) {
             callBack({transferred: false, error: e.message});

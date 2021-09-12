@@ -11,6 +11,7 @@ import {
 import ErrorMessage from "../common/util/ErrorMessage";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import config from "../../config.json";
+import {announceSaleAction} from "../wax/Wax";
 
 function SellWindow(props) {
     const asset = props['asset'];
@@ -44,39 +45,7 @@ function SellWindow(props) {
         closeCallBack();
         setIsLoading(true);
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'atomicmarket',
-                    name: 'announcesale',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        seller: userName,
-                        maker_marketplace: config.market_name,
-                        settlement_symbol: '8,WAX',
-                        asset_ids: [asset_id],
-                        listing_price: quantity.toFixed(8)+' WAX'
-                    },
-                }, {
-                    account: 'atomicassets',
-                    name: 'createoffer',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        sender: userName,
-                        recipient: 'atomicmarket',
-                        sender_asset_ids: [asset_id],
-                        recipient_asset_ids: [],
-                        memo: 'sale'
-                    },
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await announceSaleAction(asset_id, quantity, activeUser);
             callBack({listed: true, price: quantity});
         } catch (e) {
             callBack({listed: false, error: e});

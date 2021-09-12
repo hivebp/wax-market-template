@@ -15,6 +15,7 @@ import {
     AccountCircle,
     ArrowDropDown
   } from '@material-ui/icons'
+import {withdrawAction} from "../wax/Wax";
 
 const Navigation = React.memo(props => {
     const router = useRouter()
@@ -72,24 +73,7 @@ const Navigation = React.memo(props => {
     const claimRefund = async (quantity) => {
         try {
             setIsLoading(true);
-            await activeUser.signTransaction({
-                actions: [
-                    {
-                        account: 'atomicmarket',
-                        name: 'withdraw',
-                        authorization: [{
-                            actor: userName,
-                            permission: activeUser['requestPermission'],
-                        }],
-                        data: {
-                            owner: userName,
-                            token_to_withdraw: `${quantity.toFixed(8)} WAX`
-                        },
-                    }]
-            }, {
-
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await withdrawAction(quantity, activeUser);
         } catch (e) {
             console.log(e);
         } finally {
@@ -124,7 +108,7 @@ const Navigation = React.memo(props => {
                     <Link href={'/explorer'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/explorer') > -1 ? 'font-extrabold' : '',
+                            router.pathname.indexOf('/explorer') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
                             Explorer
                         </span>
@@ -132,7 +116,7 @@ const Navigation = React.memo(props => {
                     <Link href={'/market'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/market') > -1 ? 'font-extrabold' : '',
+                            router.pathname.indexOf('/market') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
                             Market
                         </span>
@@ -140,7 +124,7 @@ const Navigation = React.memo(props => {
                     <Link href={'/auctions'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/auctions') > -1 ? 'font-extrabold' : '',
+                            router.pathname.indexOf('/auctions') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
                             Auctions
                         </span>
@@ -148,7 +132,7 @@ const Navigation = React.memo(props => {
                     <Link href={'/drops'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/drops') > -1 ? 'font-extrabold' : '',
+                            router.pathname.indexOf('/drops') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
                             Drops
                         </span>

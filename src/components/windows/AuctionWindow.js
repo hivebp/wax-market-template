@@ -9,6 +9,7 @@ import {formatNumber} from '../helpers/Helpers'
 import ErrorMessage from "../common/util/ErrorMessage";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import config from "../../config.json";
+import {announceAuctionAction} from "../wax/Wax";
 
 
 function AuctionWindow(props) {
@@ -47,38 +48,7 @@ function AuctionWindow(props) {
         closeCallBack();
         setIsLoading(true);
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'atomicmarket',
-                    name: 'announceauct',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        duration: (days ? parseInt(days) * 24 * 60 * 60 : 0) + (hours ? parseInt(hours) * 60 * 60 : 0) + (minutes ? parseInt(minutes) * 60 : 0),
-                        starting_bid: quantity.toFixed(8)+' WAX',
-                        seller: userName,
-                        maker_marketplace: 'nft.hive',
-                        asset_ids: [asset_id]
-                    },
-                }, {
-                    account: 'atomicassets',
-                    name: 'transfer',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        from: userName,
-                        memo: 'auction',
-                        asset_ids: [asset_id],
-                        to: 'atomicmarket'
-                    },
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await announceAuctionAction(asset_id, days, hours, minutes, quantity, activeUser);
             callBack({auctioned: true});
         } catch (e) {
             callBack({auctioned: false, error: e.message});

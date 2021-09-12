@@ -4,6 +4,7 @@ import {Context} from "../marketwrapper";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import {formatPrice} from "../helpers/Helpers";
 import cn from "classnames";
+import {cancelAuctionAction, cancelSaleAction} from "../wax/Wax";
 
 export default function MarketButtons(props) {
     const asset = props['asset'];
@@ -46,21 +47,7 @@ export default function MarketButtons(props) {
         setIsLoading(true);
 
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'atomicmarket',
-                    name: 'cancelsale',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        sale_id: sale_id
-                    },
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await cancelSaleAction(sale_id, activeUser);
             handleCancel(true);
         } catch (e) {
             console.log(e);
@@ -78,21 +65,7 @@ export default function MarketButtons(props) {
         setIsLoading(true);
 
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'atomicmarket',
-                    name: 'cancelauct',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        auction_id: auction_id
-                    },
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await cancelAuctionAction(auction_id, activeUser);
             handleCancel(true);
         } catch (e) {
             console.log(e);

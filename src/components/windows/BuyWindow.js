@@ -9,6 +9,7 @@ import {
 } from '../helpers/Helpers';
 
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
+import {purchaseSaleAction} from "../wax/Wax";
 
 function BuyWindow(props) {
     const listing = props['listing'];
@@ -38,37 +39,7 @@ function BuyWindow(props) {
         setIsLoading(true);
 
         try {
-            await activeUser.signTransaction({
-                actions: [{
-                    account: 'eosio.token',
-                    name: 'transfer',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        from: userName,
-                        to: 'atomicmarket',
-                        quantity: `${quantity.toFixed(8)} WAX`,
-                        memo: 'deposit'
-                    },
-                }, {
-                    account: 'atomicmarket',
-                    name: 'purchasesale',
-                    authorization: [{
-                        actor: userName,
-                        permission: activeUser['requestPermission'],
-                    }],
-                    data: {
-                        buyer: userName,
-                        sale_id: sale_id,
-                        taker_marketplace: config.market_name,
-                        intended_delphi_median: token_symbol === 'USD' && median ? median : 0
-                    }
-                }]
-            }, {
-                expireSeconds: 300, blocksBehind: 0,
-            });
+            await purchaseSaleAction(sale_id, token_symbol, median, quantity, activeUser);
 
             callBack({'bought': true});
         } catch (e) {
