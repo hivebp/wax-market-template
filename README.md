@@ -8,7 +8,7 @@ The WAX Market Template is an open source, full market demo application based on
 
 ## Getting started
 - Set up a webserver and install [Node](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
-- Get this repository by running `git@github.com:hivebp/wax-market-template.git`
+- Get this repository by running `git clone https://github.com/hivebp/wax-market-template.git`
 - Go into the directory: `cd wax-market-template`
 - Run `yarn install`
 - Run `yarn build`
