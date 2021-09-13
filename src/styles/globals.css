@@ -81,5 +81,5 @@ body {
 }
 
 .content-min-height {
-    min-height: calc(100vh - 297px);
+    min-height: calc(100vh - 265px);
 }
