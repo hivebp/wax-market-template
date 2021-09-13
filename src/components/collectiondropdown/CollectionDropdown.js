@@ -97,41 +97,48 @@ const CollectionDropdown = React.memo(props => {
     const option = collection && collection !== '*' ? getCollectionOption(collectionDropDownOptions, collection) : -1;
 
     return !collectionDropDownOptions || collectionDropDownOptions.length > 1 ? (
-        <div className="w-full">
-            {collections ? <div
-                className={cn(
-                    "relative flex flex-wrap justify-center h-24 w-11/12",
-                    "bg-paper"
-                )}
-            >
-                <Autocomplete
-                    multiple={false}
-                    options={collectionDropDownOptions}
-                    getOptionLabel={(option) => option ? option.title : null}
-                    renderOption={(option) => (
-                        <React.Fragment>
-                            { option.image ? createCollectionImageOption(option.title, option.image) : createCollectionOption(option.title) }
-                        </React.Fragment>
+        <div className="w-full mb-8">
+            {collections ? 
+            <div>
+                <div className="text-neutral font-normal text-sm mb-2">
+                    Collection
+                </div>
+                <div
+                    className={cn(
+                        "relative flex flex-wrap justify-center px-2 bg-paper",
+                        'border-2 border-solid border-paper rounded',
                     )}
-                    defaultValue={option > -1 ? collectionDropDownOptions[option] : null}
-                    id="collection-box"
-                    style={{ width: '100%' }}
-                    popupIcon={null}
-                    onChange={(event, newValue) => {
-                        onSelectCollection(newValue);
-                    }}
-                    onInput={(e) => onSearchCollection(e, collections)}
-                    renderInput={(params) =>
-                        <div className={option && option > 0 ? "flex w-full h-11" : "text-blue-700 opacity-100"}>
-                            <TextField
-                                {...params}
-                                variant="standard"
-                                placeholder={'Collection'}
-                            />
-                        </div>
-                    }
-                />
-            </div> : <LoadingIndicator/> }
+                >
+                    <Autocomplete
+                        multiple={false}
+                        options={collectionDropDownOptions}
+                        getOptionLabel={(option) => option ? option.title : null}
+                        renderOption={(option) => (
+                            <React.Fragment>
+                                { option.image ? createCollectionImageOption(option.title, option.image) : createCollectionOption(option.title) }
+                            </React.Fragment>
+                        )}
+                        defaultValue={option > -1 ? collectionDropDownOptions[option] : null}
+                        id="collection-box"
+                        style={{ width: '100%' }}
+                        popupIcon={null}
+                        onChange={(event, newValue) => {
+                            onSelectCollection(newValue);
+                        }}
+                        onInput={(e) => onSearchCollection(e, collections)}
+                        renderInput={(params) =>
+                            <div className={option && option > 0 ? "flex w-full h-8" : "text-netural opacity-100"}>
+                                <TextField
+                                    {...params}
+                                    variant="standard"
+                                    placeholder={'Collection'}
+                                />
+                            </div>
+                        }
+                    />
+                </div>
+            </div>
+             : <LoadingIndicator/> }
         </div>
     ) : <div></div>;
 });
