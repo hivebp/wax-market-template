@@ -79,3 +79,7 @@ body {
 .left-error {
     left: calc(100% - 24em);
 }
+
+.content-min-height {
+    min-height: calc(100vh - 297px);
+}
