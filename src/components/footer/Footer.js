@@ -53,43 +53,13 @@ function Footer(props) {
 
     return (
         <div className={cn(
-            'w-full bg-paper py-10 mt-16'
+            'w-full bg-paper py-5 mt-16'
         )}>
             <div className={cn(
                 'container mx-auto',
                 'text-neutral font-bold text-base mb-4',
-                'grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12'
+                'grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12'
             )}>
-                <div>
-                    <h3 className={cn(
-                        'text-primary text-2xl',
-                    )}>{config.market_name}</h3>
-                </div>
-
-                <div>
-                    <h4 className={cn(
-                        'text-primary font-bold text-xl mt-2',
-                    )}>Market Links</h4>
-                    <ul className={cn(
-                        'text-base font-normal',
-                        'mt-4 mb-4'
-                    )}>
-                        <LinksList />
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 className={cn(
-                        'text-primary font-bold text-xl mt-2',
-                    )}>Company Links</h4>
-                    <ul className={cn(
-                        'text-base font-normal',
-                        'mt-4 mb-4'
-                    )}>
-                        <CompanyList />
-                    </ul>
-                </div>
-                
                 <div>
                     <h4 className={cn(
                         'text-primary text-xl mt-2',
