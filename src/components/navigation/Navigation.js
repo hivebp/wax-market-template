@@ -9,6 +9,8 @@ import {getRefundBalance, getWaxBalance, post} from "../api/Api";
 import {formatNumber} from "../helpers/Helpers";
 import cn from "classnames";
 
+import config from "../../config.json";
+
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 
 import {
@@ -129,14 +131,14 @@ const Navigation = React.memo(props => {
                             AUCTIONS
                         </span>
                     </Link>
-                    <Link href={'/drops'}>
+                    {config.drops_contract && <Link href={'/drops'}>
                         <span className={cn(
                             'pb-px md:pb-2',
                             router.pathname.indexOf('/drops') > -1 ? 'font-extrabold text-primary' : '',
                         )}>
                             DROPS
                         </span>
-                    </Link>
+                    </Link> }
                     {isLoading ? <LoadingIndicator /> : userName ?
                         <div className="flex justify-center items-center">
                             <div className="text-primary">

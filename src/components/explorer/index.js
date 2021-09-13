@@ -27,9 +27,8 @@ const Explorer = (props) => {
         if (key !== tabKey || initial) {
             const query = values;
 
-            delete query['order_dir'];
             delete query['search_type'];
-            delete query['order_by'];
+            delete query['sort'];
             query['tab'] = key;
             delete query['offer_type'];
 

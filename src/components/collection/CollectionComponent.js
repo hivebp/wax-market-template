@@ -79,19 +79,17 @@ const CollectionComponent = (props) => {
                     </div>
                 </div>
 
-                <Link href={`/explorer?tab=assets&collection=${collection_name}&order_by=asset_id&order_dir=DESC`}>
+                <Link href={`/explorer?tab=assets&collection=${collection_name}`}>
                     <AssetListHeader header="Newest Assets" />
                 </Link>
                 <StaticAssetList type={'assets'} collection={collection_name} />
 
-                <Link href={`/market?tab=sales&collection=${collection_name}&order_by=date&order_dir=DESC`}>
+                <Link href={`/market?collection=${collection_name}&sort=date_desc`}>
                     <AssetListHeader header="Latest Listings" />
                 </Link>
                 <StaticAssetList type={'listings'} collection={collection_name} />
 
-                <Link href={`/market?tab=trades&collection=${collection_name}&order_by=offer&order_dir=DESC`}>
-                    <AssetListHeader header="Top Sales" />
-                </Link>
+                <AssetListHeader header="Top Sales" />
                 <StaticAssetList type={'sales'} collection={collection_name} />
             </div>
 
