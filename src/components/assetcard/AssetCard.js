@@ -254,7 +254,7 @@ function AssetCard(props) {
                         { collection['img'] ? <div className="h-4 rounded-lg overflow-hidden">
                             <img src={config.ipfs + collection['img']} className="collection-img" alt="none"/>
                         </div> : '' }
-                        <div className="font-light ml-2 mr-auto opacity-60 truncate">{collection_name}</div>
+                        <div className="font-light ml-2 mr-auto opacity-80 hover:opacity-100 truncate">{collection_name}</div>
                     </div>
                 </Link>
                 <div
@@ -293,6 +293,12 @@ function AssetCard(props) {
                 asset={asset}
                 update={update}
             />
+            {assets.length > 1 && <div className={cn(
+                'absolute left-1 w-16 h-8 bottom-16 bg-transparent',
+                'cursor-pointer outline-none opacity-80',
+                'hover:opacity-100 z-10')}>
+                {`Bundle ${selectedAsset + 1}/${assets.length}`}
+            </div>}
             <div className={cn(
                 'aspect-w-1 aspect-h-1 overflow-hidden',
                 {'cursor-pointer' : frontVisible},
@@ -314,12 +320,6 @@ function AssetCard(props) {
                         <CardImage {...props} asset={asset} />
                     </div>
                 </Link>
-                {assets.length > 1 && <div className={cn(
-                        'absolute left-1 w-16 h-8 mr-auto bg-transparent',
-                        'cursor-pointer outline-none opacity-80',
-                        'hover:opacity-100 z-10')}>
-                {`Bundle ${selectedAsset + 1}/${assets.length}`}
-                </div>}
                 {assets.length > 1 && <div
                     className={cn(
                         'absolute w-8 h-8 ml-auto bg-transparent',

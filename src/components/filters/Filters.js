@@ -17,6 +17,7 @@ function Filters(props) {
     const rarity = values['rarity'] ? values['rarity'] : '';
     const variant = values['variant'] ? values['variant'] : '';
     const seller = values['seller'] ? values['seller'] : '';
+    const bundles = values['bundles'] ? values['bundles'] === 'true' : false;
     const searchPage = props['searchPage'];
 
     const ual = props['ual'] ? props['ual'] : {'activeUser': ''};
@@ -306,7 +307,17 @@ function Filters(props) {
             query['seller'] = userName;
 
         pushQueryString(qs.stringify(query));
+    }
 
+    const checkBundles = (e) => {
+        const query = values;
+
+        if (query['bundles'] === 'true')
+            delete query['bundles'];
+        else
+            query['bundles'] = 'true';
+
+        pushQueryString(qs.stringify(query));
     }
 
     return (
@@ -371,6 +382,17 @@ function Filters(props) {
                         onChange={checkMyListings}
                     />
                         My Auctions
+                </div> : ''
+            }
+            { searchPage === 'market' ?
+                <div className="ml-1">
+                    <Input
+                        type="checkbox"
+                        className="mr-2"
+                        checked={bundles}
+                        onChange={checkBundles}
+                    />
+                    Bundles Only
                 </div> : ''
             }
         </div>

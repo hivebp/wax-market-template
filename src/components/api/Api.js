@@ -28,7 +28,7 @@ const getFilterParams = (filters) => {
     let filterStr = '';
 
     const {
-        collections, page, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, seller, variant
+        collections, page, bundles, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, seller, variant
     } = filters;
 
     if (collections)
@@ -36,6 +36,9 @@ const getFilterParams = (filters) => {
 
     if (page)
         filterStr += `&page=${page}`;
+
+    if (bundles)
+        filterStr += `&min_assets=2`;
 
     if (schema)
         filterStr += `&schema_name=${schema}`;

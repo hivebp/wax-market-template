@@ -37,6 +37,7 @@ export const getFilters = (values, collections, page= 1) => {
     const sortBy = values['sort'] ? values['sort'] : '';
     const seller = values['seller'] ? values['seller'] : '';
     const user = values['user'] ? values['user'] : '';
+    const bundles = values['bundles'] ? values['bundles'] === 'true' : false;
 
     return {
         'collections': collections.filter(
@@ -51,7 +52,8 @@ export const getFilters = (values, collections, page= 1) => {
         'user': user,
         'name': name,
         'rarity': rarity,
-        'variant': variant
+        'variant': variant,
+        'bundles': bundles
     }
 };
 
