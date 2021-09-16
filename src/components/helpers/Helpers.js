@@ -133,7 +133,7 @@ export const formatPrice = (listing) => {
             listing_price = listing_price / (Math.pow(10, price['token_precision']));
     else if (auction_id && price)
         listing_price = price['amount'] / (Math.pow(10, price['token_precision']));
-    return `${formatNumber(listing_price)} ${listing_symbol}`;
+    return `${formatNumber(listing_price)} ${listing_symbol ? listing_symbol : 'WAX'}`;
 }
 
 export const getOrderDir = (sort) => {
