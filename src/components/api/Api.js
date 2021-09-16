@@ -91,6 +91,12 @@ export const getListings = (filters) => {
         res => res.json());
 };
 
+export const getListing = (listingId) => {
+    return fetch(
+        atomic_api + `/atomicmarket/v1/sales/${listingId}`).then(
+        res => res.json());
+};
+
 export const getAuctions = (filters) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`).then(

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import AssetDetails from "../asset/AssetDetails";
 
@@ -9,20 +9,21 @@ import config from "../../config.json";
 import cn from 'classnames';
 import {formatPrice} from "../helpers/Helpers";
 import MarketButtons from "../marketbuttons";
+import CheckIndicator from "../check/CheckIndicator";
+import {getListing} from "../api/Api";
 
 const ListingComponent = (props) => {
-    const listing = props.listing;
-
-    const [listed, setListed] = useState(false);
-    const [update, setUpdate] = useState({});
-    const [bought, setBought] = useState(false);
-    const [canceled, setCanceled] = useState(false);
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [listing, setListing] = useState(props.listing);
 
     const ual = props['ual'] ? props['ual'] : {'activeUser': ''};
     const activeUser = ual['activeUser'];
     const userName = activeUser ? activeUser['accountName'] : null;
+
+    const [listed, setListed] = useState(false);
+    const [bought, setBought] = useState(listing.state === 3 && listing.buyer && listing.buyer === userName);
+    const [canceled, setCanceled] = useState(false);
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const asset = listing.assets[0];
 
@@ -35,12 +36,15 @@ const ListingComponent = (props) => {
 
     const title = `Check out ${asset.name}`;
 
+    useEffect(() => {
+        if (userName)
+            setBought(listing && listing.buyer && listing.buyer === userName);
+    }, [userName]);
+
     const handleBought = (buyInfo) => {
         if (buyInfo) {
             if (buyInfo['bought'])
-                setUpdate({
-                    'new_owner': userName
-                });
+                getListing(listing.sale_id).then(res => setListing(res && res.success && res.data));
 
             if (buyInfo['error'])
                 setError(buyInfo['error']);
@@ -94,7 +98,6 @@ const ListingComponent = (props) => {
                     ual={props['ual']}
                     asset={asset}
                     listing={listing}
-                    update={update}
                     handleBought={handleBought}
                     handleCancel={handleCancel}
                     bought={bought}

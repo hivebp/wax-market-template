@@ -128,12 +128,12 @@ export const formatPrice = (listing) => {
     let {listing_price} = listing;
     if (listing_price && price)
         if (listing_symbol === 'USD')
-            listing_price = listing_price * (100 / price['median']);
+            listing_price = listing_price / 100.0;
         else
             listing_price = listing_price / (Math.pow(10, price['token_precision']));
     else if (auction_id && price)
         listing_price = price['amount'] / (Math.pow(10, price['token_precision']));
-    return `${formatNumber(listing_price)} WAX`;
+    return `${formatNumber(listing_price)} ${listing_symbol}`;
 }
 
 export const getOrderDir = (sort) => {

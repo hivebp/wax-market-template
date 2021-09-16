@@ -21,13 +21,13 @@ function BuyWindow(props) {
     const userName = activeUser ? activeUser['accountName'] : null;
     const [isLoading, setIsLoading] = useState(false);
 
-    const { price, assets, sale_id, seller } = listing;
+    const { price, assets, sale_id, seller, listing_symbol } = listing;
 
     const asset = assets[0];
 
     const { collection, schema, name, data } = asset;
 
-    const { token_symbol, median, amount, token_precision } = price;
+    const { median, amount, token_precision } = price;
 
     const quantity = amount / (Math.pow(10, token_precision));
 
@@ -39,7 +39,7 @@ function BuyWindow(props) {
         setIsLoading(true);
 
         try {
-            await purchaseSaleAction(sale_id, token_symbol, median, quantity, activeUser);
+            await purchaseSaleAction(sale_id, listing_symbol, median, quantity, activeUser);
 
             callBack({'bought': true});
         } catch (e) {
