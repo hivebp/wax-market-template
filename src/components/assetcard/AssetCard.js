@@ -49,6 +49,7 @@ function AssetCard(props) {
     const [auctionInterval, setAuctionInterval] = useState(null);
     const [auctionTimeLeft, setAuctionTimeLeft] = useState('');
     const sale = props['sale'];
+    const page = props['page'];
 
     const {
         collection, asset_id, template_mint, name
@@ -240,7 +241,7 @@ function AssetCard(props) {
                 'backdrop-filter backdrop-blur-sm border border-paper',
                 'shadow-md bg-paper',
             )}
-            id={'AssetPreview_'+index}
+            id={'AssetCard_'+index}
         >
             <div className={cn(
                 'flex justify-between my-2 px-2',
@@ -368,6 +369,7 @@ function AssetCard(props) {
                 setListed={setListed}
                 setIsLoading={setIsLoading}
                 isLoading={isLoading}
+                page={page}
             /> : '' }
 
             <div

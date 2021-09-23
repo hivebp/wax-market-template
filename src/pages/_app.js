@@ -50,7 +50,7 @@ const parseCollections = (dispatch, res) => {
         dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({
             'collections': data['rows'][0].collections
         })});
-        if (config.packs_contract)
+        if (config.packs_contracts)
             dispatch({ type: 'SET_PACK_DATA', payload: getPacks({
                 'collections': data['rows'][0].collections
             })});
@@ -64,7 +64,7 @@ const parseCollections = (dispatch, res) => {
         dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({
             'collections': [config.default_collection]
         })});
-        if (config.packs_contract)
+        if (config.packs_contracts)
             dispatch({ type: 'SET_PACK_DATA', payload: getPacks({
                 'collections': [config.default_collection]
             })});
@@ -86,17 +86,16 @@ function MyApp ({ Component, pageProps }) {
 
 
         return (
-          <div
-            className={cn(
-                'bg-page min-h-screen',
-                'text-neutral text-base font-medium font-main',
-            )}
-          >
-              <Navigation {...props} />
-              <WindowWrapper {...props} />
-              <Component {...props} />
-              <Footer {...props} />
-          </div>
+            <div>
+                <WindowWrapper {...props} />
+                <div className={'h-screen overflow-y-hidden bg-page'}>
+                    <Navigation {...props} />
+                    <div className={'relative h-page-s sm:h-page top-60 sm:top-28 overflow-y-auto'}>
+                        <Component {...props} />
+                        <Footer {...props} />
+                    </div>
+                </div>
+            </div>
         );
     };
 

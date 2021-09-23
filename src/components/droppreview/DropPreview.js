@@ -31,7 +31,7 @@ function DropPreview(props) {
                 'backdrop-filter backdrop-blur-sm border border-paper',
                 'shadow-md bg-paper rounded-br-2xl'
             )}
-            id={'AssetPreview_'+index}
+            id={'AssetCard_'+index}
         >
             <div className={cn(
                 'flex flex-row justify-start items-center my-2 px-2',

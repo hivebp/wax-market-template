@@ -6,7 +6,7 @@ function CardImage(props) {
     const index = props['index'];
     const asset = props['asset'];
 
-    const data = asset['data'];
+    const data = 'data' in asset ? asset['data'] : asset['immutable_data'];
 
     const image = data['img'] ? data['img'].includes(
         'http') ? data['img'] : config.ipfs + data['img'] : '';

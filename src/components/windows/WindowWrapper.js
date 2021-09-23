@@ -7,6 +7,8 @@ import TransferWindow from "./TransferWindow";
 import { Context } from "../marketwrapper";
 import BidWindow from "./BidWindow";
 import AuctionWindow from "./AuctionWindow";
+import UnboxWindow from "./UnboxWindow";
+import ClaimPopup from "./ClaimWindow";
 
 function WindowWrapper(props) {
     const ual = props['ual'] ? props['ual'] : {'activeUser': null};
@@ -16,24 +18,23 @@ function WindowWrapper(props) {
     const asset = state.asset;
     const amount = state.amount;
 
-    const triggered = state.triggered;
-
     const action = state.action;
     const callBack = state.callBack;
 
-    function useOutsideAlerter(ref, callBack, triggered) {
+    function useOutsideAlerter(ref, callBack) {
       useEffect(() => {
         /**
          * Alert if clicked on outside of element
          */
         function handleClickOutside(event) {
-          if (!triggered && ref.current && !ref.current.contains(event.target) && event.target['className'] !== 'Dropdown-option'
-              && event.target['className'] !== 'Dropdown-option is-selected' && event.target['className'] !== 'ErrorIcon'
-              && event.target['className'] !== 'ErrorMessage' && event.target['className'] !== 'ErrorItem') {
-              dispatch({ type: 'SET_ACTION', payload: '' });
-              callBack();
-              event.preventDefault();
-              event.stopPropagation();
+            if (ref.current && !ref.current.contains(event.target) && event.target['className'] !== 'Dropdown-option'
+                && event.target['className'] !== 'Dropdown-option is-selected' && event.target['className'] !== 'ErrorIcon'
+                && event.target['className'] !== 'ErrorMessage' && event.target['className'] !== 'ErrorItem'
+                && event.target['id'] !== 'unbox-button' && event.target['id'] !== 'stop-animation')  {
+                dispatch({ type: 'SET_ACTION', payload: '' });
+                callBack();
+                event.preventDefault();
+                event.stopPropagation();
           }
         }
         // Bind the event listener
@@ -48,15 +49,13 @@ function WindowWrapper(props) {
     function OutsideAlerter(props) {
         const wrapperRef = useRef(null);
         const callBack = props['callBack'];
-        const triggered = props['triggered'];
-        useOutsideAlerter(wrapperRef, callBack, triggered);
+        useOutsideAlerter(wrapperRef, callBack);
 
         return <div ref={wrapperRef}>{props.children}</div>;
     }
 
     const sellWindow = <OutsideAlerter
             callBack={callBack}
-            triggered={triggered}
         >
         <SellWindow
             asset={asset}
@@ -70,7 +69,6 @@ function WindowWrapper(props) {
 
     const buyWindow = <OutsideAlerter
         callBack={callBack}
-        triggered={triggered}
     >
         <BuyWindow
             listing={asset}
@@ -84,7 +82,6 @@ function WindowWrapper(props) {
 
     const buyDropWindow = <OutsideAlerter
         callBack={callBack}
-        triggered={triggered}
     >
         <BuyDropWindow
             drop={asset}
@@ -99,7 +96,6 @@ function WindowWrapper(props) {
 
     const auctionWindow = <OutsideAlerter
         callBack={callBack}
-        triggered={triggered}
     >
         <AuctionWindow
             asset={asset}
@@ -111,9 +107,34 @@ function WindowWrapper(props) {
         />
     </OutsideAlerter>;
 
+    const unboxWindow = <OutsideAlerter
+        callBack={callBack}
+    >
+        <UnboxWindow
+            asset={asset}
+            ual={ual}
+            closeCallBack={() => {
+                dispatch({ type: 'SET_ACTION', payload: '' });
+            }}
+            callBack={callBack}
+        />
+    </OutsideAlerter>;
+
+    const claimWindow = <OutsideAlerter
+        callBack={callBack}
+    >
+        <ClaimPopup
+            asset={asset}
+            ual={ual}
+            closeCallBack={() => {
+                dispatch({ type: 'SET_ACTION', payload: '' });
+            }}
+            callBack={callBack}
+        />
+    </OutsideAlerter>;
+
     const bidWindow = <OutsideAlerter
         callBack={callBack}
-        triggered={triggered}
     >
         <BidWindow
             listing={asset}
@@ -127,7 +148,6 @@ function WindowWrapper(props) {
 
     const transferWindow = <OutsideAlerter
         callBack={callBack}
-        triggered={triggered}
     >
         <TransferWindow
             asset={asset}
@@ -148,8 +168,10 @@ function WindowWrapper(props) {
     }, [action]);
 
     return (
-        <div className="relative">
+        <div className="absolute">
             {action === 'buy' ? buyWindow : ''}
+            {action === 'unbox' ? unboxWindow : ''}
+            {action === 'claim' ? claimWindow : ''}
             {action === 'buy_drop' ? buyDropWindow : ''}
             {action === 'auction' ? auctionWindow : ''}
             {action === 'bid' ? bidWindow : ''}

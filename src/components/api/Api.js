@@ -27,18 +27,16 @@ export const GetPrices = (asset_id) => {
 const getFilterParams = (filters) => {
     let filterStr = '';
 
-    const {
-        collections, page, bundles, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, seller, variant
-    } = filters;
+    const {collections, page, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, seller, ids} = filters;
 
     if (collections)
         filterStr += `&collection_whitelist=${collections.join(',')}`;
 
+    if (ids)
+        filterStr += `&ids=${ids.join(',')}`;
+
     if (page)
         filterStr += `&page=${page}`;
-
-    if (bundles)
-        filterStr += `&min_assets=2`;
 
     if (schema)
         filterStr += `&schema_name=${schema}`;
@@ -54,9 +52,6 @@ const getFilterParams = (filters) => {
 
     if (rarity)
         filterStr += `&template_data.rarity=${rarity}`;
-
-    if (variant)
-        filterStr += `&template_data.variant=${variant}`;
 
     if (limit)
         filterStr += `&limit=${limit}`;
@@ -223,20 +218,56 @@ function getCollectionHex(collection) {
 export const getPacks = async (filters) => {
     const packs = [];
 
-    if (config.packs_contract === 'neftyblocksp') {
-        filters.collections.map(async (collection) => {
-            const collectionHex = getCollectionHex(collection);
+    for (let i = 0; i < config.packs_contracts.length; i++) {
+        if (config.packs_contracts[i] === 'neftyblocksp') {
+            filters.collections.map(async (collection) => {
+                const collectionHex = getCollectionHex(collection);
 
+                const body = {
+                    'code': 'neftyblocksp',
+                    'index_position': 2,
+                    'json': 'true',
+                    'key_type': 'sha256',
+                    'limit': 2000,
+                    'lower_bound': `0000000000000000${collectionHex}00000000000000000000000000000000`,
+                    'upper_bound': `0000000000000000${collectionHex}ffffffffffffffffffffffffffffffff`,
+                    'reverse': 'true',
+                    'scope': 'neftyblocksp',
+                    'show_payer': 'false',
+                    'table': 'packs',
+                    'table_key': ''
+                };
+
+                const url = config.api_endpoint + '/v1/chain/get_table_rows';
+                const res = await post(url, body);
+
+                if (res && res.status === 200 && res.data && res.data.rows) {
+                    res.data.rows.map(pack => {
+                        packs.push({
+                            'packId': pack.pack_id,
+                            'unlockTime': pack.unlock_time,
+                            'templateId': pack.pack_template_id,
+                            'rollCounter': pack.rollCounter,
+                            'displayData': JSON.parse(pack.display_data),
+                            'contract': 'neftyblocksp'
+                        });
+                        return null;
+                    });
+                }
+            })
+        }
+
+        if (config.packs_contracts[i] === 'atomicpacksx') {
             const body = {
-                'code': config.packs_contract,
-                'index_position': config.packs_contract === 'neftyblocksp' ? 2 : 'primary',
+                'code': 'atomicpacksx',
+                'index_position': 'primary',
                 'json': 'true',
-                'key_type': 'sha256',
+                'key_type': 'i64',
                 'limit': 2000,
-                'lower_bound': config.packs_contract === 'neftyblocksp' ? `0000000000000000${collectionHex}00000000000000000000000000000000` : '',
-                'upper_bound': config.packs_contract === 'neftyblocksp' ? `0000000000000000${collectionHex}ffffffffffffffffffffffffffffffff` : '',
+                'lower_bound': '',
+                'upper_bound': '',
                 'reverse': 'true',
-                'scope': config.packs_contract,
+                'scope': 'atomicpacksx',
                 'show_payer': 'false',
                 'table': 'packs',
                 'table_key': ''
@@ -246,48 +277,18 @@ export const getPacks = async (filters) => {
             const res = await post(url, body);
 
             if (res && res.status === 200 && res.data && res.data.rows) {
-                res.data.rows.map(pack => {
+                res.data.rows.filter(pack => filters.collections.includes(pack.collection_name)).map(pack => {
                     packs.push({
                         'packId': pack.pack_id,
                         'unlockTime': pack.unlock_time,
                         'templateId': pack.pack_template_id,
                         'rollCounter': pack.rollCounter,
-                        'contract': config.packs_contract
+                        'displayData': JSON.parse(pack.display_data),
+                        'contract': 'atomicpacksx'
                     });
                     return null;
                 });
             }
-        })
-    } else {
-        const body = {
-            'code': config.packs_contract,
-            'index_position': 'primary',
-            'json': 'true',
-            'key_type': 'i64',
-            'limit': 2000,
-            'lower_bound': '',
-            'upper_bound': '',
-            'reverse': 'true',
-            'scope': config.packs_contract,
-            'show_payer': 'false',
-            'table': 'packs',
-            'table_key': ''
-        };
-
-        const url = config.api_endpoint + '/v1/chain/get_table_rows';
-        const res = await post(url, body);
-
-        if (res && res.status === 200 && res.data && res.data.rows) {
-            res.data.rows.filter(pack => filters.collections.includes(pack.collection_name)).map(pack => {
-                packs.push({
-                    'packId': pack.pack_id,
-                    'unlockTime': pack.unlock_time,
-                    'templateId': pack.pack_template_id,
-                    'rollCounter': pack.rollCounter,
-                    'contract': config.packs_contract
-                });
-                return null;
-            });
         }
     }
 

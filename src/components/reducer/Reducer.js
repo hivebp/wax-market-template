@@ -50,6 +50,11 @@ const Reducer = (state, action) => {
                 ...state,
                 schemaData: action.payload
             };
+        case 'SET_UNBOXED':
+            return {
+                ...state,
+                unboxed: action.payload
+            };
         case 'SET_PACK_DATA':
             return {
                 ...state,

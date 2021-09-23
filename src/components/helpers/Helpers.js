@@ -3,6 +3,7 @@ import React from "react";
 import cn from "classnames";
 import qs from 'qs';
 import config from "../../config.json";
+import {post} from "superagent/lib/client";
 
 export const setQueryStringWithoutPageReload = qsValue => {
     const newurl = window.location.protocol + '//' +
@@ -28,16 +29,31 @@ export const getValues = () => {
     return values;
 }
 
-export const getFilters = (values, collections, page= 1) => {
+const getDefaultSort = (pageName) => {
+    switch (pageName) {
+        case 'inventory':
+            return 'transferred_desc';
+        case 'packs':
+            return 'transferred_desc';
+        case 'market':
+            return 'date_desc';
+        case 'auctions':
+            return 'ending_desc';
+        case 'assets':
+            return 'created_desc';
+    }
+    return 'date_desc';
+};
+
+export const getFilters = (values, collections, pageName, page= 1) => {
     const collection = values['collection'] ? values['collection'] : '*';
-    const schema = values['schema'] ? values['schema'] : '';
+    const schema = pageName === 'packs' ? 'boxes' : values['schema'] ? values['schema'] : '';
     const name = values['name'] ? values['name'] : '';
     const rarity = values['rarity'] ? values['rarity'] : '';
     const variant = values['variant'] ? values['variant'] : '';
-    const sortBy = values['sort'] ? values['sort'] : '';
+    const sortBy = values['sort'] ? values['sort'] : getDefaultSort(pageName);
     const seller = values['seller'] ? values['seller'] : '';
     const user = values['user'] ? values['user'] : '';
-    const bundles = values['bundles'] ? values['bundles'] === 'true' : false;
 
     return {
         'collections': collections.filter(
@@ -52,8 +68,7 @@ export const getFilters = (values, collections, page= 1) => {
         'user': user,
         'name': name,
         'rarity': rarity,
-        'variant': variant,
-        'bundles': bundles
+        'variant': variant
     }
 };
 
@@ -94,6 +109,58 @@ export const createCollectionImageOption = (name, image) => {
         </div>
     );
 };
+
+export const claimPack = async (pack, asset, activeUser) => {
+    const userName = activeUser['accountName'];
+
+    const body = {
+        'code': pack.contract,
+        'index_position': 'primary',
+        'json': 'true',
+        'key_type': 'i64',
+        'limit': 1000,
+        'lower_bound': '',
+        'upper_bound': '',
+        'reverse': 'false',
+        'scope': asset.asset_id,
+        'show_payer': 'false',
+        'table': 'unboxassets',
+        'table_key': ''
+    };
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+    const res = await post(url, body);
+
+    const origin_roll_ids = [];
+    const result_templates = [];
+
+    if (res && res.status === 200 && res.body && res.body.rows) {
+        res.body.rows.map(item => {
+            origin_roll_ids.push(parseInt(item.origin_roll_id))
+            result_templates.push(parseInt(item.template_id))
+            return null;
+        });
+
+        await activeUser.signTransaction({
+            actions: [{
+                account: pack.contract,
+                name: 'claimunboxed',
+                authorization: [{
+                    actor: userName,
+                    permission: activeUser['requestPermission'],
+                }],
+                data: {
+                    origin_roll_ids: origin_roll_ids,
+                    pack_asset_id: asset.asset_id
+                },
+            }]
+        }, {
+            expireSeconds: 300, blocksBehind: 0,
+        });
+    }
+
+    return result_templates;
+}
 
 export const formatMintInfo = (mint) => {
     if (!mint) {

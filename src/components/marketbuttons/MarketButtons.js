@@ -4,14 +4,13 @@ import {Context} from "../marketwrapper";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import {formatPrice} from "../helpers/Helpers";
 import cn from "classnames";
-import {cancelAuctionAction, cancelSaleAction} from "../wax/Wax";
+import CheckIndicator from "../check/CheckIndicator";
 
 export default function MarketButtons(props) {
     const asset = props['asset'];
     const listing = props['listing'];
     const sale = props['sale'];
 
-    const update = props['update'];
     const ual = props['ual'] ? props['ual'] : {'activeUser': ''};
     const activeUser = ual['activeUser'];
     const userName = activeUser ? activeUser['accountName'] : null;
@@ -29,6 +28,7 @@ export default function MarketButtons(props) {
     const setError = props['setError'];
     const isLoading = props['isLoading'];
     const setIsLoading = props['setIsLoading'];
+    const page = props['page'];
 
     const [state, dispatch] = useContext(Context);
 
@@ -37,7 +37,7 @@ export default function MarketButtons(props) {
     };
 
     let {
-        owner, asset_id
+        owner, asset_id, unboxer
     } = asset;
 
     const cancel = async () => {
@@ -47,7 +47,21 @@ export default function MarketButtons(props) {
         setIsLoading(true);
 
         try {
-            await cancelSaleAction(sale_id, activeUser);
+            await activeUser.signTransaction({
+                actions: [{
+                    account: 'atomicmarket',
+                    name: 'cancelsale',
+                    authorization: [{
+                        actor: userName,
+                        permission: activeUser['requestPermission'],
+                    }],
+                    data: {
+                        sale_id: sale_id
+                    },
+                }]
+            }, {
+                expireSeconds: 300, blocksBehind: 0,
+            });
             handleCancel(true);
         } catch (e) {
             console.log(e);
@@ -65,7 +79,21 @@ export default function MarketButtons(props) {
         setIsLoading(true);
 
         try {
-            await cancelAuctionAction(auction_id, activeUser);
+            await activeUser.signTransaction({
+                actions: [{
+                    account: 'atomicmarket',
+                    name: 'cancelauct',
+                    authorization: [{
+                        actor: userName,
+                        permission: activeUser['requestPermission'],
+                    }],
+                    data: {
+                        auction_id: auction_id
+                    },
+                }]
+            }, {
+                expireSeconds: 300, blocksBehind: 0,
+            });
             handleCancel(true);
         } catch (e) {
             console.log(e);
@@ -76,19 +104,38 @@ export default function MarketButtons(props) {
         }
     };
 
+    const handleUnboxed = (unboxed) => {
+        if (unboxed && unboxed['unboxed']) {
+            dispatch({type: 'SET_UNBOXED', payload: true});
+        }
+        setIsLoading(false);
+    };
+
+    const unbox = () => {
+        setIsLoading(true);
+        dispatch({ type: 'SET_ASSET', payload: asset});
+        dispatch({ type: 'SET_CALLBACK', payload: (unboxed) => handleUnboxed(unboxed) });
+        dispatch({ type: 'SET_ACTION', payload: 'unbox' });
+    };
+
+    const claim = () => {
+        setIsLoading(true);
+        dispatch({ type: 'SET_ASSET', payload: asset});
+        dispatch({ type: 'SET_CALLBACK', payload: (unboxed) => handleUnboxed(unboxed) });
+        dispatch({ type: 'SET_ACTION', payload: 'claim' });
+    };
+
     const buy = () => {
         setIsLoading(true);
         dispatch({ type: 'SET_ASSET', payload: listing});
         dispatch({ type: 'SET_CALLBACK', payload: (bought) => handleBought(bought) });
         dispatch({ type: 'SET_ACTION', payload: 'buy' });
-        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const bid = async () => {
         dispatch({type: 'SET_ASSET', payload: listing});
         dispatch({type: 'SET_CALLBACK', payload: (bid) => handleBidPlaced(bid)});
         dispatch({type: 'SET_ACTION', payload: 'bid'});
-        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const sell = async () => {
@@ -96,7 +143,6 @@ export default function MarketButtons(props) {
         dispatch({ type: 'SET_ASSET', payload: asset });
         dispatch({ type: 'SET_CALLBACK', payload: (sellInfo) => handleList(sellInfo) });
         dispatch({ type: 'SET_ACTION', payload: 'sell' });
-        dispatch({ type: 'SET_TRIGGERED', payload: true });
     };
 
     const Container = ({ children, className}) => {
@@ -113,14 +159,14 @@ export default function MarketButtons(props) {
         )
     }
 
-    const BuySellButton = ({onClick, className, children}) => {
+    const AssetButton = ({onClick, children}) => {
         return (
             <div
                 className={cn(
                     'flex flex-col',
                     'bg-primary py-1 px-8 text-secondary mt-3 mb-3 mx-auto',
                     'cursor-pointer text-sm font-bold leading-relaxed uppercase',
-                    'rounded-sm outline-none',
+                    'rounded-3xl outline-none',
                 )}
                 onClick={onClick}
             >
@@ -131,9 +177,9 @@ export default function MarketButtons(props) {
 
     const sellField = (
         <Container className={cn('flex flex-col')}>
-            <BuySellButton onClick={sell}>
+            <AssetButton onClick={sell}>
                 Sell
-            </BuySellButton>
+            </AssetButton>
         </Container>
     );
 
@@ -153,48 +199,48 @@ export default function MarketButtons(props) {
         const buyField = (
             <Container className={cn('flex flex-col')}>
                 <div className="relative py-0 px-1 text-md w-full">{formattedPrice}</div>
-                <BuySellButton
+                <AssetButton
                     className="relative text-center mx-auto top-0 left-0"
                     onClick={buy}
                 >
                     Buy
-                </BuySellButton>
+                </AssetButton>
             </Container>
         );
 
         const bidField = (
             <Container className={cn('flex flex-col')}>
                 <div className="relative py-0 px-1 text-md w-full">{formattedPrice}</div>
-                <BuySellButton
+                <AssetButton
                     className="relative text-center mx-auto top-0 left-0"
                     onClick={bid}
                 >
                     Bid
-                </BuySellButton>
+                </AssetButton>
             </Container>
         );
 
         const cancelField = (
             <Container className={cn('flex flex-col')}>
                 <div className="relative py-0 px-1 text-md w-full">{formattedPrice}</div>
-                <BuySellButton
+                <AssetButton
                     className="relative text-center mx-auto top-0 left-0"
                     onClick={cancel}
                 >
                     Cancel
-                </BuySellButton>
+                </AssetButton>
             </Container>
         );
 
         const cancelAuctionField = (
             <Container className={cn('flex flex-col')}>
                 <div className="relative py-0 px-1 text-md w-full">{formattedPrice}</div>
-                <BuySellButton
+                <AssetButton
                     className="relative text-center mx-auto top-0 left-0"
                     onClick={cancelAuction}
                 >
                     Cancel
-                </BuySellButton>
+                </AssetButton>
             </Container>
         );
 
@@ -204,26 +250,27 @@ export default function MarketButtons(props) {
             </Container>
         );
 
-        const loginField = (
+        const loginField = (action) => (
             <Container className={cn('flex flex-col')}>
                 <div className="relative py-0 px-1 text-md w-full">
-                     {formattedPrice}
+                    {formattedPrice}
                 </div>
-                <BuySellButton
+                <AssetButton
                     onClick={performLogin}
                 >
-                    BUY (LOGIN)
-                </BuySellButton>
+                    {`${action} (LOGIN)`}
+                </AssetButton>
             </Container>
         );
 
         const buyable = listing_price && (!userName || userName !== seller) && (!bought || bought === false) && owner;
-
-        const sellable = userName && (userName === owner || (update && update['new_owner'] && update['new_owner'] === userName)) && (
+        const sellable = userName && (userName === owner || (listing && listing['buyer'] && listing['buyer'] === userName)) && (
             !listing_price || bought) && (!listed || bought || canceled) && handleList;
         const cancelable = userName && (userName === seller) && sale_id && !canceled;
         const auctioncancelable = userName && (userName === seller) && auction_id && !canceled;
         const biddable = auction_id && (!userName || userName !== seller) && owner;
+
+        const checked = !sellable && !cancelable && !auctioncancelable && !biddable && (listing && listing['buyer'] && listing['buyer'] === userName);
 
         const disMissError = () => {
             if (popError)
@@ -238,11 +285,12 @@ export default function MarketButtons(props) {
                 )}
             >
                 {isLoading ? <LoadingIndicator className="m-auto"/> : ''}
-                {!isLoading && buyable ? (userName ? buyField : loginField) : ''}
+                {!isLoading && buyable ? (userName ? buyField : loginField('BUY')) : ''}
                 {!isLoading && sellable ? sellField : ''}
+                {!isLoading && checked ? <CheckIndicator/> : '' }
                 {!isLoading && cancelable ? cancelField : ''}
                 {!isLoading && auctioncancelable ? cancelAuctionField : ''}
-                {!isLoading && biddable ? bidField : ''}
+                {!isLoading && biddable ? (userName ? bidField : loginField('BID')) : ''}
                 {!isLoading && !cancelable && !sellable && !buyable && listing_price && !canceled ? infoField : ''}
                 {!isLoading && (error || popError) ? <div className={cn(
                     'absolute bg-red-800 rounded p-4 mx-auto leading-5 flex justify-center',
@@ -291,12 +339,33 @@ export default function MarketButtons(props) {
                 <div className="relative text-center ml-auto mr-auto top-0 left-0" onClick={cancelAuction}>Cancel</div>
             </Container>
         );
-        const sellable = userName && (userName === owner || (
-            update['new_owner'] && update['new_owner'] === userName)) && (!listed || bought || canceled);
 
-        const cancelable = userName === owner && asset.sales && asset.sales.length > 0 && !canceled;
+        const unpackField = (
+            <Container className={cn('flex flex-col')}>
+                <AssetButton onClick={unbox}>
+                    Unbox
+                </AssetButton>
+            </Container>
+        );
 
-        const auctioncancelable = auctioned && asset.auctions && asset.auctions.length > 0 && !canceled;
+        const claimField = (
+            <Container className={cn('flex flex-col')}>
+                <AssetButton onClick={claim}>
+                    Claim
+                </AssetButton>
+            </Container>
+        );
+
+        const unpackable = userName && userName === owner && page === 'packs';
+
+        const claimable = userName && userName === unboxer && page === 'unclaimed_packs';
+
+        const sellable = userName && (userName === owner || (listing &&
+            listing['buyer'] && listing['buyer'] === userName)) && (!listed || bought || canceled) && !unpackable && !claimable;
+
+        const cancelable = userName === owner && asset.sales && asset.sales.length > 0 && !canceled && !unpackable && !claimable;
+
+        const auctioncancelable = auctioned && asset.auctions && asset.auctions.length > 0 && !canceled && !unpackable && !claimable;
 
         return (
             <div
@@ -306,6 +375,8 @@ export default function MarketButtons(props) {
             >
                 {isLoading ? <LoadingIndicator className="m-auto"/> : ''}
                 {!isLoading && !cancelable && sellable ? sellField : ''}
+                {!isLoading && unpackable ? unpackField : ''}
+                {!isLoading && claimable ? claimField : ''}
                 {!isLoading && cancelable ? cancelField : ''}
                 {!isLoading && auctioncancelable ? cancelAuctionField : ''}
                 {!isLoading && (error || popError) ? <div className={cn(

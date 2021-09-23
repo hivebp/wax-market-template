@@ -3,21 +3,12 @@ import { Menu, Transition } from '@headlessui/react'
 
 import Link from '../common/util/input/Link';
 import Logo from '../common/util/Logo';
-import SvgIcon from '../common/util/SvgIcon'
 import { useRouter } from 'next/router'
-import {getRefundBalance, getWaxBalance, post} from "../api/Api";
+import {getRefundBalance, getWaxBalance} from "../api/Api";
 import {formatNumber} from "../helpers/Helpers";
 import cn from "classnames";
 
-import config from "../../config.json";
-
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
-
-import {
-    AccountCircle,
-    ArrowDropDown
-  } from '@material-ui/icons'
-import {withdrawAction} from "../wax/Wax";
 
 const Navigation = React.memo(props => {
     const router = useRouter()
@@ -75,7 +66,24 @@ const Navigation = React.memo(props => {
     const claimRefund = async (quantity) => {
         try {
             setIsLoading(true);
-            await withdrawAction(quantity, activeUser);
+            await activeUser.signTransaction({
+                actions: [
+                    {
+                        account: 'atomicmarket',
+                        name: 'withdraw',
+                        authorization: [{
+                            actor: userName,
+                            permission: activeUser['requestPermission'],
+                        }],
+                        data: {
+                            owner: userName,
+                            token_to_withdraw: `${quantity.toFixed(8)} WAX`
+                        },
+                    }]
+            }, {
+
+                expireSeconds: 300, blocksBehind: 0,
+            });
         } catch (e) {
             console.log(e);
         } finally {
@@ -94,67 +102,79 @@ const Navigation = React.memo(props => {
 
     return (
         <div className={cn(
-            'Navigation w-full',
+            'fixed w-full h-60 sm:h-28',
             'bg-page shadow-sm border-b border-paper',
-            'z-100'
+            'z-50'
         )}>
             <div className={cn(
-                'relative h-auto h-20 w-full mx-auto px-4',
+                'relative container mx-auto',
                 'flex flex-col md:flex-row justify-between items-center',
             )}>
-                 <Logo />
+                <Logo />
                 <div className={cn(
-                    'flex flex-col gap-y-1 md:gap-x-4 md:flex-row flex-nowrap items-center',
-                    'font-normal text-base',
+                    'w-full flex-wrap md:w-auto flex flex-row justify-between gap-y-1 md:gap-x-4 items-center',
+                    'uppercase font-bold text-base',
                 )}>
                     <Link href={'/explorer'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/explorer') > -1 ? 'font-extrabold text-primary' : '',
+                            router.pathname.indexOf('/explorer') > -1 ? 'border-b-4 border-primary' : '',
                         )}>
-                            EXPLORER
+                            Explorer
                         </span>
                     </Link>
                     <Link href={'/market'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/market') > -1 ? 'font-extrabold text-primary' : '',
+                            router.pathname.indexOf('/market') > -1 ? 'border-b-4 border-primary' : '',
                         )}>
-                            MARKET
+                            Market
                         </span>
                     </Link>
                     <Link href={'/auctions'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/auctions') > -1 ? 'font-extrabold text-primary' : '',
+                            router.pathname.indexOf('/auctions') > -1 ? 'border-b-4 border-primary' : '',
                         )}>
-                            AUCTIONS
+                            Auctions
                         </span>
                     </Link>
-                    {config.drops_contract && <Link href={'/drops'}>
+                    <Link href={'/drops'}>
                         <span className={cn(
                             'pb-px md:pb-2',
-                            router.pathname.indexOf('/drops') > -1 ? 'font-extrabold text-primary' : '',
+                            router.pathname.indexOf('/drops') > -1 ? 'border-b-4 border-primary' : '',
                         )}>
-                            DROPS
+                            Drops
                         </span>
-                    </Link> }
+                    </Link>
                     {isLoading ? <LoadingIndicator /> : userName ?
-                        <div className="flex justify-center items-center">
+                        <div className="w-full md:w-auto flex justify-center items-center pb-4 md:pb-0">
                             <div className="text-primary">
                                 <Menu as="div" className="relative inline-block text-left">
                                     <div>
-                                        <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                        <Menu.Button
+                                            className={cn(
+                                                'flex flex-col items-center w-full px-2 py-1 text-sm font-medium text-white bg-paper rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75',
+                                                'border border-primary rounded-lg',
+                                                'border-opacity-0 hover:border-opacity-75',
+                                            )}
+                                        >
                                             <div
                                                 className={cn(
-                                                'flex justify-center items-center',
-                                                'px-1 py-px text-base',
-                                                'border border-primary rounded-sm',
-                                                'border-opacity-0 hover:border-opacity-75',
-                                            )}>
+                                                    'flex justify-center items-center',
+                                                    'px-1 py-px text-base'
+                                                )}>
                                                 <p>{userName}</p>
-                                                <SvgIcon icon={<ArrowDropDown />} />
+                                                <img src="/arrow-drop-down.svg" className="w-5 h-5" alt="arrow-down" />
                                             </div>
+
+                                            { balance &&
+                                            <div className={cn(
+                                                'font-light text-sm text-center'
+                                            )}>
+                                                {formatNumber(balance)} WAX
+                                            </div>
+                                            }
                                         </Menu.Button>
                                     </div>
                                     <Transition
@@ -167,27 +187,41 @@ const Navigation = React.memo(props => {
                                         leaveTo="transform opacity-0 scale-95"
                                     >
                                         <Menu.Items className={cn(
-                                            'z-100 absolute right-0 w-36 mt-1 origin-top-right',
+                                            'z-50 absolute right-0 w-36 mt-1 origin-top-right',
                                             'text-white',
-                                            'bg-gray-700 divide-y divide-gray-100 rounded-sm shadow-lg',
+                                            'bg-paper rounded-xl shadow-lg',
                                             'ring-1 ring-black ring-opacity-5 focus:outline-none'
                                         )}>
                                             <div className="py-4 text-center">
-                                                <Menu.Item>
+                                                <Menu.Item className={cn('mb-3')}>
                                                     <Link href={'/inventory/' + userName}>
                                                         <span className={cn(
                                                             'pb-px',
                                                             'cursor-pointer',
-                                                            router.pathname.indexOf('/inventory') > -1 ? 'font-extrabold' : '',
+                                                            'hover:text-primary transition-colors',
+                                                            router.pathname.indexOf('/inventory') > -1 ? 'border-b-2 border-primary' : '',
                                                         )}>
                                                             Inventory
                                                         </span>
                                                     </Link>
                                                 </Menu.Item>
-                                                <Menu.Item>
+                                                <Menu.Item className={cn('m-auto')}>
+                                                    <Link href={'/packs/' + userName}>
+                                                        <span className={cn(
+                                                            'pb-px',
+                                                            'cursor-pointer',
+                                                            'hover:text-primary transition-colors',
+                                                            router.pathname.indexOf('/packs') > -1 ? 'border-b-2 border-primary' : '',
+                                                        )}>
+                                                            Packs
+                                                        </span>
+                                                    </Link>
+                                                </Menu.Item>
+                                                <Menu.Item className={cn('mt-3')}>
                                                     <div onClick={performLogout}>
                                                         <span className={cn(
                                                             'cursor-pointer',
+                                                            'hover:text-primary transition-colors',
                                                         )}>
                                                             Logout
                                                         </span>
@@ -197,33 +231,26 @@ const Navigation = React.memo(props => {
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>
-                                { balance &&
+                                { refundBalance ?
                                     <div className={cn(
                                         'font-light text-sm text-center'
                                     )}>
-                                        {formatNumber(balance)} WAX
-                                    </div>
-                                }
-                                { refundBalance ?
-                                <div className={cn(
-                                    'font-light text-sm text-center'
-                                )}>
-                                    <div className={cn('cursor-pointer')} onClick={() => claimRefund(refundBalance)}>
-                                        Refund: {formatNumber(refundBalance)} WAX
-                                    </div>
-                                </div> : '' }
+                                        <div className={cn('cursor-pointer')} onClick={() => claimRefund(refundBalance)}>
+                                            Refund: {formatNumber(refundBalance)} WAX
+                                        </div>
+                                    </div> : '' }
                             </div>
                         </div>
-                       :
-                       <div
+                        :
+                        <div
                             className={cn(
                                 'flex justify-center items-center',
                                 'cursor-pointer',
                             )}
                             onClick={performLogin}
                         >
-                            <div className="mr-1 text-white" >
-                                <SvgIcon icon={<AccountCircle />} />
+                            <div className="mr-1" >
+                                <img src="/person-outline.svg" className="w-5 h-5" alt="Login" title={"Login"} />
                             </div>
                             <span className={cn(
                                 'hover:underline cursor-pointer',

@@ -2,10 +2,11 @@ import React from 'react'
 import cn from 'classnames'
 
 export default function Button(
-  { children, className, disabled, onClick}
+  { children, className, disabled, onClick, id}
 ) {
   return (
     <button
+      id={id}
       className={cn(
         'focus:outline-none focus-visible:ring-1 focus-visible:ring-inset',
         'focus-visible:ring-primary',
