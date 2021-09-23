@@ -27,7 +27,9 @@ export const GetPrices = (asset_id) => {
 const getFilterParams = (filters) => {
     let filterStr = '';
 
-    const {collections, page, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, seller, ids} = filters;
+    const {
+        collections, page, bundles, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, variant, seller, ids
+    } = filters;
 
     if (collections)
         filterStr += `&collection_whitelist=${collections.join(',')}`;
@@ -52,6 +54,12 @@ const getFilterParams = (filters) => {
 
     if (rarity)
         filterStr += `&template_data.rarity=${rarity}`;
+
+    if (variant)
+        filterStr += `&template_data.variant=${variant}`;
+    
+    if (bundles)
+        filterStr += `&min_assets=2`;
 
     if (limit)
         filterStr += `&limit=${limit}`;
