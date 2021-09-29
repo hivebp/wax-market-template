@@ -264,7 +264,7 @@ export default function MarketButtons(props) {
         );
 
         const buyable = listing_price && (!userName || userName !== seller) && (!bought || bought === false) && owner;
-        const sellable = userName && (userName === owner || (listing && listing['buyer'] && listing['buyer'] === userName)) && (
+        const sellable = userName && (userName === owner || (listing && listing['buyer'] && listing['buyer'] === userName && !listing['auction_id'])) && (
             !listing_price || bought) && (!listed || bought || canceled) && handleList;
         const cancelable = userName && (userName === seller) && sale_id && !canceled;
         const auctioncancelable = userName && (userName === seller) && auction_id && !canceled;
