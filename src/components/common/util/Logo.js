@@ -8,7 +8,7 @@ export default function Logo() {
     <Link href={'/'} className="opacity-100 p-2">
         <img
             className={cn('h-20 w-auto z-10')}
-            src="/wax.png"
+            src="/logo.png"
             alt={config.market_title}
         />
     </Link>

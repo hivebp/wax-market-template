@@ -2,7 +2,7 @@
     "ipfs": "https://ipfs.hivebp.io/ipfs/",
     "atomic_api": "https://wax.api.atomicassets.io",
     "market_name": "dummymarket1",
-    "market_url": "https://waxdummymarket.com",
+    "market_url": "https://wax.slikhub.com",
     "default_collection": "official.wax",
     "api_endpoint": "https://api.hivebp.io",
     "limit": 12,
@@ -12,7 +12,7 @@
     "discord_link": "https/discord.com/invite/dJtPetMdfb",
     "twitter_link": "https://twitter.com/waxio",
     "instagram_link": "https/www.instagram.com/wax.nft/",
-    "market_title": "WAX Market Template",
-    "market_description": "WAX Market for Dummy Listings",
-    "market_image": "/wax.png"
+    "market_title": "Slikhub",
+    "market_description": "WAX Market",
+    "market_image": "/logo.png"
 }
