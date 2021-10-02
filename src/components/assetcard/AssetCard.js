@@ -318,7 +318,7 @@ function AssetCard(props) {
                 </div>}
                 <Link href={sale_id ? `/listing/${sale_id}` : auction_id ? `/auction/${auction_id}` : `/asset/${asset_id}`}>
                     <div className="flex flex-1 justify-center h-full">
-                        <CardImage {...props} asset={asset} />
+                        <CardImage {...props} asset={asset} index={selectedAsset} />
                     </div>
                 </Link>
                 {assets.length > 1 && <div

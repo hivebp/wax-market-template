@@ -54,6 +54,7 @@ export const getFilters = (values, collections, pageName, page= 1) => {
     const sortBy = values['sort'] ? values['sort'] : getDefaultSort(pageName);
     const seller = values['seller'] ? values['seller'] : '';
     const user = values['user'] ? values['user'] : '';
+    const bundles = values['bundles'] ? values['bundles'] : '';
 
     return {
         'collections': collections.filter(
@@ -66,6 +67,7 @@ export const getFilters = (values, collections, pageName, page= 1) => {
         'sortBy': getSortBy(sortBy),
         'seller': seller,
         'user': user,
+        'bundles': bundles,
         'name': name,
         'rarity': rarity,
         'variant': variant
