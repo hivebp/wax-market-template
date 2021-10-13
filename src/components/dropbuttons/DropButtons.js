@@ -133,7 +133,7 @@ const DropButtons = (props) => {
             {preview ? <Link href={`/drop/${drop.dropId}`}><div>Drop Live</div></Link> :
                 isLoading ? <LoadingIndicator />
                     : <div className={cn(
-                        'relative m-auto px-4 h-20 lg:h-8',
+                        'relative w-1/2 m-auto px-4 h-auto',
                         'flex flex-wrap lg:justify-center'
                     )}>
                         <Input

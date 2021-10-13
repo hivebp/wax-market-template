@@ -28,7 +28,8 @@ const getFilterParams = (filters) => {
     let filterStr = '';
 
     const {
-        collections, page, bundles, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, variant, seller, ids
+        collections, page, bundles, user, schema, name, limit, orderDir, sortBy, asset_id, rarity, variant, seller, ids,
+        bidder, winner, template_ids, template_id
     } = filters;
 
     if (collections)
@@ -36,6 +37,12 @@ const getFilterParams = (filters) => {
 
     if (ids)
         filterStr += `&ids=${ids.join(',')}`;
+
+    if (template_ids)
+        filterStr += `&template_whitelist=${template_ids.join(',')}`;
+
+    if (template_id)
+        filterStr += `&template_id=${template_id}`;
 
     if (page)
         filterStr += `&page=${page}`;
@@ -48,6 +55,12 @@ const getFilterParams = (filters) => {
 
     if (seller)
         filterStr += `&seller=${seller}`;
+
+    if (bidder)
+        filterStr += `&bidder=${bidder}`;
+
+    if (winner)
+        filterStr += `&participant=${winner}`;
 
     if (name)
         filterStr += `&match=${escape(name)}`;
@@ -101,6 +114,18 @@ export const getListing = (listingId) => {
 };
 
 export const getAuctions = (filters) => {
+    return fetch(
+        atomic_api + `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`).then(
+        res => res.json());
+};
+
+export const getWonAuctions = (filters) => {
+    return fetch(
+        atomic_api + `/atomicmarket/v1/auctions?state=3&${getFilterParams(filters)}`).then(
+        res => res.json());
+};
+
+export const getBids = (filters) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`).then(
         res => res.json());
@@ -266,36 +291,43 @@ export const getPacks = async (filters) => {
         }
 
         if (config.packs_contracts[i] === 'atomicpacksx') {
-            const body = {
-                'code': 'atomicpacksx',
-                'index_position': 'primary',
-                'json': 'true',
-                'key_type': 'i64',
-                'limit': 2000,
-                'lower_bound': '',
-                'upper_bound': '',
-                'reverse': 'true',
-                'scope': 'atomicpacksx',
-                'show_payer': 'false',
-                'table': 'packs',
-                'table_key': ''
-            };
+            let nextKey = "0";
 
-            const url = config.api_endpoint + '/v1/chain/get_table_rows';
-            const res = await post(url, body);
+            while (nextKey) {
+                const body = {
+                    'code': 'atomicpacksx',
+                    'index_position': 'primary',
+                    'json': 'true',
+                    'key_type': 'i64',
+                    'limit': 2000,
+                    'lower_bound': parseInt(nextKey),
+                    'upper_bound': parseInt(nextKey) + 10000,
+                    'reverse': 'false',
+                    'scope': 'atomicpacksx',
+                    'show_payer': 'false',
+                    'table': 'packs',
+                    'table_key': ''
+                };
 
-            if (res && res.status === 200 && res.data && res.data.rows) {
-                res.data.rows.filter(pack => filters.collections.includes(pack.collection_name)).map(pack => {
-                    packs.push({
-                        'packId': pack.pack_id,
-                        'unlockTime': pack.unlock_time,
-                        'templateId': pack.pack_template_id,
-                        'rollCounter': pack.rollCounter,
-                        'displayData': JSON.parse(pack.display_data),
-                        'contract': 'atomicpacksx'
+                const url = config.api_endpoint + '/v1/chain/get_table_rows';
+                const res = await post(url, body);
+
+                if (res && res.status === 200 && res.data && res.data.rows) {
+                    res.data.rows.filter(pack => filters.collections.includes(pack.collection_name)).map(pack => {
+                        packs.push({
+                            'packId': pack.pack_id,
+                            'unlockTime': pack.unlock_time,
+                            'templateId': pack.pack_template_id,
+                            'rollCounter': pack.rollCounter,
+                            'displayData': JSON.parse(pack.display_data),
+                            'contract': 'atomicpacksx'
+                        });
+                        return null;
                     });
-                    return null;
-                });
+                    nextKey = res.data.next_key;
+                } else {
+                    nextKey = null;
+                }
             }
         }
     }

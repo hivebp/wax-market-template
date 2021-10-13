@@ -18,12 +18,15 @@ export default function MarketButtons(props) {
     const handleList = props['handleList'];
     const handleBought = props['handleBought'];
     const handleCancel = props['handleCancel'];
+    const handleClaim = props['handleClaim'];
     const handleBidPlaced = props['handleBidPlaced'];
     const bought = props['bought'];
+    const bidPlaced = props['bidPlaced'];
     const canceled = props['canceled'];
     const listed = props['listed'];
     const auctioned = props['auctioned'];
     const setListed = props['setListed'];
+    const claimed = props['claimed'];
     const error = props['error'];
     const setError = props['setError'];
     const isLoading = props['isLoading'];
@@ -95,6 +98,38 @@ export default function MarketButtons(props) {
                 expireSeconds: 300, blocksBehind: 0,
             });
             handleCancel(true);
+        } catch (e) {
+            console.log(e);
+            setListed(false);
+            setError(e.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const claimAuction = async () => {
+        let { auction_id } = listing ? listing : asset.auctions && asset.auctions.length > 0 && asset.auctions[0];
+
+        setError(null);
+        setIsLoading(true);
+
+        try {
+            await activeUser.signTransaction({
+                actions: [{
+                    account: 'atomicmarket',
+                    name: 'auctclaimbuy',
+                    authorization: [{
+                        actor: userName,
+                        permission: activeUser['requestPermission'],
+                    }],
+                    data: {
+                        auction_id: auction_id
+                    },
+                }]
+            }, {
+                expireSeconds: 300, blocksBehind: 0,
+            });
+            handleClaim(true);
         } catch (e) {
             console.log(e);
             setListed(false);
@@ -192,7 +227,7 @@ export default function MarketButtons(props) {
     };
 
     if (listing) {
-        const {listing_price, seller, auction_id, sale_id} = listing;
+        const {listing_price, buyer, seller, auction_id, sale_id, claimed_by_buyer} = listing;
 
         const formattedPrice = formatPrice(listing);
 
@@ -228,6 +263,18 @@ export default function MarketButtons(props) {
                     onClick={cancel}
                 >
                     Cancel
+                </AssetButton>
+            </Container>
+        );
+
+        const claimAuctionField = (
+            <Container className={cn('flex flex-col')}>
+                <div className="relative py-0 px-1 text-md w-full">{formattedPrice}</div>
+                <AssetButton
+                    className="relative text-center mx-auto top-0 left-0"
+                    onClick={claimAuction}
+                >
+                    Claim
                 </AssetButton>
             </Container>
         );
@@ -268,9 +315,10 @@ export default function MarketButtons(props) {
             !listing_price || bought) && (!listed || bought || canceled) && handleList;
         const cancelable = userName && (userName === seller) && sale_id && !canceled;
         const auctioncancelable = userName && (userName === seller) && auction_id && !canceled;
-        const biddable = auction_id && (!userName || userName !== seller) && owner;
+        const biddable = auction_id && (!userName || userName !== seller) && owner && !(buyer === userName);
+        const auctionclaimable = auction_id && listing['state'] === 3 && buyer === userName && !canceled && !claimed && !claimed_by_buyer;
 
-        const checked = !sellable && !cancelable && !auctioncancelable && !biddable && (listing && listing['buyer'] && listing['buyer'] === userName);
+        const checked = (!sellable && !cancelable && !auctioncancelable && !biddable && !auctionclaimable && (listing && listing['buyer'] && listing['buyer'] === userName)) || (biddable && bidPlaced) || (claimed);
 
         const disMissError = () => {
             if (popError)
@@ -290,7 +338,8 @@ export default function MarketButtons(props) {
                 {!isLoading && checked ? <CheckIndicator/> : '' }
                 {!isLoading && cancelable ? cancelField : ''}
                 {!isLoading && auctioncancelable ? cancelAuctionField : ''}
-                {!isLoading && biddable ? (userName ? bidField : loginField('BID')) : ''}
+                {!isLoading && auctionclaimable ? claimAuctionField : ''}
+                {!isLoading && biddable && !checked ? (userName ? bidField : loginField('BID')) : ''}
                 {!isLoading && !cancelable && !sellable && !buyable && listing_price && !canceled ? infoField : ''}
                 {!isLoading && (error || popError) ? <div className={cn(
                     'absolute bg-red-800 rounded p-4 mx-auto leading-5 flex justify-center',

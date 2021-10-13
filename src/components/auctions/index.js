@@ -5,7 +5,7 @@ import {Context} from "../marketwrapper";
 import config from "../../config.json";
 
 import AssetCard from "../assetcard/AssetCard";
-import {getAuctions} from "../api/Api";
+import {getAuctions, getWonAuctions} from "../api/Api";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import Pagination from "../pagination/Pagination";
 import Filters from "../filters/Filters";
@@ -16,14 +16,23 @@ import {getValues, getFilters} from "../helpers/Helpers";
 import ScrollUpIcon from '../common/util/ScrollUpIcon';
 import cn from "classnames"
 
-const Market = (props) => {
+const Auctions = (props) => {
     const [ state, dispatch ] = useContext(Context);
 
     const [listings, setListings] = useState([]);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
 
+    const bidder = props['bidder'];
+    const winner = props['winner'];
+
     const values = getValues();
+
+    if (winner)
+        values['winner'] = winner;
+
+    if (bidder)
+        values['winner'] = bidder;
 
     if (!values['sort'])
         values['sort'] = 'ending_asc';
@@ -41,7 +50,10 @@ const Market = (props) => {
 
     const initAuctions = async (page) => {
         setIsLoading(true);
-        getAuctions(getFilters(values, state.collections, page)).then(result => getResult(result));
+        if (winner)
+            getWonAuctions(getFilters(values, state.collections, 'auctions', page)).then(result => getResult(result));
+        else
+            getAuctions(getFilters(values, state.collections, 'auctions', page)).then(result => getResult(result));
     };
 
     useEffect(() => {
@@ -85,6 +97,8 @@ const Market = (props) => {
                     <Filters
                         {...props}
                         searchPage={'auctions'}
+                        winner={winner}
+                        bidder={bidder}
                     />
                 </div>
                 <div
@@ -128,4 +142,4 @@ const Market = (props) => {
     );
 };
 
-export default Market;
+export default Auctions;

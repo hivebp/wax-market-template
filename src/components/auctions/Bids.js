@@ -11,7 +11,7 @@ const Bids = (props) => {
         <div className={cn(
             'm-auto w-80 h-auto lg:h-24',
             'flex text-center justify-evenly flex-wrap lg:justify-center',
-            'text-sm text-white mt-5',
+            'text-sm text-white mt-5 overflow-y-auto',
         )}>
             {bids.sort((a, b) => b.number - a.number).map(bid =>
                 <table className="w-full mb-2">

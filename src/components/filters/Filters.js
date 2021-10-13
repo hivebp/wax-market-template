@@ -19,6 +19,8 @@ function Filters(props) {
     const seller = values['seller'] ? values['seller'] : '';
     const bundles = values['bundles'] ? values['bundles'] === 'true' : false;
     const searchPage = props['searchPage'];
+    const winner = props['winner'];
+    const bidder = props['bidder'];
 
     const ual = props['ual'] ? props['ual'] : {'activeUser': ''};
     const activeUser = ual['activeUser'];
@@ -373,7 +375,7 @@ function Filters(props) {
                         My Listings
                 </div> : ''
             }
-            { searchPage === 'auctions' ?
+            { searchPage === 'auctions' && !winner && !bidder ?
                 <div className="ml-1">
                     <Input
                         type="checkbox"

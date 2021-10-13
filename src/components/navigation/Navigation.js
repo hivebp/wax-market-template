@@ -217,6 +217,30 @@ const Navigation = React.memo(props => {
                                                         </span>
                                                     </Link>
                                                 </Menu.Item>
+                                                <Menu.Item className={cn('mb-3')}>
+                                                    <Link href={'/bids/' + userName}>
+                                                        <span className={cn(
+                                                            'pb-px',
+                                                            'cursor-pointer',
+                                                            'hover:text-primary transition-colors',
+                                                            router.pathname.indexOf('/bids') > -1 ? 'border-b-2 border-primary' : '',
+                                                        )}>
+                                                            Bids
+                                                        </span>
+                                                    </Link>
+                                                </Menu.Item>
+                                                <Menu.Item className={cn('mb-3')}>
+                                                    <Link href={'/won/' + userName}>
+                                                        <span className={cn(
+                                                            'pb-px',
+                                                            'cursor-pointer',
+                                                            'hover:text-primary transition-colors',
+                                                            router.pathname.indexOf('/won') > -1 ? 'border-b-2 border-primary' : '',
+                                                        )}>
+                                                            Won Auctions
+                                                        </span>
+                                                    </Link>
+                                                </Menu.Item>
                                                 <Menu.Item className={cn('mt-3')}>
                                                     <div onClick={performLogout}>
                                                         <span className={cn(
