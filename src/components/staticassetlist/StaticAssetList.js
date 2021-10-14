@@ -97,6 +97,7 @@ const StaticAssetList = (props) => {
                         index={index}
                         listing={listing}
                         assets={listing.assets}
+                        key={index}
                     />
                 ) : ''
             }
@@ -106,6 +107,7 @@ const StaticAssetList = (props) => {
                         {...props}
                         index={index}
                         assets={[asset]}
+                        key={index}
                     />
                 ) : ''
             }
@@ -116,6 +118,7 @@ const StaticAssetList = (props) => {
                             index={index}
                             sale={sale}
                             assets={sale.assets}
+                            key={index}
                         />
                     ) : ''
                 }
