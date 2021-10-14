@@ -19,6 +19,7 @@ const CollectionDropdown = React.memo(props => {
     const values = getValues();
 
     const [collections, setCollections] = useState(null);
+    const [allCollections, setAllCollections] = useState([]);
     const [state, dispatch] = useContext(Context);
 
     const pushQueryString = props['pushQueryString'];
@@ -96,7 +97,7 @@ const CollectionDropdown = React.memo(props => {
 
     const option = collection && collection !== '*' ? getCollectionOption(collectionDropDownOptions, collection) : -1;
 
-    return !collectionDropDownOptions || collectionDropDownOptions.length > 1 ? (
+    return collections && collections.length > 1 ? (
         <div className="w-full mb-8">
             {collections ? 
             <div>

@@ -19,6 +19,8 @@ const CollectionComponent = (props) => {
 
     const {name, collection_name, img, description} = collection;
 
+    console.log(collection_name);
+
     const image = config.ipfs + img;
 
     const title = `Check out ${name}`;
@@ -82,15 +84,15 @@ const CollectionComponent = (props) => {
                 <Link href={`/explorer?tab=assets&collection=${collection_name}`}>
                     <AssetListHeader header="Newest Assets" />
                 </Link>
-                <StaticAssetList type={'assets'} collection={collection_name} />
+                <StaticAssetList type={'assets'} {...props} collection={collection_name} />
 
                 <Link href={`/market?collection=${collection_name}&sort=date_desc`}>
                     <AssetListHeader header="Latest Listings" />
                 </Link>
-                <StaticAssetList type={'listings'} collection={collection_name} />
+                <StaticAssetList type={'listings'} {...props} collection={collection_name} />
 
                 <AssetListHeader header="Top Sales" />
-                <StaticAssetList type={'sales'} collection={collection_name} />
+                <StaticAssetList type={'sales'} {...props} collection={collection_name} />
             </div>
 
             {showScrollUpIcon ? <ScrollUpIcon onClick={scrollUp} /> : '' }
