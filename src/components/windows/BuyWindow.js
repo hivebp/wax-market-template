@@ -55,30 +55,33 @@ function BuyWindow(props) {
     };
 
     return (
-        <div className={cn(
-            'fixed top-40 left-popup',
-            'w-full max-w-popup lg:max-w-popup-lg h-auto',
-            'p-3 lg:p-8 m-0',
-            'text-sm text-neutral font-light opacity-100',
-            'bg-paper rounded-xl shadow-lg z-40',
-            'backdrop-filter backdrop-blur-lg',
-        )}>
-            <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4" onClick={cancel} src="/close_btn.svg" alt="X" />
-            <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
-            <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
-            <div className="text-lg text-center my-4">
-                {`Do you want to buy this Item for ${formatNumber(quantity)} WAX?`}
-            </div>
+        <div>
             <div className={cn(
-                'relative m-auto mt-5 h-20 lg:h-8',
-                'flex justify-evenly flex-wrap lg:justify-end'
+                'fixed top-40 left-popup',
+                'w-full max-w-popup lg:max-w-popup-lg h-auto',
+                'p-3 lg:p-8 m-0',
+                'text-sm text-neutral font-light opacity-100',
+                'bg-paper rounded-xl shadow-lg z-40',
+                'backdrop-filter backdrop-blur-lg',
             )}>
-                <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                { userName !== seller ? <WindowButton text="Buy" onClick={buy} /> : '' }
+                <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4" onClick={cancel} src="/close_btn.svg" alt="X" />
+                <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
+                <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
+                <div className="text-lg text-center my-4">
+                    {`Do you want to buy this Item for ${formatNumber(quantity)} WAX?`}
+                </div>
+                <div className={cn(
+                    'relative m-auto mt-5 h-20 lg:h-8',
+                    'flex justify-evenly flex-wrap lg:justify-end'
+                )}>
+                    <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
+                    { userName !== seller ? <WindowButton text="Buy" onClick={buy} /> : '' }
+                </div>
+                {isLoading ? <div className="absolute t-0 w-full h-full backdrop-filter backdrop-blur-md">
+                    <LoadingIndicator text="Loading Transaction" />
+                </div> : '' }
             </div>
-            {isLoading ? <div className="absolute t-0 w-full h-full backdrop-filter backdrop-blur-md">
-                <LoadingIndicator text="Loading Transaction" />
-            </div> : '' }
+            <div className="backdrop-element" onClick={cancel}></div>
         </div>
     );
 }
