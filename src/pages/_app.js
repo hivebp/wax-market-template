@@ -90,7 +90,7 @@ function MyApp ({ Component, pageProps }) {
                 <WindowWrapper {...props} />
                 <div className={'h-screen overflow-y-hidden bg-page'}>
                     <Navigation {...props} />
-                    <div className={'relative h-page-s sm:h-page top-60 sm:top-28 overflow-y-auto'}>
+                    <div className={'relative h-page-s md:h-page top-48 md:top-28 overflow-y-auto'}>
                         <Component {...props} />
                         <Footer {...props} />
                     </div>

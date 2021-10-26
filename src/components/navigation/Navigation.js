@@ -102,9 +102,9 @@ const Navigation = React.memo(props => {
 
     return (
         <div className={cn(
-            'fixed w-full h-60 sm:h-28',
+            'fixed w-full h-48 md:h-28',
             'bg-page shadow-sm border-b border-paper',
-            'z-50'
+            'z-30'
         )}>
             <div className={cn(
                 'relative container mx-auto',

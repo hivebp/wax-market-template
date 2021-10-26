@@ -42,6 +42,8 @@ module.exports = {
         'img-small': '2rem',
         'img-collection': '25rem',
         'img-asset': '37.5rem',
+        'popup': '38.5rem',
+        'popup-lg': '44rem',
       },
       inset: {
         '22': '5.5rem'
@@ -55,7 +57,7 @@ module.exports = {
         '6.5':'1.625rem',
         'asset': '23rem',
         'page': 'calc(100% - 6.5rem)',
-        'page-s': 'calc(100% - 15rem)'
+        'page-s': 'calc(100% - 12rem)'
       },
       lineHeight: {
         'tab': '1.625rem',

@@ -135,15 +135,17 @@ function UnboxPopup(props) {
             acknowledge={acknowledge}
         />
         : <div className={cn(
-            'fixed top-40 left-popup',
-            'w-full max-w-popup lg:max-w-popup-lg h-auto',
+            'fixed top-1/2 transform -translate-y-1/2',
+            'left-1/2 transform -translate-x-1/2',
+            'w-11/12 max-w-popup lg:max-w-popup-lg h-auto',
+            'max-h-popup md:max-h-popup-lg',
             'p-3 lg:p-8 m-0',
             'text-sm text-neutral font-light opacity-100',
             'bg-paper rounded-xl shadow-lg z-100',
             'backdrop-filter backdrop-blur-lg',
         )}>
             <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4 " onClick={cancel} src="/close_btn.svg" alt="X" />
-            <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
+            <div className="text-xl sm:text-2xl md:text-3xl mt-4 lg:mt-0 text-center">{name}</div>
             <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
             <div className="text-lg text-left my-4">
                 {`Claim ${name}?`}
@@ -156,7 +158,7 @@ function UnboxPopup(props) {
                 <LoadingIndicator />
             </div> : <div className={cn(
                 'relative m-auto mt-5 h-20 lg:h-8',
-                'flex justify-evenly flex-wrap lg:justify-end'
+                'flex justify-evenly lg:justify-end'
             )}>
                 <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
                 <WindowButton text="Claim" onClick={claim} id={'unbox-button'} />
