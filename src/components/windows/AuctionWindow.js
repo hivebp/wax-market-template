@@ -90,17 +90,19 @@ function AuctionWindow(props) {
 
     return (
         <div className={cn(
-            'fixed top-40 left-popup',
-            'w-full max-w-popup lg:max-w-popup-lg h-auto',
-            'p-3 lg:p-8 m-0',
+            'fixed top-1/2 transform -translate-y-1/2',
+            'left-1/2 transform -translate-x-1/2',
+            'w-11/12 max-w-popup lg:max-w-popup-lg h-auto',
+            'max-h-popup md:max-h-popup-lg',
+            'p-3 lg:p-8 m-0 overflow-y-auto',
             'text-sm text-neutral font-light opacity-100',
             'bg-paper rounded-xl shadow-lg z-40',
             'backdrop-filter backdrop-blur-lg',
         )}>
             <img className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4 " onClick={cancel} src="/close_btn.svg" alt="X" />
-            <div className="text-3xl mt-4 lg:mt-0 text-center">{name}</div>
+            <div className="text-xl sm:text-2xl md:text-3xl mt-4 lg:mt-0 text-center">{name}</div>
             <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
-            <div className="text-lg text-left my-4">
+            <div className="text-base sm:text-lg text-center my-0 md:my-4">
                 {`Are you sure you want to auction ${name} for ${formatNumber(sellPrice)} WAX?`}
             </div>
             {
@@ -109,7 +111,7 @@ function AuctionWindow(props) {
             <div className="relative">
                 <div className="flex flex-row">
                     <div className={cn(
-                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2 mr-4',
+                        'relative m-auto lg:mb-2 py-1 w-1/2 mr-4',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Price</div>
@@ -129,7 +131,7 @@ function AuctionWindow(props) {
                         </div>
                     </div>
                     <div className={cn(
-                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2',
+                        'relative m-auto lg:mb-2 py-1 w-1/2',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Days</div>
@@ -151,7 +153,7 @@ function AuctionWindow(props) {
                 </div>
                 <div className="flex flex-row">
                     <div className={cn(
-                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2 mr-4',
+                        'relative m-auto lg:mb-2 py-1 w-1/2 mr-4',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Hours</div>
@@ -171,7 +173,7 @@ function AuctionWindow(props) {
                         </div>
                     </div>
                     <div className={cn(
-                        'relative m-auto lg:mb-4 h-20 lg:h-8 w-1/2',
+                        'relative m-auto lg:mb-2 py-1 w-1/2',
                         'flex flex-row items-center justify-between flex-wrap'
                     )}>
                         <div className="flex items-center">Minutes</div>
@@ -216,8 +218,8 @@ function AuctionWindow(props) {
                     </div> : <LoadingIndicator/>
                 }
                 <div className={cn(
-                    'relative m-auto mt-5 lg:mt-10 h-20 lg:h-8',
-                    'flex justify-evenly flex-wrap lg:justify-end'
+                    'relative m-auto mt-5 lg:mt-8 h-20 lg:h-8',
+                    'flex justify-evenly lg:justify-end'
                 )}>
                     <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
                     <WindowButton

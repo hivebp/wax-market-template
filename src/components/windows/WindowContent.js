@@ -14,7 +14,7 @@ export default function WindowContent(
                         <source src={video} />
                         Your browser does not support the video tag.
                     </video> :
-                    <img className="w-48 h-48 lg:h-72 m-auto" src={image} alt="none" /> }
+                    <img className="w-48 h-48 m-auto" src={image} alt="none" /> }
             </div>
             <div className={cn(
                 'my-2.5 lg:m-auto px-8 w-full lg:w-3/5',
