@@ -84,7 +84,7 @@ function BuyDropWindow(props) {
             'left-1/2 transform -translate-x-1/2',
             'w-11/12 max-w-popup lg:max-w-popup-lg h-auto',
             'max-h-popup md:max-h-popup-lg',
-            'p-3 lg:p-8 m-0',
+            'p-3 lg:p-8 m-0 overflow-y-auto',
             'text-sm text-neutral font-light opacity-100',
             'bg-paper rounded-xl shadow-lg z-40',
             'backdrop-filter backdrop-blur-lg',
