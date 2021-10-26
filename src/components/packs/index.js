@@ -44,42 +44,40 @@ const Packs = (props) => {
 
     return (
         <Page>
-            <Content headline="Packs">
-                <div className="container mx-auto">
-                    <Tabs
-                        className={cn(
-                            'border-tabs',
-                            'flex h-12 my-10 rounded-md',
-                            'text-sm lg:text-base text-neutral',
-                            'border border-paper'
-                        )}
-                        defaultActiveKey={tabKey}
-                        id="collection-switch"
-                        onSelect={(k) => initTabs(k)}
+            <div className="container mx-auto">
+                <Tabs
+                    className={cn(
+                        'border-tabs',
+                        'flex h-12 my-10 rounded-md',
+                        'text-sm lg:text-base text-neutral',
+                        'border border-paper'
+                    )}
+                    defaultActiveKey={tabKey}
+                    id="collection-switch"
+                    onSelect={(k) => initTabs(k)}
+                >
+                    <Tab
+                        eventKey="mypacks"
+                        title={
+                            <TabItem target={'mypacks'} tabKey={tabKey} title={'My Packs'} />
+                        }
                     >
-                        <Tab
-                            eventKey="mypacks"
-                            title={
-                                <TabItem target={'mypacks'} tabKey={tabKey} title={'My Packs'} />
-                            }
-                        >
-                        {tabKey === 'mypacks' &&
-                            <MyPacksList {...props} />
+                    {tabKey === 'mypacks' &&
+                        <MyPacksList {...props} />
+                    }
+                    </Tab>
+                    <Tab
+                        eventKey="unclaimed"
+                        title={
+                            <TabItem target={'unclaimed'} tabKey={tabKey} title={'Unclaimed Packs'} />
                         }
-                        </Tab>
-                        <Tab
-                            eventKey="unclaimed"
-                            title={
-                                <TabItem target={'unclaimed'} tabKey={tabKey} title={'Unclaimed Packs'} />
-                            }
-                        >
-                        {tabKey === 'unclaimed' &&
-                            <UnclaimedPacksList {...props} />
-                        }
-                        </Tab>
-                    </Tabs>
-                </div>
-            </Content>
+                    >
+                    {tabKey === 'unclaimed' &&
+                        <UnclaimedPacksList {...props} />
+                    }
+                    </Tab>
+                </Tabs>
+            </div>
         </Page>
     );
 };
