@@ -79,9 +79,9 @@ const CollectionDropdown = React.memo(props => {
 
     const createCollectionDropDownOptions = (collections) => {
         if (collections && collections['data']) {
-            setCollectionDropDownOptions(createCollections(collections['data']['results'], false,
+            setCollectionDropDownOptions(createCollections(collections['data'], false,
                 'All Collections', true));
-            setCollections(collections['data']['results']);
+            setCollections(collections['data']);
         }
     };
 

@@ -20,8 +20,8 @@ function CollectionList(props) {
 
     const receiveCollections = (res) => {
         setIsLoading(false);
-        if (res && res.data && res.data.results)
-            setCollections(res.data.results);
+        if (res && res.data)
+            setCollections(res.data);
     }
 
     useEffect(() => {

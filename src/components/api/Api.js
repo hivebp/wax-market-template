@@ -12,9 +12,12 @@ export const get = (path) =>
         res => res.json());
 
 export const getCollections = (collections) => {
+    const escaped = [];
+    collections.map(collection => escaped.push(escape(collection)));
+
     return fetch(
-        atomic_api + `/atomicmarket/v1/stats/collections?symbol=WAX&page=1&limit=100&collection_whitelist=${
-            collections.join(',')}`
+        atomic_api +
+        `/atomicassets/v1/collections?page=1&limit=10&order=desc&sort=created&collection_whitelist=${escaped.join(',')}`
     ).then(
         res => res.json());
 };

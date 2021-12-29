@@ -68,23 +68,25 @@ export default function UnclaimedPacksList(props) {
     const getUnclaimedPacks = async () => {
         const promises = [];
         config.packs_contracts.map((contract) => {
-            const body = {
-                "json": true,
-                "code": contract,
-                "scope": contract,
-                "table": "unboxpacks",
-                "table_key": "unboxer",
-                "lower_bound": user,
-                "upper_bound": user,
-                "index_position": 2,
-                "key_type": "name",
-                "limit": 200,
-                "reverse": false,
-                "show_payer": false
-            }
+            if (contract === 'atomicpacksx') {
+                const body = {
+                    "json": true,
+                    "code": contract,
+                    "scope": contract,
+                    "table": "unboxpacks",
+                    "table_key": "unboxer",
+                    "lower_bound": user,
+                    "upper_bound": user,
+                    "index_position": 2,
+                    "key_type": "name",
+                    "limit": 200,
+                    "reverse": false,
+                    "show_payer": false
+                }
 
-            const url = config.api_endpoint + '/v1/chain/get_table_rows';
-            promises.push(post(url, body));
+                const url = config.api_endpoint + '/v1/chain/get_table_rows';
+                promises.push(post(url, body));
+            }
         })
 
         if (promises.length > 0) {
