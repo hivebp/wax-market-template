@@ -36,13 +36,13 @@ const getDefaultSort = (pageName) => {
         case 'packs':
             return 'transferred_desc';
         case 'market':
-            return 'date_desc';
+            return 'created_desc';
         case 'auctions':
             return 'ending_desc';
         case 'assets':
             return 'created_desc';
     }
-    return 'date_desc';
+    return 'created_desc';
 };
 
 export const getFilters = (values, collections, pageName, page= 1) => {

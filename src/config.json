@@ -4,7 +4,7 @@
     "market_name": "dummymarket1",
     "market_url": "https://waxdummymarket.com",
     "default_collection": "official.wax",
-    "api_endpoint": "https://api.hivebp.io",
+    "api_endpoint": "https://api3.hivebp.io",
     "limit": 12,
     "drops_contract": "neftyblocksd",
     "packs_contracts": ["atomicpacksx"],

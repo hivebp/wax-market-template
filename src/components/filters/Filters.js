@@ -29,7 +29,7 @@ function Filters(props) {
     const getDefaultSort = (page) => {
         switch (page) {
             case 'inventory': return 'transferred_desc';
-            case 'market': return 'date_desc';
+            case 'market': return 'created_desc';
             case 'assets': return 'created_desc';
             case 'auctions': return 'ending_asc';
             default: return 'name_asc';
@@ -60,11 +60,11 @@ function Filters(props) {
 
     if (searchPage === 'market') {
         sortDropdownOptions.push({
-            "value": 'date_desc',
+            "value": 'created_desc',
             "label": 'Date (Newest)'
         });
         sortDropdownOptions.push({
-            "value": 'date_asc',
+            "value": 'created_asc',
             "label": 'Date (Oldest)'
         });
         sortDropdownOptions.push({
@@ -87,11 +87,11 @@ function Filters(props) {
             "label": 'Ending (Soonest)'
         });
         sortDropdownOptions.push({
-            "value": 'date_desc',
+            "value": 'created_desc',
             "label": 'Date (Newest)'
         });
         sortDropdownOptions.push({
-            "value": 'date_asc',
+            "value": 'created_asc',
             "label": 'Date (Oldest)'
         });
         sortDropdownOptions.push({
