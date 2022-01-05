@@ -17,8 +17,6 @@ function MyPacksList(props) {
     const values = getValues();
     values['user'] = props['user'];
 
-    console.log(values['user']);
-
     const initialized = state.collections !== null && state.collections !== undefined;
 
     const unboxed = state.unboxed;

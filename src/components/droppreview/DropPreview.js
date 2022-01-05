@@ -73,6 +73,7 @@ function DropPreview(props) {
             <DropButtons
                 drop={drop}
                 preview={true}
+                {...props}
             />
         </div>
     );

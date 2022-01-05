@@ -7,14 +7,14 @@ import config from "../../config.json";
 import {getDrops} from "../api/Api";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import Pagination from "../pagination/Pagination";
-import Filters from "../filters/Filters";
-import MarketContent from "../common/layout/Content"
+import Content from "../common/layout/Content"
 import Page from "../common/layout/Page"
 import Header from "../common/util/Header"
 import {getValues, getFilters} from "../helpers/Helpers";
 import ScrollUpIcon from '../common/util/ScrollUpIcon';
 import cn from "classnames"
 import DropPreview from "../droppreview/DropPreview";
+import moment from "moment";
 
 const Drops = (props) => {
     const [ state, dispatch ] = useContext(Context);
@@ -24,6 +24,8 @@ const Drops = (props) => {
     const [templateData, setTemplateData] = useState(null);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+
+    const currentTime = moment();
 
     const initialized = state.collections !== null && state.collections !== undefined && state.collectionData !== null && state.collectionData !== undefined && state.templateData !== null && state.templateData !== undefined;
 
@@ -38,7 +40,7 @@ const Drops = (props) => {
 
     const initDrops = async (page, ) => {
         setIsLoading(true);
-        getDrops(getFilters(values, state.collections, page), collectionData, templateData).then(
+        getDrops(getFilters(values, state.collections, 'drops', page), collectionData, templateData).then(
             result => getResult(result));
     };
 
@@ -48,8 +50,8 @@ const Drops = (props) => {
             state.templateData.then(res => setTemplateData(res));
         }
         if (initialized && collectionData && templateData) {
-            initDrops(page, collectionData && collectionData.success && collectionData.data && collectionData.data.results ?
-                collectionData.data.results[0] : null);
+            initDrops(page, collectionData && collectionData.success && collectionData.data ?
+                collectionData.data[0] : null);
         }
     }, [page, initialized, collectionData, templateData]);
 
@@ -78,36 +80,23 @@ const Drops = (props) => {
                 description={config.market_description}
                 image={config.market_image}
             />
-            <MarketContent>
-                <div 
-                    className={cn(
-                        'w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5',
-                        'max-w-filter'
-                    )}    
-                >
-                        
-                    <Filters
-                        {...props}
-                        searchPage={'market'}
-                    />
-                </div>
+            <Content>
                 <div
                     className={cn(
-                        'w-full sm:2/3 md:w-3/4',
+                        'w-full',
                     )}
                 >
-                    <Pagination
-                        items={drops}
-                        page={page}
-                        setPage={setPage}
-                    />
-                    { isLoading ? <LoadingIndicator /> : 
+                    <h4 className={cn('text-5xl mb-8 w-full')}>Drops</h4>
+                    { isLoading ? <LoadingIndicator /> :
                         <div className={cn(
                             "relative w-full mb-24",
                             "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
                         )}>
                             {
-                                drops ? drops.map((drop, index) =>
+                                drops ? drops.filter(
+                                    drop => (drop.endTime ? currentTime.unix() > drop.endTime : true) &&
+                                        (drop.maxClaimable > 0 ? drop.currentClaimed < drop.maxClaimable : true)
+                                ).map((drop, index) =>
                                     <DropPreview
                                         {...props}
                                         templateData={templateData}
@@ -127,7 +116,7 @@ const Drops = (props) => {
                         />
                     }
                 </div>
-            </MarketContent>
+            </Content>
             {showScrollUpIcon ? <ScrollUpIcon onClick={scrollUp} /> : '' }
         </Page>
     );

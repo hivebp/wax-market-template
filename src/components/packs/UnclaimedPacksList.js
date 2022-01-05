@@ -55,8 +55,6 @@ export default function UnclaimedPacksList(props) {
             }
         });
 
-        console.log(asset_ids);
-
         if (asset_ids.length > 0)
             getAssets({ids: asset_ids, limit: config.limit}).then(res => getAssetsResult(res, unboxer));
         else {

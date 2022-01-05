@@ -19,8 +19,6 @@ const CollectionComponent = (props) => {
 
     const {name, collection_name, img, description} = collection;
 
-    console.log(collection_name);
-
     const image = config.ipfs + img;
 
     const title = `Check out ${name}`;

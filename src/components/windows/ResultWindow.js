@@ -1,7 +1,7 @@
 import cn from "classnames";
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 import ResultList from "../packs/ResultList";
-import React from "react";
+import React, {useEffect} from "react";
 
 function ResultWindow(props) {
     const stopAnimation = props['stopAnimation'];
@@ -13,6 +13,13 @@ function ResultWindow(props) {
     const bgColor = animation['bgColor'];
 
     const isLoading = props['isLoading'];
+
+    useEffect(() => {
+        if (!animation.video) {
+            stopAnimation();
+        }
+    }, [animation]);
+
     return (
         <div style={{backgroundColor: bgColor}} className={cn(
             'fixed left-0 top-0',

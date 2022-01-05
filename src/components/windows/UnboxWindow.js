@@ -80,9 +80,7 @@ function UnboxWindow(props) {
                 const video = data ? data.video : null;
                 const bgColor = pack.displayData.animation.drawing.bg_color;
 
-                if (video) {
-                    setAnimation({video: video, bgColor: bgColor});
-                }
+                setAnimation({video: video, bgColor: bgColor});
             }
         } else {
             throw 'Could not load Pack';

@@ -38,7 +38,7 @@ const DropComponent = (props) => {
 
     useEffect(() => {
         if (initialized) {
-            state.collectionData.then(res => res.success && res.data && setCollectionData(res.data.results));
+            state.collectionData.then(res => res.success && res.data && setCollectionData(res.data));
             state.templateData.then(res => res.success && setTemplateData(res.data));
         }
     }, [initialized]);
@@ -107,6 +107,7 @@ const DropComponent = (props) => {
                 setIsLoading={setIsLoading}
                 setError={setError}
                 handleBought={handleBought}
+                {...props}
             /> }
         </Page>
     );

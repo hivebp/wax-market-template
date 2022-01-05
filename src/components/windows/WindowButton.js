@@ -8,16 +8,18 @@ export default function WindowButton(
     return (
         <Button
             className={cn(
-                'w-36 h-8 ml-4 bg-primary',
+                'w-36 h-8 ml-4',
                 'text-xxs text-secondary',
-                'border border-solid border-primary',
+                'border border-solid',
                 'rounded-bl-xl rounded-tr-xl outline-none',
                 'hover:font-bold',
-                className
+                className,
+                {'bg-gray-400 border-gray-400 cursor-not-allowed': disabled},
+                {'border-primary bg-primary': !disabled}
             )}
+            id={id}
             onClick={onClick}
             disabled={disabled}
-            id={id}
         >
             {text}
         </Button>

@@ -5,11 +5,14 @@ import Long from 'long';
 
 export const atomic_api = config.atomic_api;
 
+
 export const api_endpoint = config.api_endpoint;
+
 
 export const get = (path) =>
     fetch(`${api_endpoint}/api/${path}`).then(
         res => res.json());
+
 
 export const getCollections = (collections) => {
     const escaped = [];
@@ -22,10 +25,12 @@ export const getCollections = (collections) => {
         res => res.json());
 };
 
+
 export const GetPrices = (asset_id) => {
     return fetch(atomic_api + `/atomicmarket/v1/prices/assets?ids=${asset_id}`).then(
         res => res.json());
 }
+
 
 const getFilterParams = (filters) => {
     let filterStr = '';
@@ -92,11 +97,128 @@ const getFilterParams = (filters) => {
     return filterStr;
 };
 
+
+export const getAccountStats = async (user, dropID) => {
+    const body = {
+        "json": true,
+        "code": 'neftyblocksd',
+        "scope": user,
+        "table": "accstats",
+        'table_key': '',
+        'lower_bound': dropID,
+        'upper_bound': dropID,
+        "index_position": 1,
+        'key_type': '',
+        "limit": 1,
+        "reverse": false,
+        "show_payer": false
+    }
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+
+    const res = await post(url, body);
+
+    if (res && res.status === 200 && res.data.rows.length > 0) {
+        return res.data.rows[0];
+    }
+
+    return null;
+};
+
+
+export const getDropKeys = async (dropId) => {
+    const body = {
+        'code': 'neftyblocksd',
+        'index_position': 'primary',
+        'json': 'true',
+        'key_type': 'i64',
+        'limit': 1,
+        'lower_bound': '',
+        'upper_bound': '',
+        'reverse': 'true',
+        'scope': dropId,
+        'show_payer': 'false',
+        'table': 'authkeys',
+        'table_key': ''
+    };
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+    const res = await post(url, body);
+
+    let result = null;
+
+    if (res && res.status === 200 && res.data && res.data.rows && res.data.rows.length > 0) {
+        result = res.data.rows[0];
+    }
+
+    return result;
+};
+
+
+export const getWhiteList = async (dropId, userName) => {
+    const body = {
+        'code': 'neftyblocksd',
+        'index_position': 'primary',
+        'json': 'true',
+        'key_type': 'i64',
+        'limit': 1,
+        'lower_bound': userName,
+        'upper_bound': userName,
+        'reverse': 'true',
+        'scope': dropId,
+        'show_payer': 'false',
+        'table': 'whitelists',
+        'table_key': ''
+    };
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+    const res = await post(url, body);
+
+    let result = null;
+
+    if (res && res.status === 200 && res.data && res.data.rows && res.data.rows.length > 0) {
+        result = res.data.rows[0];
+    }
+
+    return result;
+};
+
+
+export const getProofOwn = async (dropId) => {
+    const body = {
+        'code': 'neftyblocksd',
+        'index_position': 'primary',
+        'json': 'true',
+        'key_type': 'i64',
+        'limit': 1,
+        'lower_bound': dropId,
+        'upper_bound': dropId,
+        'reverse': 'true',
+        'scope': 'neftyblocksd',
+        'show_payer': 'false',
+        'table': 'proofown',
+        'table_key': ''
+    };
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+    const res = await post(url, body);
+
+    let result = null;
+
+    if (res && res.status === 200 && res.data && res.data.rows && res.data.rows.length > 0) {
+        result = res.data.rows[0];
+    }
+
+    return result;
+};
+
+
 export const getSchemas = (filters) => {
     return fetch(
         atomic_api + `/atomicassets/v1/schemas?${getFilterParams(filters)}`).then(
         res => res.json());
 };
+
 
 export const getTemplates = (filters) => {
     return fetch(
@@ -104,11 +226,13 @@ export const getTemplates = (filters) => {
     ).then(res => res.json());
 };
 
+
 export const getListings = (filters) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/sales?state=1${getFilterParams(filters)}`).then(
         res => res.json());
 };
+
 
 export const getListing = (listingId) => {
     return fetch(
@@ -116,11 +240,13 @@ export const getListing = (listingId) => {
         res => res.json());
 };
 
+
 export const getAuctions = (filters) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`).then(
         res => res.json());
 };
+
 
 export const getWonAuctions = (filters) => {
     return fetch(
@@ -128,11 +254,13 @@ export const getWonAuctions = (filters) => {
         res => res.json());
 };
 
+
 export const getBids = (filters) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`).then(
         res => res.json());
 };
+
 
 export const getSales = (filters) => {
     return fetch(
@@ -140,11 +268,13 @@ export const getSales = (filters) => {
         res => res.json());
 };
 
+
 export const getListingsById = (asset_id) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/sales?&limit=1&asset_id=${asset_id}`).then(
         res => res.json());
 };
+
 
 export const getAuctionsById = (asset_id) => {
     return fetch(
@@ -152,15 +282,18 @@ export const getAuctionsById = (asset_id) => {
         res => res.json());
 };
 
+
 export const getAssets = (filters) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/assets?${getFilterParams(filters)}`).then(res => res.json());
 };
 
+
 export const getTemplate = (templateId, collectionName) => {
     return fetch(
         atomic_api + `/atomicassets/v1/templates/${collectionName}/${templateId}`).then(res => res.json());
 };
+
 
 export const getAsset = (assetId) => {
     return fetch(
@@ -172,15 +305,18 @@ export const getCollection = (collection_name) => {
         atomic_api + `/atomicassets/v1/collections/${collection_name}`).then(res => res.json());
 };
 
+
 export const getSale = (saleId) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/sales/${saleId}`).then(res => res.json());
 };
 
+
 export const getAuction = (auctionId) => {
     return fetch(
         atomic_api + `/atomicmarket/v1/auctions/${auctionId}`).then(res => res.json());
 };
+
 
 const post = (url, data) =>
     axios({
@@ -188,6 +324,7 @@ const post = (url, data) =>
         url: url,
         data: data
     }).then(res => res);
+
 
 export const loadCollections = async () => {
     const body = {
@@ -210,6 +347,7 @@ export const loadCollections = async () => {
     return post(url, body);
 }
 
+
 function bytesToHex(bytes) {
     let leHex = '';
     for (const b of bytes) {
@@ -219,12 +357,14 @@ function bytesToHex(bytes) {
     return leHex;
 }
 
+
 const charidx = ch => {
     const idx = '.12345abcdefghijklmnopqrstuvwxyz'.indexOf(ch);
     if (idx === -1) throw new TypeError(`Invalid character: '${ch}'`);
 
     return idx;
 };
+
 
 function getCollectionHex(collection) {
     if (typeof collection !== 'string')
@@ -250,6 +390,7 @@ function getCollectionHex(collection) {
 
     return bytesToHex(longVal.toBytes());
 }
+
 
 export const getPacks = async (filters) => {
     const packs = [];
@@ -338,6 +479,7 @@ export const getPacks = async (filters) => {
     return packs;
 };
 
+
 export const getDrop = async (dropId) => {
     const body = {
         'code': config.drops_contract,
@@ -385,6 +527,7 @@ export const getDrop = async (dropId) => {
     return result;
 };
 
+
 export const getDelphiMedian = async () => {
     const body = {
         'code': 'delphioracle',
@@ -413,6 +556,7 @@ export const getDelphiMedian = async () => {
 
     return null;
 };
+
 
 export const getDrops = async (filters) => {
     if (!filters.collections)
@@ -452,6 +596,7 @@ export const getDrops = async (filters) => {
                 'currentClaimed': drop.current_claimed,
                 'maxClaimable': drop.max_claimable,
                 'name': displayData.name,
+                'authRequired': drop.auth_required,
                 'listingPrice': drop.listing_price,
                 'description': displayData.description,
                 'assetsToMint': drop.assets_to_mint,
@@ -464,6 +609,7 @@ export const getDrops = async (filters) => {
 
     return drops;
 };
+
 
 export const getRefundBalance = async (name) => {
     const body = {
@@ -484,6 +630,7 @@ export const getRefundBalance = async (name) => {
     const url = config.api_endpoint + '/v1/chain/get_table_rows';
     return post(url, body);
 };
+
 
 export const getWaxBalance = async (name) => {
     const body = {
