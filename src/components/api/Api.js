@@ -366,7 +366,7 @@ const charidx = ch => {
 };
 
 
-function getCollectionHex(collection) {
+export const getCollectionHex = (collection) => {
     if (typeof collection !== 'string')
         throw new TypeError('name parameter is a required string');
 

@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import {getRefundBalance, getWaxBalance} from "../api/Api";
 import {formatNumber} from "../helpers/Helpers";
 import cn from "classnames";
+import config from '../../config.json';
 
 import LoadingIndicator from "../loadingindicator/LoadingIndicator";
 
@@ -217,6 +218,18 @@ const Navigation = React.memo(props => {
                                                         </span>
                                                     </Link>
                                                 </Menu.Item>
+                                                {config.blend_contracts.length > 0 ? <Menu.Item className={cn('mb-3')}>
+                                                    <Link href={'/blends'}>
+                                                    <span className={cn(
+                                                        'pb-px',
+                                                        'cursor-pointer',
+                                                        'hover:text-primary transition-colors',
+                                                        router.pathname.indexOf('/blends') > -1 ? 'border-b-2 border-primary' : '',
+                                                    )}>
+                                                        Blends
+                                                    </span>
+                                                    </Link>
+                                                </Menu.Item> : '' }
                                                 <Menu.Item className={cn('mb-3')}>
                                                     <Link href={'/bids/' + userName}>
                                                         <span className={cn(
