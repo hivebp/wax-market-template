@@ -371,6 +371,85 @@ export const getWaxBalance = createTableGetter(
         }, 0),
 )
 
+export const getDelphiMedian = createTableGetter(
+    () => ({
+        code: 'delphioracle',
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 1,
+        lower_bound: '',
+        reverse: 'true',
+        scope: 'waxpusd',
+        show_payer: 'false',
+        table: 'datapoints',
+        table_key: '',
+        upper_bound: '',
+    }),
+    (result) => firstRow(result)?.median || null,
+)
+
+const getDropByCollectionHex = createTableGetter(
+    (collectionHex) => ({
+        code: config.drops_contract,
+        index_position: 2,
+        json: 'true',
+        key_type: 'sha256',
+        limit: 100,
+        lower_bound: `0000000000000000${collectionHex}00000000000000000000000000000000`,
+        upper_bound: `0000000000000000${collectionHex}ffffffffffffffffffffffffffffffff`,
+        reverse: 'true',
+        scope: config.drops_contract,
+        show_payer: 'false',
+        table: 'drops',
+        table_key: '',
+    }),
+    allRows,
+)
+
+const parseDropData = (drop) => ({
+    accountLimit: drop.account_limit,
+    accountLimitCooldown: drop.account_limit_cooldown,
+    assetsToMint: drop.assets_to_mint,
+    authRequired: drop.auth_required,
+    collectionName: drop.collection_name,
+    currentClaimed: drop.current_claimed,
+    description: JSON.parse(drop.display_data).description,
+    dropId: drop.drop_id,
+    endTime: drop.end_time,
+    listingPrice: drop.listing_price,
+    maxClaimable: drop.max_claimable,
+    name: displayData.name,
+    startTime: drop.start_time,
+})
+
+export const getDrop = createTableGetter(
+    (dropId) => ({
+        code: config.drops_contract,
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 1,
+        lower_bound: dropId,
+        upper_bound: dropId,
+        reverse: 'true',
+        scope: config.drops_contract,
+        show_payer: 'false',
+        table: 'drops',
+        table_key: '',
+    }),
+    (result) => {
+        const drop = firstRow(result)
+        return drop ? parseDropData(drop) : null
+    },
+)
+
+export const getDrops = async (filters) => {
+    if (!filters.collections) return []
+    const rows = await getDropByCollectionHex(getCollectionHex(filters.collections[0]))
+    return rows.map((drop) => parseDropData(drop))
+}
+
 export const useCollections = () => {
     const { data, error, loading, fetch } = usePost(`${api_endpoint}/v1/chain/get_table_rows`, {
         code: 'marketmapper',
