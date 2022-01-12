@@ -11,3 +11,5 @@ export const millisecondsToString = (ms) => {
     const duration = msToDuration(ms)
     return `${duration.days}d ${duration.hours}h ${duration.minutes}m ${duration.seconds}s`
 }
+
+export const isValidDate = (date) => date instanceof Date && !isNaN(date)

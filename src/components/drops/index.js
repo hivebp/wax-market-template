@@ -1,5 +1,4 @@
 import cn from 'classnames'
-import moment from 'moment'
 import React, { useContext, useEffect, useState } from 'react'
 import config from '../../config.json'
 import { getDrops } from '../api/fetch'
@@ -22,7 +21,7 @@ const Drops = (props) => {
     const [page, setPage] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
 
-    const currentTime = moment()
+    const currentUnixTime = Date.now() / 1000
 
     const initialized =
         state.collections !== null &&
@@ -98,7 +97,7 @@ const Drops = (props) => {
                                 ? drops
                                       .filter(
                                           (drop) =>
-                                              (drop.endTime ? currentTime.unix() > drop.endTime : true) &&
+                                              (drop.endTime ? currentUnixTime > drop.endTime : true) &&
                                               (drop.maxClaimable > 0 ? drop.currentClaimed < drop.maxClaimable : true),
                                       )
                                       .map((drop, index) => (

@@ -1,5 +1,4 @@
 import cn from 'classnames'
-import moment from 'moment'
 import React, { useContext, useEffect, useState } from 'react'
 import { getCollection } from '../api/fetch'
 import CollectionTitle from '../assetcard/CollectionTitle'
@@ -19,9 +18,9 @@ function BlendItem(props) {
 
     const displaydata = JSON.parse(display_data)
 
-    const { name, image, description } = displaydata
+    const { name, image } = displaydata
 
-    const currentTime = moment()
+    const currentTime = Date.now() / 1000 // check if this is correct; blend.start_time might be in milliseconds
 
     const parseCollection = (res) => {
         if (res && res['success']) setCollection(res['data'])

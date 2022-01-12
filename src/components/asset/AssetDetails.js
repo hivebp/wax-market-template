@@ -1,4 +1,4 @@
-import moment from 'moment'
+import format from 'date-fns/format'
 import React from 'react'
 import config from '../../config.json'
 import Link from '../common/util/input/Link'
@@ -8,11 +8,9 @@ const AssetDetails = (props) => {
 
     const { name, asset_id, owner, schema, minted_at_time, template_mint } = asset
 
-    const utc = moment
-        .unix(minted_at_time / 1000)
-        .utc()
-        .toDate()
-    const date = minted_at_time ? moment(utc).local().format('YYYY-MM-DD HH:mm:ss') : ''
+    const parsedDate = new Date(minted_at_time)
+
+    const date = isValidDate(parsedDate) ? format(date, 'yyyy-MM-dd HH:mm:ss') : ''
 
     return (
         <div className="text-sm text-white overflow-auto">

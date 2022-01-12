@@ -1,7 +1,7 @@
 import cn from 'classnames'
-import moment from 'moment'
 import React, { useContext, useEffect, useState } from 'react'
-import { getAccountStats, getWhiteList } from '../api/fetch'
+import { millisecondsToString } from '../../api/date'
+import { getAccountStats, getWhiteList } from '../../api/fetch'
 import Button from '../common/util/input/Button'
 import Input from '../common/util/input/Input'
 import Link from '../common/util/input/Link'
@@ -72,45 +72,38 @@ const DropButtons = (props) => {
     }, [userName])
 
     useEffect(() => {
-        const currentTime = moment()
+        const currentUnixTime = Date.now() / 1000
 
-        if (soldOut) {
-            return
-        }
+        if (soldOut) return
 
-        if (drop.endTime && currentTime.unix() > drop.endTime) {
+        if (drop.endTime && currentUnixTime > drop.endTime) {
             setDropEnded(true)
             return
         }
 
-        const diffTime = drop.startTime - currentTime.unix()
+        const diffTime = drop.startTime - currentUnixTime
 
         if (diffTime > 0) {
-            if (dropInterval) {
-                clearInterval(dropInterval)
-            }
+            if (dropInterval) clearInterval(dropInterval)
 
-            let duration = moment.duration(diffTime * 1000, 'milliseconds')
             const interval = 1000
 
             setDropInterval(
                 setInterval(function () {
-                    duration = moment.duration(duration - interval, 'milliseconds')
-
-                    if (dropInterval) {
+                    const timeLeft = drop.startTime - Date.now() / 1000
+                    if (timeLeft < 0) {
                         clearInterval(dropInterval)
+                        return setDropTimeLeft(0)
                     }
 
-                    if (duration.asSeconds() < 0) setDropTimeLeft(null)
-                    else
-                        setDropTimeLeft(
-                            `${duration.days()}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`,
-                        )
+                    setDropTimeLeft(timeLeft)
                 }, interval),
             )
-        } else {
-            setDropReady(true)
+
+            return () => clearInterval(dropInterval)
         }
+
+        setDropReady(true)
     }, [dropReady === false])
 
     const free = drop && drop.listingPrice && drop.listingPrice === '0 NULL'
@@ -202,8 +195,8 @@ const DropButtons = (props) => {
                                 onClick={userName ? claim : ual.showModal}
                                 disabled={!dropReady || (accountStats && accountLimit - accountStats.counter <= 0)}
                             >
-                                {dropTimeLeft && !dropReady
-                                    ? dropTimeLeft
+                                {dropTimeLeft !== undefined && !dropReady
+                                    ? millisecondsToString(dropTimeLeft)
                                     : userName
                                     ? free
                                         ? 'Claim'
