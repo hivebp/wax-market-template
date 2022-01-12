@@ -1,7 +1,7 @@
 import Long from 'long'
 import { useEffect, useState } from 'react'
 import config from '../config.json'
-import { getFilterParams } from './filter'
+import { filter } from './filter'
 import { query } from './query'
 
 export const { atomic_api, api_endpoint } = config
@@ -224,19 +224,17 @@ const createGetter =
         return response.json()
     }
 
-export const getSchemas = createGetter((filters) => `/atomicassets/v1/schemas?${getFilterParams(filters)}`)
-export const getTemplates = createGetter(
-    (filters) => `/atomicassets/v1/templates?has_assets=true${getFilterParams(filters)}`,
-)
-export const getListings = createGetter((filters) => `/atomicmarket/v1/sales?state=1${getFilterParams(filters)}`)
+export const getSchemas = createGetter((filters) => `/atomicassets/v1/schemas?${filter(filters)}`)
+export const getTemplates = createGetter((filters) => `/atomicassets/v1/templates?has_assets=true${filter(filters)}`)
+export const getListings = createGetter((filters) => `/atomicmarket/v1/sales?state=1${filter(filters)}`)
 export const getListing = createGetter((listingId) => `/atomicmarket/v1/sales/${listingId}`)
-export const getAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`)
-export const getWonAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=3&${getFilterParams(filters)}`)
-export const getBids = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`)
-export const getSales = createGetter((filters) => `/atomicmarket/v1/sales?state=3${getFilterParams(filters)}`)
+export const getAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${filter(filters)}`)
+export const getWonAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=3&${filter(filters)}`)
+export const getBids = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${filter(filters)}`)
+export const getSales = createGetter((filters) => `/atomicmarket/v1/sales?state=3${filter(filters)}`)
 export const getListingsById = createGetter((asset_id) => `/atomicmarket/v1/sales?&limit=1&asset_id=${asset_id}`)
 export const getAuctionsById = createGetter((asset_id) => `/atomicmarket/v1/auctions?&limit=1&asset_id=${asset_id}`)
-export const getAssets = createGetter((filters) => `/atomicmarket/v1/assets?${getFilterParams(filters)}`)
+export const getAssets = createGetter((filters) => `/atomicmarket/v1/assets?${filter(filters)}`)
 export const getTemplate = createGetter(
     (templateId, collectionName) => `/atomicassets/v1/templates/${collectionName}/${templateId}`,
 )

@@ -41,5 +41,3 @@ export const filter = ({
         ...(sortBy && { sort: sortBy }),
         ...(asset_id && { asset_id: asset_id }),
     }).slice(1)
-
-export const getFilterParams = filter
