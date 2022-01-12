@@ -29,39 +29,6 @@ const Navigation = React.memo((props) => {
         ual.logout()
     }
 
-    const parseWaxBalance = (res) => {
-        if (res && res.status === 200) {
-            let wax = 0
-            const data = res.data
-
-            if (data && Object.keys(data).includes('rows'))
-                data['rows'].map((row) => {
-                    wax += parseFloat(row['balance'].replace(' WAX', ''))
-                })
-
-            setBalance(wax)
-        }
-    }
-
-    const parseRefundBalance = (res) => {
-        if (res && res.status === 200) {
-            let atomic = 0
-            const data = res.data
-
-            if (data && Object.keys(data).includes('rows'))
-                data['rows'].map((row) => {
-                    if (Object.keys(row).includes('quantities'))
-                        row['quantities'].map((quantity) => {
-                            if (quantity.includes(' WAX')) {
-                                atomic += parseFloat(quantity.replace(' WAX', ''))
-                            }
-                        })
-                })
-
-            setRefundBalance(atomic)
-        }
-    }
-
     const claimRefund = async (quantity) => {
         try {
             setIsLoading(true)
@@ -93,16 +60,16 @@ const Navigation = React.memo((props) => {
             console.log(e)
         } finally {
             setTimeout(function () {
-                getWaxBalance(userName).then((res) => parseWaxBalance(res))
-                getRefundBalance(userName).then((res) => parseRefundBalance(res))
+                getWaxBalance(userName).then(setBalance)
+                getRefundBalance(userName).then(setRefundBalance)
                 setIsLoading(false)
             }, 2000)
         }
     }
 
     useEffect(() => {
-        // getWaxBalance(userName).then((res) => parseWaxBalance(res))
-        // getRefundBalance(userName).then((res) => parseRefundBalance(res))
+        getWaxBalance(userName).then(setBalance)
+        getRefundBalance(userName).then(setRefundBalance)
     }, [userName])
 
     return (

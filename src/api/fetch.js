@@ -278,181 +278,59 @@ const getAtomicpacksxCollectionByKey = createTableGetter(
 export const getPacks = async ({ collections = [] } = {}) => {
     const packs = []
 
-    packs_contracts.forEach((contract) => {
-        switch (contract) {
-            case 'neftyblocksp':
-                collections.forEach(async (collection) => {
-                    const collectionHex = getCollectionHex(collection)
+    await Promise.all(
+        packs_contracts.map(async (contract) => {
+            switch (contract) {
+                case 'neftyblocksp':
+                    collections.forEach(async (collection) => {
+                        const collectionHex = getCollectionHex(collection)
 
-                    const rows = await getNeftyblockspCollectionByHex(collectionHex)
-                    rows.forEach((pack) => {
-                        packs.push({
-                            packId: pack.pack_id,
-                            unlockTime: pack.unlock_time,
-                            templateId: pack.pack_template_id,
-                            rollCounter: pack.rollCounter,
-                            displayData: JSON.parse(pack.display_data),
-                            contract: 'neftyblocksp',
+                        const rows = await getNeftyblockspCollectionByHex(collectionHex)
+                        rows.forEach((pack) => {
+                            packs.push({
+                                packId: pack.pack_id,
+                                unlockTime: pack.unlock_time,
+                                templateId: pack.pack_template_id,
+                                rollCounter: pack.rollCounter,
+                                displayData: JSON.parse(pack.display_data),
+                                contract: 'neftyblocksp',
+                            })
                         })
                     })
-                })
-                break
+                    break
 
-            case 'atomicpacksx':
-                let lower_bound = 0
+                case 'atomicpacksx':
+                    let lower_bound = 0
 
-                while (lower_bound !== null) {
-                    const { rows, nextIndex, more } = await getAtomicpacksxCollectionByKey(lower_bound)
-                    rows.filter((pack) => collections.includes(pack.collection_name)).forEach((pack) => {
-                        packs.push({
-                            packId: pack.pack_id,
-                            unlockTime: pack.unlock_time,
-                            templateId: pack.pack_template_id,
-                            rollCounter: pack.rollCounter,
-                            displayData: JSON.parse(pack.display_data),
-                            contract: 'atomicpacksx',
+                    while (lower_bound !== null) {
+                        const { rows, nextIndex, more } = await getAtomicpacksxCollectionByKey(lower_bound)
+                        rows.filter((pack) => collections.includes(pack.collection_name)).forEach((pack) => {
+                            packs.push({
+                                packId: pack.pack_id,
+                                unlockTime: pack.unlock_time,
+                                templateId: pack.pack_template_id,
+                                rollCounter: pack.rollCounter,
+                                displayData: JSON.parse(pack.display_data),
+                                contract: 'atomicpacksx',
+                            })
                         })
-                    })
-                    lower_bound = more ? nextIndex : null
-                }
-                break
+                        lower_bound = more ? nextIndex : null
+                    }
+                    break
 
-            default:
-                console.warn(`Unknown contract "${contract}" to fetch packs`)
-        }
-    })
+                default:
+                    console.warn(`Unknown contract "${contract}" to fetch packs`)
+            }
+        }),
+    )
 
     return packs
 }
 
-export const getDrop = async (dropId) => {
-    const body = {
-        code: config.drops_contract,
-        index_position: 'primary',
-        json: 'true',
-        key_type: 'i64',
-        limit: 1,
-        lower_bound: dropId,
-        upper_bound: dropId,
-        reverse: 'true',
-        scope: config.drops_contract,
-        show_payer: 'false',
-        table: 'drops',
-        table_key: '',
-    }
+const waxValueToFloat = (waxValue) => parseFloat(waxValue.replace(' WAX', ''))
 
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-    const res = await post(url, body)
-
-    let result = null
-
-    if (res && res.status === 200 && res.data && res.data.rows) {
-        res.data.rows.map((drop) => {
-            const displayData = JSON.parse(drop.display_data)
-
-            result = {
-                collectionName: drop.collection_name,
-                dropId: drop.drop_id,
-                accountLimit: drop.account_limit,
-                accountLimitCooldown: drop.account_limit_cooldown,
-                currentClaimed: drop.current_claimed,
-                maxClaimable: drop.max_claimable,
-                name: displayData.name,
-                listingPrice: drop.listing_price,
-                description: displayData.description,
-                assetsToMint: drop.assets_to_mint,
-                endTime: drop.end_time,
-                startTime: drop.start_time,
-            }
-
-            return null
-        })
-    }
-
-    return result
-}
-
-export const getDelphiMedian = async () => {
-    const body = {
-        code: 'delphioracle',
-        index_position: 'primary',
-        json: 'true',
-        key_type: 'i64',
-        limit: 1,
-        lower_bound: '',
-        reverse: 'true',
-        scope: 'waxpusd',
-        show_payer: 'false',
-        table: 'datapoints',
-        table_key: '',
-        upper_bound: '',
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-    const res = await post(url, body)
-
-    if (res && res.status === 200 && res.data && res.data.rows) {
-        const row = res.data.rows[0]
-
-        if (row.median) return row.median
-    }
-
-    return null
-}
-
-export const getDrops = async (filters) => {
-    if (!filters.collections) return []
-
-    const collectionHex = getCollectionHex(filters.collections[0])
-
-    const body = {
-        code: config.drops_contract,
-        index_position: 2,
-        json: 'true',
-        key_type: 'sha256',
-        limit: 100,
-        lower_bound: `0000000000000000${collectionHex}00000000000000000000000000000000`,
-        upper_bound: `0000000000000000${collectionHex}ffffffffffffffffffffffffffffffff`,
-        reverse: 'true',
-        scope: config.drops_contract,
-        show_payer: 'false',
-        table: 'drops',
-        table_key: '',
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-    const res = await post(url, body)
-
-    const drops = []
-
-    if (res && res.status === 200 && res.data && res.data.rows) {
-        res.data.rows.map((drop) => {
-            const displayData = JSON.parse(drop.display_data)
-
-            drops.push({
-                collectionName: drop.collection_name,
-                dropId: drop.drop_id,
-                accountLimit: drop.account_limit,
-                accountLimitCooldown: drop.account_limit_cooldown,
-                currentClaimed: drop.current_claimed,
-                maxClaimable: drop.max_claimable,
-                name: displayData.name,
-                authRequired: drop.auth_required,
-                listingPrice: drop.listing_price,
-                description: displayData.description,
-                assetsToMint: drop.assets_to_mint,
-                endTime: drop.end_time,
-                startTime: drop.start_time,
-            })
-            return null
-        })
-    }
-
-    return drops
-}
-
-export const getRefundBalance = async (name) => {
-    const body = {
+export const getRefundBalance = createTableGetter(
+    (name) => ({
         code: 'atomicmarket',
         index_position: 'primary',
         json: 'true',
@@ -465,14 +343,17 @@ export const getRefundBalance = async (name) => {
         show_payer: 'false',
         table: 'balances',
         table_key: '',
-    }
+    }),
+    (result) =>
+        allRows(result).reduce(
+            (wax, { quantities }) =>
+                quantities.reduce((wax, quantity) => (wax + quantity ? waxValueToFloat(quantity) : 0), wax),
+            0,
+        ),
+)
 
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-    return post(url, body)
-}
-
-export const getWaxBalance = async (name) => {
-    const body = {
+export const getWaxBalance = createTableGetter(
+    (name) => ({
         code: 'eosio.token',
         index_position: 'primary',
         json: 'true',
@@ -483,12 +364,12 @@ export const getWaxBalance = async (name) => {
         show_payer: 'false',
         table: 'accounts',
         table_key: '',
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-
-    return post(url, body)
-}
+    }),
+    (result) =>
+        allRows(result).reduce((wax, { balance }) => {
+            return wax + waxValueToFloat(balance)
+        }, 0),
+)
 
 export const useCollections = () => {
     const { data, error, loading, fetch } = usePost(`${api_endpoint}/v1/chain/get_table_rows`, {
