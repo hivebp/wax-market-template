@@ -1,9 +1,8 @@
-import ShareButton from '../sharebutton/ShareButton'
-import React, { useContext } from 'react'
-import { Context } from '../marketwrapper'
 import cn from 'classnames'
-
+import React, { useContext } from 'react'
 import config from '../../config.json'
+import { Context } from '../marketwrapper'
+import ShareButton from '../sharebutton/ShareButton'
 
 function MoreOptions(props) {
     const showMenu = props['showMenu']

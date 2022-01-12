@@ -1,6 +1,5 @@
-import React from 'react'
-
 import qs from 'qs'
+import React from 'react'
 import Blends from '../../components/blends'
 
 const BlendsPage = (props) => {

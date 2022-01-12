@@ -1,15 +1,12 @@
-import React, { useState } from 'react'
-
-import CollectionDetails from './CollectionDetails'
-
-import Link from '../common/util/input/Link'
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
-
-import config from '../../config.json'
-import StaticAssetList from '../staticassetlist/StaticAssetList'
-import ScrollUpIcon from '../common/util/ScrollUpIcon'
 import cn from 'classnames'
+import React, { useState } from 'react'
+import config from '../../config.json'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
+import Link from '../common/util/input/Link'
+import ScrollUpIcon from '../common/util/ScrollUpIcon'
+import StaticAssetList from '../staticassetlist/StaticAssetList'
+import CollectionDetails from './CollectionDetails'
 
 const CollectionComponent = (props) => {
     const collection = props.collection

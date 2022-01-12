@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
 import cn from 'classnames'
+import React, { useState } from 'react'
+import config from '../../config.json'
+import ErrorMessage from '../common/util/ErrorMessage'
+import Input from '../common/util/input/Input'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { transferAction } from '../wax/Wax'
 import WindowButton from './WindowButton'
 import WindowContent from './WindowContent'
-import Input from '../common/util/input/Input'
-
-import ErrorMessage from '../common/util/ErrorMessage'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import config from '../../config.json'
-import { transferAction } from '../wax/Wax'
 
 function TransferWindow(props) {
     const asset = props['asset']

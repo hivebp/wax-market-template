@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
-
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-
+import cn from 'classnames'
 import qs from 'qs'
-import { Context } from '../marketwrapper'
+import React, { useContext, useEffect, useState } from 'react'
+import config from '../../config.json'
 import { createCollectionImageOption, createCollectionOption, getValues } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import config from '../../config.json'
-import cn from 'classnames'
+import { Context } from '../marketwrapper'
 
 const CollectionDropdown = React.memo((props) => {
     const values = getValues()

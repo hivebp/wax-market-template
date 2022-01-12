@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import config from '../../config.json'
 import cn from 'classnames'
+import React, { useEffect } from 'react'
+import config from '../../config.json'
 
 function CardImage(props) {
     const index = props['index']

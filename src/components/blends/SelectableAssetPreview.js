@@ -1,9 +1,8 @@
-import React, { useContext, useEffect } from 'react'
-
-import { formatMintInfo } from '../helpers/Helpers'
 import cn from 'classnames'
-import CollectionTitle from '../assetcard/CollectionTitle'
+import React, { useContext, useEffect } from 'react'
 import CardImage from '../assetcard/CardImage'
+import CollectionTitle from '../assetcard/CollectionTitle'
+import { formatMintInfo } from '../helpers/Helpers'
 import { Context } from '../marketwrapper'
 
 function SelectableAssetPreview(props) {

@@ -1,8 +1,7 @@
-import React from 'react'
-import Link from '../common/util/input/Link'
 import cn from 'classnames'
-
+import React from 'react'
 import config from '../../config.json'
+import Link from '../common/util/input/Link'
 
 const links = [
     {

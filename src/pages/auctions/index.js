@@ -1,7 +1,6 @@
-import React from 'react'
-
-import Auctions from '../../components/auctions'
 import qs from 'qs'
+import React from 'react'
+import Auctions from '../../components/auctions'
 
 const AuctionsPage = (props) => {
     return <Auctions {...props} />

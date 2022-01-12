@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react'
-
-import { setQueryStringWithoutPageReload, getValues } from '../helpers/Helpers'
-
-import qs from 'qs'
-
-import NeftyBlendsList from './NeftyBlendsList'
-import Page from '../common/layout/Page'
-import Content from '../common/layout/Content'
 import cn from 'classnames'
+import { useRouter } from 'next/router'
+import qs from 'qs'
+import React, { useEffect, useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
+import config from '../../config.json'
+import Content from '../common/layout/Content'
+import Page from '../common/layout/Page'
+import { getValues } from '../helpers/Helpers'
 import TabItem from '../tabitem/TabItem'
 import BlenderizerList from './BlenderizerList'
-import { useRouter } from 'next/router'
-import config from '../../config.json'
+import NeftyBlendsList from './NeftyBlendsList'
 
 const Blends = (props) => {
     const values = getValues()

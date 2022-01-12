@@ -1,6 +1,6 @@
-import config from '../../config.json'
 import Head from 'next/head'
 import React from 'react'
+import config from '../../config.json'
 
 const DefaultHeader = () => {
     return (

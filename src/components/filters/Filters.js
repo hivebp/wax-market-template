@@ -1,12 +1,12 @@
+import cn from 'classnames'
+import { useRouter } from 'next/router'
+import qs from 'qs'
+import React, { useContext, useEffect, useState } from 'react'
 import CollectionDropdown from '../collectiondropdown'
 import DropdownItem from '../collectiondropdown/DropdownItem'
-import React, { useContext, useEffect, useState } from 'react'
+import Input from '../common/util/input/Input'
 import { getValues } from '../helpers/Helpers'
 import { Context } from '../marketwrapper'
-import Input from '../common/util/input/Input'
-import qs from 'qs'
-import { useRouter } from 'next/router'
-import cn from 'classnames'
 
 function Filters(props) {
     const values = getValues()

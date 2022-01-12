@@ -1,6 +1,6 @@
+import cn from 'classnames'
 import React from 'react'
 import Button from './input/Button'
-import cn from 'classnames'
 
 export default function ScrollUpIcon({ className, onClick }) {
     return (

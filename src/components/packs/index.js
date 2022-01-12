@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react'
-
-import { setQueryStringWithoutPageReload, getValues } from '../helpers/Helpers'
-
-import { Tab, Tabs } from 'react-bootstrap'
-import TabItem from '../tabitem/TabItem'
-
-import qs from 'qs'
 import cn from 'classnames'
-
+import qs from 'qs'
+import React, { useEffect, useState } from 'react'
+import { Tab, Tabs } from 'react-bootstrap'
+import Page from '../common/layout/Page'
+import { getValues, setQueryStringWithoutPageReload } from '../helpers/Helpers'
+import TabItem from '../tabitem/TabItem'
 import MyPacksList from './MyPacksList'
 import UnclaimedPacksList from './UnclaimedPacksList'
-import Page from '../common/layout/Page'
-import Content from '../common/layout/Content'
 
 const Packs = (props) => {
     const values = getValues()

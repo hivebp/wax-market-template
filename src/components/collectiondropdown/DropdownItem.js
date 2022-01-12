@@ -1,6 +1,6 @@
+import cn from 'classnames'
 import React from 'react'
 import Dropdown from 'react-dropdown'
-import cn from 'classnames'
 
 const DropdownItem = ({ header, options, onChange, value }) => {
     return (

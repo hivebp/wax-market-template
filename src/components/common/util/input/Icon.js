@@ -1,5 +1,5 @@
-import React from 'react'
 import cn from 'classnames'
+import React from 'react'
 import Button from './Button'
 
 export default function Icon({ children, className, onClick, disabled }) {

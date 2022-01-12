@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
+import React, { useEffect, useState } from 'react'
+import config from '../../config.json'
+import ErrorMessage from '../common/util/ErrorMessage'
+import Input from '../common/util/input/Input'
+import { formatNumber } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { announceSaleAction } from '../wax/Wax'
 import WindowButton from './WindowButton'
 import WindowContent from './WindowContent'
-import Input from '../common/util/input/Input'
-
-import { formatNumber } from '../helpers/Helpers'
-
-import ErrorMessage from '../common/util/ErrorMessage'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import config from '../../config.json'
-import { announceSaleAction } from '../wax/Wax'
 
 function SellWindow(props) {
     const asset = props['asset']

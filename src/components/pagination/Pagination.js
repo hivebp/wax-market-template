@@ -1,7 +1,6 @@
-import React from 'react'
-
-import config from '../../config.json'
 import cn from 'classnames'
+import React from 'react'
+import config from '../../config.json'
 
 function Pagination(props) {
     const currentPage = props['page']

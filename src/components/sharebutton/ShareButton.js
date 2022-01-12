@@ -1,6 +1,6 @@
-import ShareWindow from '../windows/ShareWindow'
-import React, { useState } from 'react'
 import cn from 'classnames'
+import React, { useState } from 'react'
+import ShareWindow from '../windows/ShareWindow'
 
 function ShareButton(props) {
     const link = props['link']

@@ -1,9 +1,8 @@
-import React from 'react'
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
 import cn from 'classnames'
-
+import React from 'react'
 import config from '../../config.json'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
 
 const Home = () => {
     return (

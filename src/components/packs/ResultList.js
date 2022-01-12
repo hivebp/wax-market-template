@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
-
-import Filters from '../filters/Filters'
+import React from 'react'
 import ResultCard from './ResultCard'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 
 function ResultList(props) {
     const results = props['results']

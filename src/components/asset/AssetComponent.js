@@ -1,13 +1,10 @@
-import React from 'react'
-
-import AssetDetails from '../asset/AssetDetails'
-
-import AssetImage from '../asset/AssetImage'
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
 import cn from 'classnames'
-
+import React from 'react'
 import config from '../../config.json'
+import AssetDetails from '../asset/AssetDetails'
+import AssetImage from '../asset/AssetImage'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
 
 const AssetComponent = (props) => {
     const asset = props.asset

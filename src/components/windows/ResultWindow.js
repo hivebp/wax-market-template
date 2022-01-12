@@ -1,7 +1,7 @@
 import cn from 'classnames'
+import React, { useEffect } from 'react'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import ResultList from '../packs/ResultList'
-import React, { useEffect } from 'react'
 
 function ResultWindow(props) {
     const stopAnimation = props['stopAnimation']

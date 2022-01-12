@@ -1,7 +1,6 @@
-import React from 'react'
-
-import Home from '../components/home'
 import qs from 'qs'
+import React from 'react'
+import Home from '../components/home'
 
 const HomePage = (props) => {
     return <Home {...props} />

@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react'
-
-import config from '../../config.json'
-
-import Link from '../common/util/input/Link'
-import PreviewImage from './PreviewImage'
 import cn from 'classnames'
-
-import { parseAssetsToMint } from '../helpers/Helpers'
+import React, { useEffect, useState } from 'react'
+import config from '../../config.json'
+import Link from '../common/util/input/Link'
 import DropButtons from '../dropbuttons/DropButtons'
+import { parseAssetsToMint } from '../helpers/Helpers'
+import PreviewImage from './PreviewImage'
 
 function DropPreview(props) {
     const drop = props['drop']

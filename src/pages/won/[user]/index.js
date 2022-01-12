@@ -1,6 +1,5 @@
-import React from 'react'
-
 import qs from 'qs'
+import React from 'react'
 import Auctions from '../../../components/auctions'
 
 const BidsPage = (props) => {
@@ -8,14 +7,10 @@ const BidsPage = (props) => {
 }
 
 BidsPage.getInitialProps = async (ctx) => {
-    const c = ctx.query.user
-
+    const user = ctx.query.user
     const paths = ctx.asPath.split('/')
-
-    const values = qs.parse(paths[2].replace(c + '?', ''))
-
-    values['winner'] = c
-
+    const values = qs.parse(paths[2].replace(user + '?', ''))
+    values['winner'] = user
     return values
 }
 

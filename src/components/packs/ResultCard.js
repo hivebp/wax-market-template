@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react'
-
-import config from '../../config.json'
-
 import cn from 'classnames'
+import React, { useEffect, useState } from 'react'
+import config from '../../config.json'
 import CardImage from '../assetcard/CardImage'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 

@@ -1,10 +1,9 @@
-import React, { useContext } from 'react'
-
-import { Context } from '../marketwrapper'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import { formatPrice } from '../helpers/Helpers'
 import cn from 'classnames'
+import React, { useContext } from 'react'
 import CheckIndicator from '../check/CheckIndicator'
+import { formatPrice } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
 
 export default function MarketButtons(props) {
     const asset = props['asset']

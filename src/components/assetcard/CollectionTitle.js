@@ -1,7 +1,7 @@
-import Link from '../common/util/input/Link'
 import cn from 'classnames'
-import config from '../../config.json'
 import React from 'react'
+import config from '../../config.json'
+import Link from '../common/util/input/Link'
 
 function CollectionTitle(props) {
     const collection = props['collection']

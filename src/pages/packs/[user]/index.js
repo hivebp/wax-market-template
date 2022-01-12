@@ -1,6 +1,5 @@
-import React from 'react'
-
 import qs from 'qs'
+import React from 'react'
 import Packs from '../../../components/packs'
 
 const PacksPage = (props) => {

@@ -1,7 +1,7 @@
-import React from 'react'
-import Link from './input/Link'
-import config from '../../../config.json'
 import cn from 'classnames'
+import React from 'react'
+import config from '../../../config.json'
+import Link from './input/Link'
 
 export default function Logo() {
     return (

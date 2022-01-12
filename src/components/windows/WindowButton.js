@@ -1,5 +1,5 @@
-import React from 'react'
 import cn from 'classnames'
+import React from 'react'
 import Button from '../common/util/input/Button'
 
 export default function WindowButton({ text, className, disabled, onClick, id }) {

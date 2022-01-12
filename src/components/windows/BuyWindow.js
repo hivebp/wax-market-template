@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
 import cn from 'classnames'
-import WindowButton from './WindowButton'
-import WindowContent from './WindowContent'
+import React, { useState } from 'react'
 import config from '../../config.json'
-
 import { formatNumber } from '../helpers/Helpers'
-
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { purchaseSaleAction } from '../wax/Wax'
+import WindowButton from './WindowButton'
+import WindowContent from './WindowContent'
 
 function BuyWindow(props) {
     const listing = props['listing']

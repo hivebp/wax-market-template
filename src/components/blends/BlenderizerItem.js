@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-import { Context } from '../marketwrapper'
+import React, { useContext, useEffect, useState } from 'react'
+import CollectionTitle from '../assetcard/CollectionTitle'
 import Link from '../common/util/input/Link'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import CollectionTitle from '../assetcard/CollectionTitle'
+import { Context } from '../marketwrapper'
 import BlendPreviewImage from './BlendPreviewImage'
 
 function BlenderizerItem(props) {

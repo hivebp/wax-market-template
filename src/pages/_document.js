@@ -1,8 +1,6 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
-
-import config from '../config.json'
-
 import React from 'react'
+import config from '../config.json'
 
 export class MyDocument extends Document {
     render() {

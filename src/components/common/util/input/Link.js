@@ -1,6 +1,6 @@
-import React from 'react'
 import cn from 'classnames'
 import NextLink from 'next/link'
+import React from 'react'
 
 export default function Link({ children, className, href, external }) {
     const linkClassNames = cn(

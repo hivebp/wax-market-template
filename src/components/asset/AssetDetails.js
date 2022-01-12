@@ -1,5 +1,5 @@
-import React from 'react'
 import moment from 'moment'
+import React from 'react'
 import config from '../../config.json'
 import Link from '../common/util/input/Link'
 

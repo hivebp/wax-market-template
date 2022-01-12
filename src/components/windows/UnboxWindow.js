@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-import WindowButton from './WindowButton'
-import WindowContent from './WindowContent'
-
-import ErrorMessage from '../common/util/ErrorMessage'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import React, { useContext, useEffect, useState } from 'react'
 import config from '../../config.json'
+import ErrorMessage from '../common/util/ErrorMessage'
+import { claimPack } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 import ResultWindow from './ResultWindow'
-import { claimPack } from '../helpers/Helpers'
+import WindowButton from './WindowButton'
+import WindowContent from './WindowContent'
 
 function UnboxWindow(props) {
     const asset = props['asset']

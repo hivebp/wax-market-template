@@ -1,15 +1,14 @@
-import React, { useState } from 'react'
-
-import ErrorMessage from '../common/util/ErrorMessage'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import { formatNumber } from '../helpers/Helpers'
 import cn from 'classnames'
-import WindowButton from './WindowButton'
-import WindowContent from './WindowContent'
-import Input from '../common/util/input/Input'
+import React, { useState } from 'react'
 import config from '../../config.json'
 import Bids from '../auctions/Bids'
+import ErrorMessage from '../common/util/ErrorMessage'
+import Input from '../common/util/input/Input'
+import { formatNumber } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { bidAction } from '../wax/Wax'
+import WindowButton from './WindowButton'
+import WindowContent from './WindowContent'
 
 function BidWindow(props) {
     const listing = props['listing']

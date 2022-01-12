@@ -1,5 +1,5 @@
-import React from 'react'
 import cn from 'classnames'
+import React from 'react'
 
 function ErrorMessage(props) {
     const error = props['error']

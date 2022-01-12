@@ -1,21 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
-
+import React, { useEffect, useRef } from 'react'
 import {
-    FacebookShareButton,
     FacebookIcon,
-    LineShareButton,
+    FacebookShareButton,
     LineIcon,
-    RedditShareButton,
+    LineShareButton,
     RedditIcon,
-    TelegramShareButton,
+    RedditShareButton,
     TelegramIcon,
-    TwitterShareButton,
+    TelegramShareButton,
     TwitterIcon,
-    WeiboShareButton,
+    TwitterShareButton,
     WeiboIcon,
-    WhatsappShareButton,
+    WeiboShareButton,
     WhatsappIcon,
+    WhatsappShareButton,
 } from 'react-share'
 
 function useOutsideAlerter(ref, callBack) {

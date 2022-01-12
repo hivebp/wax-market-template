@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-import { Context } from '../marketwrapper'
-import { getFilters, getValues } from '../helpers/Helpers'
-import Pagination from '../pagination/Pagination'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import config from '../../config.json'
+import React, { useContext, useEffect, useState } from 'react'
 import { post } from 'superagent/lib/client'
+import config from '../../config.json'
+import { getFilters, getValues } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
+import Pagination from '../pagination/Pagination'
 import BlenderizerItem from './BlenderizerItem'
 
 function BlenderizerList(props) {

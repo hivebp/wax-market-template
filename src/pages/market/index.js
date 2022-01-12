@@ -1,7 +1,6 @@
-import React from 'react'
-
-import Market from '../../components/market'
 import qs from 'qs'
+import React from 'react'
+import Market from '../../components/market'
 
 const MarketPage = (props) => {
     return <Market {...props} />
