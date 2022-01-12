@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
-
-import DropDetails from './DropDetails'
-
-import DropImage from './DropImage'
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
 import cn from 'classnames'
+import React, { useContext, useEffect, useState } from 'react'
+import { getDrop } from '../api/fetch'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
+import DropButtons from '../dropbuttons/DropButtons'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
-import ReactMarkdown from 'react-markdown'
-import DropButtons from '../dropbuttons/DropButtons'
-import { getDrop } from '../api/Api'
+import DropDetails from './DropDetails'
+import DropImage from './DropImage'
 
 const DropComponent = (props) => {
     const [drop, setDrop] = useState(props.drop)

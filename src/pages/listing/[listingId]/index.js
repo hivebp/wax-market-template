@@ -1,8 +1,7 @@
-import React from 'react'
-
-import ListingComponent from '../../../components/listing/ListingComponent'
 import qs from 'qs'
-import { getSale } from '../../../components/api/Api'
+import React from 'react'
+import { getSale } from '../../../api/fetch'
+import ListingComponent from '../../../components/listing/ListingComponent'
 
 const Sale = (props) => {
     return <ListingComponent {...props} />

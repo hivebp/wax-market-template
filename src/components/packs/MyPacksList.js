@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-import { Context } from '../marketwrapper'
-import { getFilters, getValues } from '../helpers/Helpers'
-import { getAssets } from '../api/Api'
-import Pagination from '../pagination/Pagination'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import React, { useContext, useEffect, useState } from 'react'
+import { getAssets } from '../../api/fetch'
 import AssetCard from '../assetcard/AssetCard'
+import { getFilters, getValues } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
+import Pagination from '../pagination/Pagination'
 
 function MyPacksList(props) {
     const [state, dispatch] = useContext(Context)

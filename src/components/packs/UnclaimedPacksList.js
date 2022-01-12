@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-import MarketContent from '../common/layout/Content'
-import Pagination from '../pagination/Pagination'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import AssetCard from '../assetcard/AssetCard'
-import { Context } from '../marketwrapper'
-import { getValues } from '../helpers/Helpers'
-import config from '../../config.json'
+import React, { useContext, useEffect, useState } from 'react'
 import { post } from 'superagent/lib/client'
-import { getAssets } from '../api/Api'
+import { getAssets } from '../../api/fetch'
+import config from '../../config.json'
+import AssetCard from '../assetcard/AssetCard'
+import MarketContent from '../common/layout/Content'
+import { getValues } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
+import Pagination from '../pagination/Pagination'
 
 export default function UnclaimedPacksList(props) {
     const [state, dispatch] = useContext(Context)

@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-
-import CollectionCard from './CollectionCard'
-
-import { getCollections } from '../api/Api'
-import { Context } from '../marketwrapper'
+import React, { useContext, useEffect, useState } from 'react'
+import { getCollections } from '../../api/fetch'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
+import CollectionCard from './CollectionCard'
 
 function CollectionList(props) {
     const ual = props['ual'] ? props['ual'] : { activeUser: null }

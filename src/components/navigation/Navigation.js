@@ -1,14 +1,12 @@
-import React, { Fragment, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-
+import cn from 'classnames'
+import { useRouter } from 'next/router'
+import React, { Fragment, useEffect, useState } from 'react'
+import { getRefundBalance, getWaxBalance } from '../../api/fetch'
+import config from '../../config.json'
 import Link from '../common/util/input/Link'
 import Logo from '../common/util/Logo'
-import { useRouter } from 'next/router'
-import { getRefundBalance, getWaxBalance } from '../api/Api'
 import { formatNumber } from '../helpers/Helpers'
-import cn from 'classnames'
-import config from '../../config.json'
-
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 
 const Navigation = React.memo((props) => {

@@ -1,8 +1,7 @@
-import React from 'react'
-
-import DropComponent from '../../../components/drop/DropComponent'
 import qs from 'qs'
-import { getDrop } from '../../../components/api/Api'
+import React from 'react'
+import { getDrop } from '../../../api/fetch'
+import DropComponent from '../../../components/drop/DropComponent'
 
 const DropPage = (props) => {
     return <DropComponent {...props} />

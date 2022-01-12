@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
-
-import AssetDetails from '../asset/AssetDetails'
-
-import AssetImage from '../asset/AssetImage'
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
-import config from '../../config.json'
 import cn from 'classnames'
+import React, { useState } from 'react'
+import config from '../../config.json'
+import { getAuctionsById } from '../api/fetch'
+import AssetDetails from '../asset/AssetDetails'
+import AssetImage from '../asset/AssetImage'
+import Bids from '../auctions/Bids'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
 import { formatPrice } from '../helpers/Helpers'
 import MarketButtons from '../marketbuttons'
-import { getAuctionsById } from '../api/Api'
-import Bids from '../auctions/Bids'
 
 const AuctionComponent = (props) => {
     const [auction, setAuction] = useState(props.auction)

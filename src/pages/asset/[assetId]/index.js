@@ -1,8 +1,7 @@
-import React from 'react'
-
-import AssetComponent from '../../../components/asset/AssetComponent'
 import qs from 'qs'
-import { getAsset } from '../../../components/api/Api'
+import React from 'react'
+import { getAsset } from '../../../api/fetch'
+import AssetComponent from '../../../components/asset/AssetComponent'
 
 const Asset = (props) => {
     return <AssetComponent {...props} />

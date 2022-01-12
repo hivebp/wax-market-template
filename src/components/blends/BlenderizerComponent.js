@@ -1,17 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
-
-import AssetImage from '../asset/AssetImage'
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
 import cn from 'classnames'
-
-import { Context } from '../marketwrapper'
-import { getCollection, getTemplate } from '../api/Api'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import Button from '../common/util/input/Button'
+import React, { useContext, useEffect, useState } from 'react'
+import { getCollection, getTemplate } from '../api/fetch'
+import AssetImage from '../asset/AssetImage'
 import CheckIndicator from '../check/CheckIndicator'
-import TemplateIngredient from './TemplateIngredient'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
+import Button from '../common/util/input/Button'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
 import MyAssetList from './MyAssetList'
+import TemplateIngredient from './TemplateIngredient'
 
 const BlenderizerComponent = (props) => {
     const blend = props.blend

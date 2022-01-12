@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { GetPrices } from '../api/Api'
+import { GetPrices } from '../api/fetch'
 import { formatNumber } from '../helpers/Helpers'
 
 function PreviewDetailsTable(props) {

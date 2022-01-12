@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react'
-
-import config from '../../config.json'
-
-import MarketButtons from '../marketbuttons'
-
+import { ArrowLeft, ArrowRight } from '@material-ui/icons'
+import cn from 'classnames'
 import moment from 'moment'
-
-import { formatMintInfo } from '../helpers/Helpers'
-import CardDetails from './CardDetails'
+import React, { useEffect, useState } from 'react'
+import { getAsset, getAuctionsById, getListingsById } from '../../api/fetch'
+import config from '../../config.json'
 import Link from '../common/util/input/Link'
 import SvgIcon from '../common/util/SvgIcon'
-import MoreOptions from './MoreOptions'
+import { formatMintInfo } from '../helpers/Helpers'
+import MarketButtons from '../marketbuttons'
+import CardDetails from './CardDetails'
 import CardImage from './CardImage'
-import { getListingsById, getAsset, getAuctionsById } from '../api/Api'
-import cn from 'classnames'
-
-import { ArrowLeft, ArrowRight } from '@material-ui/icons'
+import MoreOptions from './MoreOptions'
 
 function AssetCard(props) {
     const [listing, setListing] = useState(props['listing'])

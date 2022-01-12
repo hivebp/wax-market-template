@@ -1,8 +1,7 @@
-import React from 'react'
-
 import qs from 'qs'
+import React from 'react'
+import { getBlenderizer, getTemplate } from '../../../../api/fetch'
 import BlenderizerComponent from '../../../../components/blends/BlenderizerComponent'
-import { getBlenderizer, getTemplate } from '../../../../components/api/Api'
 
 const BlenderizerPage = (props) => {
     return <BlenderizerComponent {...props} />

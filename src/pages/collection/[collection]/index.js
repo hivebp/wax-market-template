@@ -1,8 +1,7 @@
-import React from 'react'
-
-import CollectionComponent from '../../../components/collection/CollectionComponent'
 import qs from 'qs'
-import { getCollection } from '../../../components/api/Api'
+import React from 'react'
+import { getCollection } from '../../../api/fetch'
+import CollectionComponent from '../../../components/collection/CollectionComponent'
 
 const Collection = (props) => {
     return <CollectionComponent {...props} />

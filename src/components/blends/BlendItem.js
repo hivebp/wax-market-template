@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-import { Context } from '../marketwrapper'
-import { getCollection } from '../api/Api'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import moment from 'moment'
+import React, { useContext, useEffect, useState } from 'react'
+import { getCollection } from '../api/fetch'
 import CollectionTitle from '../assetcard/CollectionTitle'
 import Link from '../common/util/input/Link'
-
-import moment from 'moment'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
 import BlendPreviewImage from './BlendPreviewImage'
 
 function BlendItem(props) {

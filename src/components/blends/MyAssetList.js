@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-import { getAssets } from '../api/Api'
+import React, { useContext, useEffect, useState } from 'react'
+import { getAssets } from '../api/fetch'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 import SelectableAssetPreview from './SelectableAssetPreview'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 
 function MyAssetList(props) {
     const templates = props['templates']

@@ -1,13 +1,57 @@
 import axios from 'axios'
-
-import config from '../../config.json'
 import Long from 'long'
+import config from '../config.json'
+import { getFilterParams } from './filter'
 
-export const atomic_api = config.atomic_api
-
-export const api_endpoint = config.api_endpoint
+export const { atomic_api, api_endpoint } = config
 
 export const get = (path) => fetch(`${api_endpoint}/api/${path}`).then((res) => res.json())
+
+export const useGet = (path) => {
+    const [state, setState] = useState({
+        data: undefined,
+        error: undefined,
+        loading: false,
+        controller: undefined,
+    })
+
+    const fetch = async () => {
+        if (state.controller) state.controller.abort()
+
+        const controller = new AbortController()
+        setState((state) => ({ ...state, loading: true, controller }))
+
+        try {
+            const response = await fetch(`${api_endpoint}/api/${path}`, {
+                signal: controller.signal,
+            })
+
+            const data = await response.json()
+
+            setState({
+                data,
+                error: undefined,
+                loading: false,
+                controller: undefined,
+            })
+        } catch (err) {
+            if (err.code === 'ECONNABORTED') return
+            setState((state) => ({
+                data: state.data,
+                error: err.code === 'ECONNABORTED' ? undefined : err,
+                loading: false,
+            }))
+        }
+
+        return controller
+    }
+
+    useEffect(() => {
+        return () => state.controller?.abort()
+    }, [state.controller])
+
+    return { data, error, loading }
+}
 
 export const getCollections = (collections) => {
     const escaped = []
@@ -23,69 +67,6 @@ export const getCollections = (collections) => {
 
 export const GetPrices = (asset_id) => {
     return fetch(atomic_api + `/atomicmarket/v1/prices/assets?ids=${asset_id}`).then((res) => res.json())
-}
-
-const getFilterParams = (filters) => {
-    let filterStr = ''
-
-    const {
-        collections,
-        page,
-        bundles,
-        user,
-        schema,
-        name,
-        limit,
-        orderDir,
-        sortBy,
-        asset_id,
-        rarity,
-        variant,
-        seller,
-        ids,
-        bidder,
-        winner,
-        template_ids,
-        template_id,
-    } = filters
-
-    if (collections) filterStr += `&collection_whitelist=${collections.join(',')}`
-
-    if (ids) filterStr += `&ids=${ids.join(',')}`
-
-    if (template_ids) filterStr += `&template_whitelist=${template_ids.join(',')}`
-
-    if (template_id) filterStr += `&template_id=${template_id}`
-
-    if (page) filterStr += `&page=${page}`
-
-    if (schema) filterStr += `&schema_name=${schema}`
-
-    if (user) filterStr += `&owner=${user}`
-
-    if (seller) filterStr += `&seller=${seller}`
-
-    if (bidder) filterStr += `&bidder=${bidder}`
-
-    if (winner) filterStr += `&participant=${winner}`
-
-    if (name) filterStr += `&match=${escape(name)}`
-
-    if (rarity) filterStr += `&template_data.rarity=${rarity}`
-
-    if (variant) filterStr += `&template_data.variant=${variant}`
-
-    if (bundles) filterStr += `&min_assets=2`
-
-    if (limit) filterStr += `&limit=${limit}`
-
-    if (orderDir) filterStr += `&order=${orderDir}`
-
-    if (sortBy) filterStr += `&sort=${sortBy}`
-
-    if (asset_id) filterStr += `&asset_id=${asset_id}`
-
-    return filterStr
 }
 
 export const getAccountStats = async (user, dropID) => {

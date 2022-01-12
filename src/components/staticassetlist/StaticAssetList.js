@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-
-import { Context } from '../marketwrapper'
-
+import React, { useContext, useEffect, useState } from 'react'
+import { getAssets, getListings, getSales } from '../../api/fetch'
 import AssetCard from '../assetcard/AssetCard'
-import { getAssets, getListings, getSales } from '../api/Api'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
 
 const StaticAssetList = (props) => {
     const type = props.type

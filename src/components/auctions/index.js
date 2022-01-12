@@ -1,20 +1,17 @@
+import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-
-import { Context } from '../marketwrapper'
-
 import config from '../../config.json'
-
+import { getAuctions, getWonAuctions } from '../api/fetch'
 import AssetCard from '../assetcard/AssetCard'
-import { getAuctions, getWonAuctions } from '../api/Api'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import Pagination from '../pagination/Pagination'
-import Filters from '../filters/Filters'
 import MarketContent from '../common/layout/Content'
 import Page from '../common/layout/Page'
 import Header from '../common/util/Header'
-import { getValues, getFilters } from '../helpers/Helpers'
 import ScrollUpIcon from '../common/util/ScrollUpIcon'
-import cn from 'classnames'
+import Filters from '../filters/Filters'
+import { getFilters, getValues } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
+import Pagination from '../pagination/Pagination'
 
 const Auctions = (props) => {
     const [state, dispatch] = useContext(Context)

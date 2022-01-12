@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
-import WindowButton from './WindowButton'
-import config from '../../config.json'
-
-import { getValues } from '../helpers/Helpers'
-
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import { getAssets, getDelphiMedian, getDropKeys, getProofOwn, getWhiteList } from '../api/Api'
 import PrivateKey from 'eosjs'
+import React, { useEffect, useState } from 'react'
+import { getAssets, getDelphiMedian, getDropKeys, getProofOwn, getWhiteList } from '../../api/fetch'
+import config from '../../config.json'
+import { getValues } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import WindowButton from './WindowButton'
 
 function BuyDropPopup(props) {
     const drop = props['drop']

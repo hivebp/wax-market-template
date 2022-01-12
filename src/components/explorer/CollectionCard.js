@@ -1,10 +1,8 @@
-import React from 'react'
 import cn from 'classnames'
-
-import LazyLoad from 'react-lazy-load'
-
-import Link from '../common/util/input/Link'
+import React from 'react'
 import config from '../../config.json'
+import Link from '../common/util/input/Link'
+import LazyLoad from '../helpers/LazyLoad'
 
 function CollectionCard(props) {
     const collectionItem = props['collection']

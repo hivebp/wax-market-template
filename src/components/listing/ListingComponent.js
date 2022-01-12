@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react'
-
-import AssetDetails from '../asset/AssetDetails'
-
-import AssetImage from '../asset/AssetImage'
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
-import config from '../../config.json'
 import cn from 'classnames'
+import React, { useEffect, useState } from 'react'
+import { getListing } from '../../api/fetch'
+import config from '../../config.json'
+import AssetDetails from '../asset/AssetDetails'
+import AssetImage from '../asset/AssetImage'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
 import { formatPrice } from '../helpers/Helpers'
 import MarketButtons from '../marketbuttons'
-import CheckIndicator from '../check/CheckIndicator'
-import { getListing } from '../api/Api'
 
 const ListingComponent = (props) => {
     const [listing, setListing] = useState(props.listing)

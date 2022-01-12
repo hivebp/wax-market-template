@@ -1,21 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
-
-import { Context } from '../marketwrapper'
-
-import Header from '../common/util/Header'
-import Page from '../common/layout/Page'
-import MarketContent from '../common/layout/Content'
-
-import config from '../../config.json'
-
-import { getAssets } from '../api/Api'
-import AssetCard from '../assetcard/AssetCard'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import Pagination from '../pagination/Pagination'
-import Filters from '../filters/Filters'
-import ScrollUpIcon from '../common/util/ScrollUpIcon'
-import { getValues, getFilters } from '../helpers/Helpers'
 import cn from 'classnames'
+import React, { useContext, useEffect, useState } from 'react'
+import { getAssets } from '../../api/fetch'
+import config from '../../config.json'
+import AssetCard from '../assetcard/AssetCard'
+import MarketContent from '../common/layout/Content'
+import Page from '../common/layout/Page'
+import Header from '../common/util/Header'
+import ScrollUpIcon from '../common/util/ScrollUpIcon'
+import Filters from '../filters/Filters'
+import { getFilters, getValues } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
+import Pagination from '../pagination/Pagination'
 
 const Inventory = (props) => {
     const [state, dispatch] = useContext(Context)

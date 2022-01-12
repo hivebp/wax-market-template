@@ -1,7 +1,6 @@
-import React from 'react'
-
 import qs from 'qs'
-import { getBlend } from '../../../components/api/Api'
+import React from 'react'
+import { getBlend } from '../../../api/fetch'
 import BlendComponent from '../../../components/blends/BlendComponent'
 
 const BlendPage = (props) => {

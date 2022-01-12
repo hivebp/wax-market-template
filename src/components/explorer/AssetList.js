@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
 import cn from 'classnames'
-
-import { Context } from '../marketwrapper'
-
-import { getAssets } from '../api/Api'
+import React, { useContext, useEffect, useState } from 'react'
+import { getAssets } from '../../api/fetch'
 import AssetCard from '../assetcard/AssetCard'
-import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import Pagination from '../pagination/Pagination'
-import Filters from '../filters/Filters'
 import AssetListContent from '../common/layout/Content'
-import { getValues, getFilters } from '../helpers/Helpers'
+import Filters from '../filters/Filters'
+import { getFilters, getValues } from '../helpers/Helpers'
+import LoadingIndicator from '../loadingindicator/LoadingIndicator'
+import { Context } from '../marketwrapper'
+import Pagination from '../pagination/Pagination'
 
 function AssetList(props) {
     const [state, dispatch] = useContext(Context)
