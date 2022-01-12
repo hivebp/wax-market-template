@@ -1,17 +1,27 @@
 import React from 'react'
 
-function LoadingIndicator(props) {
-    const text = props['text']
+export const LoadingIndicator = (props) => {
+    const text = props.text ?? props.children ?? null
     return text ? (
         <div>
             <div className="flex justify-center m-auto">
-                <img src="/Loader.svg" className="w-8 h-8 m-auto animate-spin duration-1000" alt="Loading" />
+                <img
+                    data-testid="loading-spinner"
+                    src="/Loader.svg"
+                    className="w-8 h-8 m-auto animate-spin duration-1000"
+                    alt="Loading"
+                />
             </div>
-            <div>{text}</div>
+            <div data-testid="loading-text">{text}</div>
         </div>
     ) : (
         <div className="flex justify-center m-auto">
-            <img src="/Loader.svg" className="w-8 h-8 m-auto animate-spin duration-1000" alt="Loading" />
+            <img
+                data-testid="loading-spinner"
+                src="/Loader.svg"
+                className="w-8 h-8 m-auto animate-spin duration-1000"
+                alt="Loading"
+            />
         </div>
     )
 }

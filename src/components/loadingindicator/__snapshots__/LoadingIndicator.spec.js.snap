@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoadingIndicator should render 1`] = `
+<div>
+  <div
+    class="flex justify-center m-auto"
+  >
+    <img
+      alt="Loading"
+      class="w-8 h-8 m-auto animate-spin duration-1000"
+      data-testid="loading-spinner"
+      src="/Loader.svg"
+    />
+  </div>
+</div>
+`;
