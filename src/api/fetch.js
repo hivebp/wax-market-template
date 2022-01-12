@@ -1,27 +1,18 @@
-import Long from 'long'
 import { useEffect, useState } from 'react'
 import config from '../config.json'
+import { getCollectionHex } from './fetch_utils'
 import { filter } from './filter'
 import { query } from './query'
 
-export const { atomic_api, api_endpoint } = config
+export const { atomic_api, api_endpoint, packs_contracts } = config
 
-function bytesToHex(bytes) {
-    let leHex = ''
-    for (const b of bytes) {
-        const n = Number(b).toString(16)
-        leHex += (n.length === 1 ? '0' : '') + n
-    }
-    return leHex
-}
+export const get = (url, parms) => fetch(query(url, parms)).then((res) => res.json())
 
-const charidx = (ch) => {
-    const idx = '.12345abcdefghijklmnopqrstuvwxyz'.indexOf(ch)
-    if (idx === -1) throw new TypeError(`Invalid character: '${ch}'`)
-
-    return idx
-}
-export const get = (path) => fetch(`${api_endpoint}/api/${path}`).then((res) => res.json())
+export const post = (url, data) =>
+    fetch(url, {
+        method: 'post',
+        body: JSON.stringify(data),
+    }).then((res) => res.json())
 
 export const useFetch = (url, method = 'GET', body = undefined, autofetch = false) => {
     const [state, setState] = useState({
@@ -78,138 +69,34 @@ export const useFetch = (url, method = 'GET', body = undefined, autofetch = fals
 export const useGet = (url, data) => useFetch(query(url, data), 'GET', undefined, true)
 export const usePost = (url, data) => useFetch(url, 'POST', data, true)
 
-export const post = (url, data) =>
-    fetch(url, {
-        method: 'post',
-        body: JSON.stringify(data),
-    }).then((res) => res.json())
+/**
+ * @param {any} result
+ * @returns {any}
+ */
+const identity = (result) => result
+/**
+ * @param {any} result
+ * @returns {any}
+ */
+const firstRow = (result) => result?.rows?.[0] || null
+/**
+ * @param {any} result
+ * @returns {any[]}
+ */
+const allRows = (result) => result?.rows || []
 
-export const getCollections = (collections) => {
-    const escaped = []
-    collections.map((collection) => {
-        const a = escape(collection)
-        console.log({ a, b: encodeURIComponent(collection), c: encodeURI(collection) })
-        escaped.push(a)
-    })
-
-    return fetch(
-        atomic_api +
-            `/atomicassets/v1/collections?page=1&limit=10&order=desc&sort=created&collection_whitelist=${escaped.join(
-                ',',
-            )}`,
-    ).then((res) => res.json())
-}
-
-export const getAccountStats = async (user, dropID) => {
-    const body = {
-        json: true,
-        code: 'neftyblocksd',
-        scope: user,
-        table: 'accstats',
-        table_key: '',
-        lower_bound: dropID,
-        upper_bound: dropID,
-        index_position: 1,
-        key_type: '',
-        limit: 1,
-        reverse: false,
-        show_payer: false,
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-
-    const res = await post(url, body)
-
-    if (res && res.status === 200 && res.data.rows.length > 0) {
-        return res.data.rows[0]
-    }
-
-    return null
-}
-
-export const getDropKeys = async (dropId) => {
-    const body = {
-        code: 'neftyblocksd',
-        index_position: 'primary',
-        json: 'true',
-        key_type: 'i64',
-        limit: 1,
-        lower_bound: '',
-        upper_bound: '',
-        reverse: 'true',
-        scope: dropId,
-        show_payer: 'false',
-        table: 'authkeys',
-        table_key: '',
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-    const res = await post(url, body)
-
-    let result = null
-
-    if (res && res.status === 200 && res.data && res.data.rows && res.data.rows.length > 0) {
-        result = res.data.rows[0]
-    }
-
-    return result
-}
-
-export const getWhiteList = async (dropId, userName) => {
-    const body = {
-        code: 'neftyblocksd',
-        index_position: 'primary',
-        json: 'true',
-        key_type: 'i64',
-        limit: 1,
-        lower_bound: userName,
-        upper_bound: userName,
-        reverse: 'true',
-        scope: dropId,
-        show_payer: 'false',
-        table: 'whitelists',
-        table_key: '',
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-    const res = await post(url, body)
-
-    let result = null
-
-    if (res && res.status === 200 && res.data && res.data.rows && res.data.rows.length > 0) {
-        result = res.data.rows[0]
-    }
-
-    return result
-}
-
-export const getProofOwn = async (dropId) => {
-    const body = {
-        code: 'neftyblocksd',
-        index_position: 'primary',
-        json: 'true',
-        key_type: 'i64',
-        limit: 1,
-        lower_bound: dropId,
-        upper_bound: dropId,
-        reverse: 'true',
-        scope: 'neftyblocksd',
-        show_payer: 'false',
-        table: 'proofown',
-        table_key: '',
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
-    const res = await post(url, body)
-
-    let result = null
-
-    if (res && res.status === 200 && res.data && res.data.rows && res.data.rows.length > 0) {
-        result = res.data.rows[0]
-    }
-
-    return result
-}
+/**
+ * @template T
+ * @template Result
+ * @param {string} url
+ * @param {(...args: T) => any} dataGenerator
+ * @param {(result: any) => Result} map
+ * @return {(...args: T) => Promise<Result>}
+ */
+const createTableGetter =
+    (dataGenerator, mapFn) =>
+    async (...args) =>
+        mapFn(await post(`${api_endpoint}/v1/chain/get_table_rows`, dataGenerator(...args)))
 
 /**
  * Creates a function that fetches the resulting path and returns the json data of the response.
@@ -219,10 +106,8 @@ export const getProofOwn = async (dropId) => {
  */
 const createGetter =
     (pathGenerator) =>
-    async (...args) => {
-        const response = await fetch(`${atomic_api}${pathGenerator(...args)}`)
-        return response.json()
-    }
+    async (...args) =>
+        get(`${atomic_api}${pathGenerator(...args)}`)
 
 export const getSchemas = createGetter((filters) => `/atomicassets/v1/schemas?${filter(filters)}`)
 export const getTemplates = createGetter((filters) => `/atomicassets/v1/templates?has_assets=true${filter(filters)}`)
@@ -243,26 +128,89 @@ export const getCollection = createGetter((collection_name) => `/atomicassets/v1
 export const getSale = createGetter((saleId) => `/atomicmarket/v1/sales/${saleId}`)
 export const getAuction = createGetter((auctionId) => `/atomicmarket/v1/auctions/${auctionId}`)
 
-export const useCollections = () => {
-    const { data, error, loading, fetch } = usePost(`${api_endpoint}/v1/chain/get_table_rows`, {
-        code: 'marketmapper',
-        index_position: 'primary',
-        json: 'true',
-        key_type: 'i64',
-        limit: 1,
-        reverse: 'false',
-        scope: 'marketmapper',
-        show_payer: 'false',
-        table: 'mappings',
-        lower_bound: config.market_name,
-        upper_bound: config.market_name,
-        table_key: '',
+export const getCollections = (collections) =>
+    get(`${atomic_api}/atomicassets/v1/collections`, {
+        page: '1',
+        limit: '10',
+        order: 'desc',
+        sort: 'created',
+        collection_whitelist: collections,
     })
-    return { data, error, loading, fetch }
-}
 
-export const loadCollections = async () => {
-    const body = {
+export const getAccountStats = createTableGetter(
+    (user, dropID) => ({
+        json: true,
+        code: 'neftyblocksd',
+        scope: user,
+        table: 'accstats',
+        table_key: '',
+        lower_bound: dropID,
+        upper_bound: dropID,
+        index_position: 1,
+        key_type: '',
+        limit: 1,
+        reverse: false,
+        show_payer: false,
+    }),
+    firstRow,
+)
+
+export const getDropKeys = createTableGetter(
+    (dropId) => ({
+        code: 'neftyblocksd',
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 1,
+        lower_bound: '',
+        upper_bound: '',
+        reverse: 'true',
+        scope: dropId,
+        show_payer: 'false',
+        table: 'authkeys',
+        table_key: '',
+    }),
+    firstRow,
+)
+
+export const getWhiteList = createTableGetter(
+    (dropId, userName) => ({
+        code: 'neftyblocksd',
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 1,
+        lower_bound: userName,
+        upper_bound: userName,
+        reverse: 'true',
+        scope: dropId,
+        show_payer: 'false',
+        table: 'whitelists',
+        table_key: '',
+    }),
+    firstRow,
+)
+
+export const getProofOwn = createTableGetter(
+    (dropId) => ({
+        code: 'neftyblocksd',
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 1,
+        lower_bound: dropId,
+        upper_bound: dropId,
+        reverse: 'true',
+        scope: 'neftyblocksd',
+        show_payer: 'false',
+        table: 'proofown',
+        table_key: '',
+    }),
+    firstRow,
+)
+
+export const loadCollections = createTableGetter(
+    () => ({
         code: 'marketmapper',
         index_position: 'primary',
         json: 'true',
@@ -275,65 +223,69 @@ export const loadCollections = async () => {
         lower_bound: config.market_name,
         upper_bound: config.market_name,
         table_key: '',
-    }
+    }),
+    identity,
+)
 
-    const url = config.api_endpoint + '/v1/chain/get_table_rows'
+const getNeftyblockspCollectionByHex = createTableGetter(
+    (collectionHex) => ({
+        code: 'neftyblocksp',
+        index_position: 2,
+        json: 'true',
+        key_type: 'sha256',
+        limit: 2000,
+        lower_bound: `0000000000000000${collectionHex}00000000000000000000000000000000`,
+        upper_bound: `0000000000000000${collectionHex}ffffffffffffffffffffffffffffffff`,
+        reverse: 'true',
+        scope: 'neftyblocksp',
+        show_payer: 'false',
+        table: 'packs',
+        table_key: '',
+    }),
+    allRows,
+)
 
-    return post(url, body)
-}
-
-export const getCollectionHex = (collection) => {
-    if (typeof collection !== 'string') throw new TypeError('name parameter is a required string')
-
-    if (collection.length > 12) throw new TypeError('A name can be up to 12 characters long')
-
-    let bitstr = ''
-    for (let i = 0; i <= 12; i++) {
-        // process all 64 bits (even if name is short)
-        const c = i < collection.length ? charidx(collection[i]) : 0
-        const bitlen = i < 12 ? 5 : 4
-        let bits = Number(c).toString(2)
-        if (bits.length > bitlen) {
-            throw new TypeError('Invalid name ' + collection)
+const getAtomicpacksxCollectionByKey = createTableGetter(
+    (lower_bound) => ({
+        code: 'atomicpacksx',
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 2000,
+        lower_bound: lower_bound,
+        upper_bound: lower_bound + 10000,
+        reverse: 'false',
+        scope: 'atomicpacksx',
+        show_payer: 'false',
+        table: 'packs',
+        table_key: '',
+    }),
+    (result) => {
+        console.log(result)
+        return {
+            rows: result?.rows || [],
+            more: result?.more || false,
+            nextIndex: result?.next_key ? parseInt(result?.next_key, 10) : null,
         }
-        bits = '0'.repeat(bitlen - bits.length) + bits
-        bitstr += bits
-    }
+    },
+)
 
-    const longVal = Long.fromString(bitstr, true, 2)
-
-    return bytesToHex(longVal.toBytes())
-}
-
-export const getPacks = async (filters) => {
-    console.log(new Error().stack)
+/**
+ *
+ * @param {{ collections: string [] }} filters
+ * @returns {any[]}
+ */
+export const getPacks = async ({ collections = [] } = {}) => {
     const packs = []
 
-    for (let i = 0; i < config.packs_contracts.length; i++) {
-        if (config.packs_contracts[i] === 'neftyblocksp') {
-            filters.collections.map(async (collection) => {
-                const collectionHex = getCollectionHex(collection)
+    packs_contracts.forEach((contract) => {
+        switch (contract) {
+            case 'neftyblocksp':
+                collections.forEach(async (collection) => {
+                    const collectionHex = getCollectionHex(collection)
 
-                const body = {
-                    code: 'neftyblocksp',
-                    index_position: 2,
-                    json: 'true',
-                    key_type: 'sha256',
-                    limit: 2000,
-                    lower_bound: `0000000000000000${collectionHex}00000000000000000000000000000000`,
-                    upper_bound: `0000000000000000${collectionHex}ffffffffffffffffffffffffffffffff`,
-                    reverse: 'true',
-                    scope: 'neftyblocksp',
-                    show_payer: 'false',
-                    table: 'packs',
-                    table_key: '',
-                }
-
-                const url = config.api_endpoint + '/v1/chain/get_table_rows'
-                const res = await post(url, body)
-
-                if (res && res.status === 200 && res.data && res.data.rows) {
-                    res.data.rows.map((pack) => {
+                    const rows = await getNeftyblockspCollectionByHex(collectionHex)
+                    rows.forEach((pack) => {
                         packs.push({
                             packId: pack.pack_id,
                             unlockTime: pack.unlock_time,
@@ -342,55 +294,33 @@ export const getPacks = async (filters) => {
                             displayData: JSON.parse(pack.display_data),
                             contract: 'neftyblocksp',
                         })
-                        return null
                     })
-                }
-            })
-        }
+                })
+                break
 
-        if (config.packs_contracts[i] === 'atomicpacksx') {
-            let nextKey = '0'
+            case 'atomicpacksx':
+                let lower_bound = 0
 
-            while (nextKey) {
-                const body = {
-                    code: 'atomicpacksx',
-                    index_position: 'primary',
-                    json: 'true',
-                    key_type: 'i64',
-                    limit: 2000,
-                    lower_bound: parseInt(nextKey),
-                    upper_bound: parseInt(nextKey) + 10000,
-                    reverse: 'false',
-                    scope: 'atomicpacksx',
-                    show_payer: 'false',
-                    table: 'packs',
-                    table_key: '',
-                }
-
-                const url = config.api_endpoint + '/v1/chain/get_table_rows'
-                const res = await post(url, body)
-
-                if (res && res.status === 200 && res.data && res.data.rows) {
-                    res.data.rows
-                        .filter((pack) => filters.collections.includes(pack.collection_name))
-                        .map((pack) => {
-                            packs.push({
-                                packId: pack.pack_id,
-                                unlockTime: pack.unlock_time,
-                                templateId: pack.pack_template_id,
-                                rollCounter: pack.rollCounter,
-                                displayData: JSON.parse(pack.display_data),
-                                contract: 'atomicpacksx',
-                            })
-                            return null
+                while (lower_bound !== null) {
+                    const { rows, nextIndex, more } = await getAtomicpacksxCollectionByKey(lower_bound)
+                    rows.filter((pack) => collections.includes(pack.collection_name)).forEach((pack) => {
+                        packs.push({
+                            packId: pack.pack_id,
+                            unlockTime: pack.unlock_time,
+                            templateId: pack.pack_template_id,
+                            rollCounter: pack.rollCounter,
+                            displayData: JSON.parse(pack.display_data),
+                            contract: 'atomicpacksx',
                         })
-                    nextKey = res.data.next_key
-                } else {
-                    nextKey = null
+                    })
+                    lower_bound = more ? nextIndex : null
                 }
-            }
+                break
+
+            default:
+                console.warn(`Unknown contract "${contract}" to fetch packs`)
         }
-    }
+    })
 
     return packs
 }
@@ -558,4 +488,22 @@ export const getWaxBalance = async (name) => {
     const url = config.api_endpoint + '/v1/chain/get_table_rows'
 
     return post(url, body)
+}
+
+export const useCollections = () => {
+    const { data, error, loading, fetch } = usePost(`${api_endpoint}/v1/chain/get_table_rows`, {
+        code: 'marketmapper',
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 1,
+        reverse: 'false',
+        scope: 'marketmapper',
+        show_payer: 'false',
+        table: 'mappings',
+        lower_bound: config.market_name,
+        upper_bound: config.market_name,
+        table_key: '',
+    })
+    return { data, error, loading, fetch }
 }
