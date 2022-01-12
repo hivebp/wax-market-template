@@ -1,5 +1,10 @@
+import { query } from './query'
+
 export const filter = (filters) => {
+    // console.log('filter', filters)
     let filterStr = ''
+
+    const data = {}
 
     const {
         collections,
@@ -22,43 +27,45 @@ export const filter = (filters) => {
         template_id,
     } = filters
 
-    if (collections) filterStr += `&collection_whitelist=${collections.join(',')}`
+    if (collections) data['collection_whitelist'] = collections //  filterStr += `&collection_whitelist=${collections.join(',')}`
 
-    if (ids) filterStr += `&ids=${ids.join(',')}`
+    if (ids) data['ids'] = ids //  filterStr += `&ids=${ids.join(',')}`
 
-    if (template_ids) filterStr += `&template_whitelist=${template_ids.join(',')}`
+    if (template_ids) data['template_whitelist'] = template_ids //  filterStr += `&template_whitelist=${template_ids.join(',')}`
 
-    if (template_id) filterStr += `&template_id=${template_id}`
+    if (template_id) data['template_id'] = template_id //  filterStr += `&template_id=${template_id}`
 
-    if (page) filterStr += `&page=${page}`
+    if (page) data['page'] = page //  filterStr += `&page=${page}`
 
-    if (schema) filterStr += `&schema_name=${schema}`
+    if (schema) data['schema_name'] = schema //  filterStr += `&schema_name=${schema}`
 
-    if (user) filterStr += `&owner=${user}`
+    if (user) data['owner'] = user //  filterStr += `&owner=${user}`
 
-    if (seller) filterStr += `&seller=${seller}`
+    if (seller) data['seller'] = seller //  filterStr += `&seller=${seller}`
 
-    if (bidder) filterStr += `&bidder=${bidder}`
+    if (bidder) data['bidder'] = bidder //  filterStr += `&bidder=${bidder}`
 
-    if (winner) filterStr += `&participant=${winner}`
+    if (winner) data['participant'] = winner //  filterStr += `&participant=${winner}`
 
-    if (name) filterStr += `&match=${escape(name)}`
+    if (name) data['match'] = name //  filterStr += `&match=${escape(name)}`
 
-    if (rarity) filterStr += `&template_data.rarity=${rarity}`
+    if (rarity) data['template_data.rarity'] = rarity //  filterStr += `&template_data.rarity=${rarity}`
 
-    if (variant) filterStr += `&template_data.variant=${variant}`
+    if (variant) data['template_data.variant'] = variant //  filterStr += `&template_data.variant=${variant}`
 
-    if (bundles) filterStr += `&min_assets=2`
+    if (bundles) data['min_assets'] = 2 //  filterStr += `&min_assets=2`
 
-    if (limit) filterStr += `&limit=${limit}`
+    if (limit) data['limit'] = limit //  filterStr += `&limit=${limit}`
 
-    if (orderDir) filterStr += `&order=${orderDir}`
+    if (orderDir) data['order'] = orderDir //  filterStr += `&order=${orderDir}`
 
-    if (sortBy) filterStr += `&sort=${sortBy}`
+    if (sortBy) data['sort'] = sortBy //  filterStr += `&sort=${sortBy}`
 
-    if (asset_id) filterStr += `&asset_id=${asset_id}`
+    if (asset_id) data['asset_id'] = asset_id //  filterStr += `&asset_id=${asset_id}`
 
-    return filterStr
+    const result = query('', data).slice(1)
+    if (!result) return ''
+    return '&' + result
 }
 
 export const getFilterParams = filter
