@@ -2,7 +2,7 @@ import { filter } from './filter'
 
 describe('filter', () => {
     it.each([
-        ['', {}],
+        ['&', {}],
         ['&collection_whitelist=a%2Cb', { collections: ['a', 'b'] }],
         ['&page=a', { page: 'a' }],
         ['&min_assets=2', { bundles: true }],
