@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight } from '@material-ui/icons'
 import cn from 'classnames'
-import moment from 'moment'
 import React, { useEffect, useState } from 'react'
+import { millisecondsToString } from '../../api/date'
 import { getAsset, getAuctionsById, getListingsById } from '../../api/fetch'
 import config from '../../config.json'
 import Link from '../common/util/input/Link'
@@ -11,8 +11,7 @@ import MarketButtons from '../marketbuttons'
 import CardDetails from './CardDetails'
 import CardImage from './CardImage'
 import MoreOptions from './MoreOptions'
-
-function AssetCard(props) {
+export const AssetCard = (props) => {
     const [listing, setListing] = useState(props['listing'])
 
     const [assets, setAssets] = useState(props['assets'])
@@ -38,7 +37,7 @@ function AssetCard(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [transferred, setTransferred] = useState(false)
     const [auctionInterval, setAuctionInterval] = useState(null)
-    const [auctionTimeLeft, setAuctionTimeLeft] = useState('')
+    const [auctionTimeLeft, setAuctionTimeLeft] = useState(undefined)
     const sale = props['sale']
     const page = props['page']
 
@@ -55,35 +54,26 @@ function AssetCard(props) {
         ? asset.sales[0]['sale_id']
         : null
 
-    useEffect(() => {}, [frontVisible, sale_id])
-
     useEffect(() => {
         if (auction_id) {
-            if (auctionInterval) {
-                clearInterval(auctionInterval)
-            }
+            if (auctionInterval) clearInterval(auctionInterval)
 
-            const currentTime = moment()
-
-            const diffTime = end_time / 1000 - currentTime.unix()
-            let duration = moment.duration(diffTime * 1000, 'milliseconds')
             const interval = 1000
 
             setAuctionInterval(
                 setInterval(function () {
-                    duration = moment.duration(duration - interval, 'milliseconds')
+                    const diffInMilliseconds = end_time - Date.now()
 
-                    if (auctionInterval) {
+                    if (diffInMilliseconds < 0) {
                         clearInterval(auctionInterval)
+                        return setAuctionTimeLeft(0)
                     }
 
-                    if (duration.asSeconds() < 0) setAuctionTimeLeft(' - ')
-                    else
-                        setAuctionTimeLeft(
-                            `${duration.days()}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`,
-                        )
+                    setAuctionTimeLeft(diffInMilliseconds)
                 }, interval),
             )
+
+            return () => clearInterval(auctionInterval)
         }
     }, [auction_id])
 
@@ -409,7 +399,11 @@ function AssetCard(props) {
                     <SvgIcon icon={<ArrowRight fontSize="large" />} />
                 )}
             </div>
-            {auctionTimeLeft && !canceled && <div className={cn('text-center')}>{auctionTimeLeft}</div>}
+            {auctionTimeLeft !== undefined && !canceled && (
+                <div className={cn('text-center')}>
+                    {auctionTimeLeft ? millisecondsToString(auctionTimeLeft) : ' - '}
+                </div>
+            )}
         </div>
     )
 }
