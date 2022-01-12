@@ -1,4 +1,5 @@
 import Long from 'long'
+import { useEffect, useState } from 'react'
 import config from '../config.json'
 import { getFilterParams } from './filter'
 
@@ -21,7 +22,7 @@ const charidx = (ch) => {
 }
 export const get = (path) => fetch(`${api_endpoint}/api/${path}`).then((res) => res.json())
 
-export const useFetch = (path, method = 'GET', body = undefined) => {
+export const useFetch = (url, method = 'GET', body = undefined, autofetch = false) => {
     const [state, setState] = useState({
         data: undefined,
         error: undefined,
@@ -29,14 +30,14 @@ export const useFetch = (path, method = 'GET', body = undefined) => {
         controller: undefined,
     })
 
-    const fetch = async () => {
+    const request = async () => {
         if (state.controller) state.controller.abort()
 
         const controller = new AbortController()
         setState((state) => ({ ...state, loading: true, controller }))
 
         try {
-            const response = await fetch(`${api_endpoint}/api/${path}`, {
+            const response = await fetch(url, {
                 signal: controller.signal,
                 method,
                 body: body ? JSON.stringify(body) : undefined,
@@ -66,21 +67,29 @@ export const useFetch = (path, method = 'GET', body = undefined) => {
         return () => state.controller?.abort()
     }, [state.controller])
 
-    return { data, error, loading }
+    useEffect(() => {
+        if (autofetch) request()
+    }, [])
+
+    return { data: state.data, error: state.error, loading: state.loading, fetch: request }
 }
 
-export const useGet = (path) => useFetch(path, 'GET')
-export const usePost = (path, data) => useFetch(path, 'POST', data)
+export const useGet = (path) => useFetch(`${api_endpoint}/api/${path}`, 'GET', undefined, true)
+export const usePost = (url, data) => useFetch(url, 'POST', data, true)
 
 export const post = (url, data) =>
     fetch(url, {
         method: 'post',
-        data: JSON.stringify(data),
+        body: JSON.stringify(data),
     }).then((res) => res.json())
 
 export const getCollections = (collections) => {
     const escaped = []
-    collections.map((collection) => escaped.push(escape(collection)))
+    collections.map((collection) => {
+        const a = escape(collection)
+        console.log({ a, b: encodeURIComponent(collection), c: encodeURI(collection) })
+        escaped.push(a)
+    })
 
     return fetch(
         atomic_api +
@@ -88,10 +97,6 @@ export const getCollections = (collections) => {
                 ',',
             )}`,
     ).then((res) => res.json())
-}
-
-export const GetPrices = (asset_id) => {
-    return fetch(atomic_api + `/atomicmarket/v1/prices/assets?ids=${asset_id}`).then((res) => res.json())
 }
 
 export const getAccountStats = async (user, dropID) => {
@@ -205,70 +210,56 @@ export const getProofOwn = async (dropId) => {
     return result
 }
 
-export const getSchemas = (filters) => {
-    return fetch(atomic_api + `/atomicassets/v1/schemas?${getFilterParams(filters)}`).then((res) => res.json())
-}
+/**
+ * Creates a function that fetches the resulting path and returns the json data of the response.
+ * @template T
+ * @param {(...args: T) => string} pathGenerator
+ * @return {(...args: T) => Promise<unknown>}
+ */
+const createGetter =
+    (pathGenerator) =>
+    async (...args) => {
+        const response = await fetch(`${atomic_api}${pathGenerator(...args)}`)
+        return response.json()
+    }
 
-export const getTemplates = (filters) => {
-    return fetch(atomic_api + `/atomicassets/v1/templates?has_assets=true${getFilterParams(filters)}`).then((res) =>
-        res.json(),
-    )
-}
+export const getSchemas = createGetter((filters) => `/atomicassets/v1/schemas?${getFilterParams(filters)}`)
+export const getTemplates = createGetter(
+    (filters) => `/atomicassets/v1/templates?has_assets=true${getFilterParams(filters)}`,
+)
+export const getListings = createGetter((filters) => `/atomicmarket/v1/sales?state=1${getFilterParams(filters)}`)
+export const getListing = createGetter((listingId) => `/atomicmarket/v1/sales/${listingId}`)
+export const getAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`)
+export const getWonAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=3&${getFilterParams(filters)}`)
+export const getBids = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`)
+export const getSales = createGetter((filters) => `/atomicmarket/v1/sales?state=3${getFilterParams(filters)}`)
+export const getListingsById = createGetter((asset_id) => `/atomicmarket/v1/sales?&limit=1&asset_id=${asset_id}`)
+export const getAuctionsById = createGetter((asset_id) => `/atomicmarket/v1/auctions?&limit=1&asset_id=${asset_id}`)
+export const getAssets = createGetter((filters) => `/atomicmarket/v1/assets?${getFilterParams(filters)}`)
+export const getTemplate = createGetter(
+    (templateId, collectionName) => `/atomicassets/v1/templates/${collectionName}/${templateId}`,
+)
+export const getAsset = createGetter((assetId) => `/atomicmarket/v1/assets/${assetId}`)
+export const getCollection = createGetter((collection_name) => `/atomicassets/v1/collections/${collection_name}`)
+export const getSale = createGetter((saleId) => `/atomicmarket/v1/sales/${saleId}`)
+export const getAuction = createGetter((auctionId) => `/atomicmarket/v1/auctions/${auctionId}`)
 
-export const getListings = (filters) => {
-    return fetch(atomic_api + `/atomicmarket/v1/sales?state=1${getFilterParams(filters)}`).then((res) => res.json())
-}
-
-export const getListing = (listingId) => {
-    return fetch(atomic_api + `/atomicmarket/v1/sales/${listingId}`).then((res) => res.json())
-}
-
-export const getAuctions = (filters) => {
-    return fetch(atomic_api + `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`).then((res) => res.json())
-}
-
-export const getWonAuctions = (filters) => {
-    return fetch(atomic_api + `/atomicmarket/v1/auctions?state=3&${getFilterParams(filters)}`).then((res) => res.json())
-}
-
-export const getBids = (filters) => {
-    return fetch(atomic_api + `/atomicmarket/v1/auctions?state=1&${getFilterParams(filters)}`).then((res) => res.json())
-}
-
-export const getSales = (filters) => {
-    return fetch(atomic_api + `/atomicmarket/v1/sales?state=3${getFilterParams(filters)}`).then((res) => res.json())
-}
-
-export const getListingsById = (asset_id) => {
-    return fetch(atomic_api + `/atomicmarket/v1/sales?&limit=1&asset_id=${asset_id}`).then((res) => res.json())
-}
-
-export const getAuctionsById = (asset_id) => {
-    return fetch(atomic_api + `/atomicmarket/v1/auctions?&limit=1&asset_id=${asset_id}`).then((res) => res.json())
-}
-
-export const getAssets = (filters) => {
-    return fetch(atomic_api + `/atomicmarket/v1/assets?${getFilterParams(filters)}`).then((res) => res.json())
-}
-
-export const getTemplate = (templateId, collectionName) => {
-    return fetch(atomic_api + `/atomicassets/v1/templates/${collectionName}/${templateId}`).then((res) => res.json())
-}
-
-export const getAsset = (assetId) => {
-    return fetch(atomic_api + `/atomicmarket/v1/assets/${assetId}`).then((res) => res.json())
-}
-
-export const getCollection = (collection_name) => {
-    return fetch(atomic_api + `/atomicassets/v1/collections/${collection_name}`).then((res) => res.json())
-}
-
-export const getSale = (saleId) => {
-    return fetch(atomic_api + `/atomicmarket/v1/sales/${saleId}`).then((res) => res.json())
-}
-
-export const getAuction = (auctionId) => {
-    return fetch(atomic_api + `/atomicmarket/v1/auctions/${auctionId}`).then((res) => res.json())
+export const useCollections = () => {
+    const { data, error, loading, fetch } = usePost(`${api_endpoint}/v1/chain/get_table_rows`, {
+        code: 'marketmapper',
+        index_position: 'primary',
+        json: 'true',
+        key_type: 'i64',
+        limit: 1,
+        reverse: 'false',
+        scope: 'marketmapper',
+        show_payer: 'false',
+        table: 'mappings',
+        lower_bound: config.market_name,
+        upper_bound: config.market_name,
+        table_key: '',
+    })
+    return { data, error, loading, fetch }
 }
 
 export const loadCollections = async () => {
