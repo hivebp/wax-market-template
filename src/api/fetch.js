@@ -4,9 +4,24 @@ import { getFilterParams } from './filter'
 
 export const { atomic_api, api_endpoint } = config
 
+function bytesToHex(bytes) {
+    let leHex = ''
+    for (const b of bytes) {
+        const n = Number(b).toString(16)
+        leHex += (n.length === 1 ? '0' : '') + n
+    }
+    return leHex
+}
+
+const charidx = (ch) => {
+    const idx = '.12345abcdefghijklmnopqrstuvwxyz'.indexOf(ch)
+    if (idx === -1) throw new TypeError(`Invalid character: '${ch}'`)
+
+    return idx
+}
 export const get = (path) => fetch(`${api_endpoint}/api/${path}`).then((res) => res.json())
 
-export const useGet = (path) => {
+export const useFetch = (path, method = 'GET', body = undefined) => {
     const [state, setState] = useState({
         data: undefined,
         error: undefined,
@@ -23,6 +38,8 @@ export const useGet = (path) => {
         try {
             const response = await fetch(`${api_endpoint}/api/${path}`, {
                 signal: controller.signal,
+                method,
+                body: body ? JSON.stringify(body) : undefined,
             })
 
             const data = await response.json()
@@ -51,6 +68,15 @@ export const useGet = (path) => {
 
     return { data, error, loading }
 }
+
+export const useGet = (path) => useFetch(path, 'GET')
+export const usePost = (path, data) => useFetch(path, 'POST', data)
+
+export const post = (url, data) =>
+    fetch(url, {
+        method: 'post',
+        data: JSON.stringify(data),
+    }).then((res) => res.json())
 
 export const getCollections = (collections) => {
     const escaped = []
@@ -245,12 +271,6 @@ export const getAuction = (auctionId) => {
     return fetch(atomic_api + `/atomicmarket/v1/auctions/${auctionId}`).then((res) => res.json())
 }
 
-export const post = (url, data) =>
-    fetch(url, {
-        method: 'post',
-        data: JSON.stringify(data),
-    }).then((res) => res.json())
-
 export const loadCollections = async () => {
     const body = {
         code: 'marketmapper',
@@ -270,22 +290,6 @@ export const loadCollections = async () => {
     const url = config.api_endpoint + '/v1/chain/get_table_rows'
 
     return post(url, body)
-}
-
-function bytesToHex(bytes) {
-    let leHex = ''
-    for (const b of bytes) {
-        const n = Number(b).toString(16)
-        leHex += (n.length === 1 ? '0' : '') + n
-    }
-    return leHex
-}
-
-const charidx = (ch) => {
-    const idx = '.12345abcdefghijklmnopqrstuvwxyz'.indexOf(ch)
-    if (idx === -1) throw new TypeError(`Invalid character: '${ch}'`)
-
-    return idx
 }
 
 export const getCollectionHex = (collection) => {
