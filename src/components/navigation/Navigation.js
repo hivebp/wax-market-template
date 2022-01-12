@@ -101,8 +101,8 @@ const Navigation = React.memo((props) => {
     }
 
     useEffect(() => {
-        getWaxBalance(userName).then((res) => parseWaxBalance(res))
-        getRefundBalance(userName).then((res) => parseRefundBalance(res))
+        // getWaxBalance(userName).then((res) => parseWaxBalance(res))
+        // getRefundBalance(userName).then((res) => parseRefundBalance(res))
     }, [userName])
 
     return (

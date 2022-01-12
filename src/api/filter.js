@@ -1,4 +1,4 @@
-export const getFilterParams = (filters) => {
+export const filter = (filters) => {
     let filterStr = ''
 
     const {
@@ -60,3 +60,5 @@ export const getFilterParams = (filters) => {
 
     return filterStr
 }
+
+export const getFilterParams = filter

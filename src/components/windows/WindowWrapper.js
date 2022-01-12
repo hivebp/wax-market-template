@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useRef } from 'react'
-
-import SellWindow from './SellWindow'
-import BuyWindow from './BuyWindow'
-import BuyDropWindow from './BuyDropWindow'
-import TransferWindow from './TransferWindow'
 import { Context } from '../marketwrapper'
-import BidWindow from './BidWindow'
 import AuctionWindow from './AuctionWindow'
-import UnboxWindow from './UnboxWindow'
+import BidWindow from './BidWindow'
+import BuyDropWindow from './BuyDropWindow'
+import BuyWindow from './BuyWindow'
 import ClaimPopup from './ClaimWindow'
+import SellWindow from './SellWindow'
+import TransferWindow from './TransferWindow'
+import UnboxWindow from './UnboxWindow'
 
 function WindowWrapper(props) {
     const ual = props['ual'] ? props['ual'] : { activeUser: null }
@@ -20,6 +19,8 @@ function WindowWrapper(props) {
 
     const action = state.action
     const callBack = state.callBack
+
+    console.log('WindowWrapper', { action, amount, asset })
 
     function useOutsideAlerter(ref, callBack) {
         useEffect(() => {

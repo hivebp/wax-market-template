@@ -2,6 +2,7 @@ import Long from 'long'
 import { useEffect, useState } from 'react'
 import config from '../config.json'
 import { getFilterParams } from './filter'
+import { query } from './query'
 
 export const { atomic_api, api_endpoint } = config
 
@@ -74,7 +75,7 @@ export const useFetch = (url, method = 'GET', body = undefined, autofetch = fals
     return { data: state.data, error: state.error, loading: state.loading, fetch: request }
 }
 
-export const useGet = (path) => useFetch(`${api_endpoint}/api/${path}`, 'GET', undefined, true)
+export const useGet = (url, data) => useFetch(query(url, data), 'GET', undefined, true)
 export const usePost = (url, data) => useFetch(url, 'POST', data, true)
 
 export const post = (url, data) =>
@@ -307,6 +308,7 @@ export const getCollectionHex = (collection) => {
 }
 
 export const getPacks = async (filters) => {
+    console.log(new Error().stack)
     const packs = []
 
     for (let i = 0; i < config.packs_contracts.length; i++) {

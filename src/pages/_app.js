@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
 import { UALProvider, withUAL } from 'ual-reactjs-renderer'
-import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
+import { getCollections, getPacks, getSchemas, getTemplates, useCollections } from '../api/fetch'
 import Footer from '../components/footer'
 import MarketWrapper, { Context } from '../components/marketwrapper'
 import Navigation from '../components/navigation/Navigation'
@@ -14,6 +14,8 @@ import config from '../config.json'
 import '../styles/App.css'
 import '../styles/globals.css'
 import '../styles/Search.css'
+
+const { default_collection, packs_contracts } = config
 
 const queryClient = new QueryClient()
 
@@ -38,75 +40,28 @@ const wax = new Wax([waxNet], {
 
 const wallets = [wax, anchor]
 
-const parseCollections = (dispatch, res) => {
-    if (res && res.status === 200) {
-        const data = res['data']
-        dispatch({ type: 'SET_COLLECTIONS', payload: data['rows'][0].collections })
-        dispatch({
-            type: 'SET_COLLECTION_DATA',
-            payload: getCollections(data['rows'][0].collections),
-        })
-        dispatch({
-            type: 'SET_TEMPLATE_DATA',
-            payload: getTemplates({
-                collections: data['rows'][0].collections,
-                limit: 1000,
-            }),
-        })
-        dispatch({
-            type: 'SET_SCHEMA_DATA',
-            payload: getSchemas({
-                collections: data['rows'][0].collections,
-            }),
-        })
-        if (config.packs_contracts)
-            dispatch({
-                type: 'SET_PACK_DATA',
-                payload: getPacks({
-                    collections: data['rows'][0].collections,
-                }),
-            })
-    } else {
-        dispatch({ type: 'SET_COLLECTIONS', payload: [config.default_collection] })
-        dispatch({
-            type: 'SET_COLLECTION_DATA',
-            payload: getCollections([config.default_collection]),
-        })
-        dispatch({
-            type: 'SET_TEMPLATE_DATA',
-            payload: getTemplates({
-                collections: [config.default_collection],
-                limit: 1000,
-            }),
-        })
-        dispatch({
-            type: 'SET_SCHEMA_DATA',
-            payload: getSchemas({
-                collections: [config.default_collection],
-            }),
-        })
-        if (config.packs_contracts)
-            dispatch({
-                type: 'SET_PACK_DATA',
-                payload: getPacks({
-                    collections: [config.default_collection],
-                }),
-            })
-    }
+const disptachCollectionsData = (dispatch, collections) => {
+    dispatch({ type: 'SET_COLLECTIONS', payload: collections })
+    dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollections(collections) })
+    dispatch({ type: 'SET_TEMPLATE_DATA', payload: getTemplates({ collections: collections, limit: 1000 }) })
+    dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({ collections: collections }) })
+    if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
 function MyApp({ Component, pageProps }) {
     const AppContainer = (props) => {
-        const [state, dispatch] = useContext(Context)
-
+        const [, dispatch] = useContext(Context)
         const [init, setInit] = useState(true)
+        const { data: collectionsData, error, loading } = useCollections()
 
         useEffect(() => {
-            if (init) {
+            if (init && !loading && (collectionsData || error)) {
                 setInit(false)
-                loadCollections().then((res) => parseCollections(dispatch, res))
+                // when no error occured, collection data could be retrieved and it has collections, use them, else fallback
+                const collections = (!error && collectionsData?.rows?.[0]?.collections) || [default_collection]
+                disptachCollectionsData(dispatch, collections)
             }
-        }, [state.collections === null])
+        }, [init, collectionsData])
 
         return (
             <div>
