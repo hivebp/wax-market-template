@@ -1,32 +1,32 @@
-import React, {useContext, useEffect} from 'react';
-import cn from "classnames";
-import PreviewImage from "../assetcard/PreviewImage";
-import {Context} from "../marketwrapper";
+import React, { useContext, useEffect } from 'react'
+import cn from 'classnames'
+import PreviewImage from '../assetcard/PreviewImage'
+import { Context } from '../marketwrapper'
 
 function TemplateIngredient(props) {
-    const template = props['template'];
-    const index = props['index'];
-    const [ state, dispatch ] = useContext(Context);
+    const template = props['template']
+    const index = props['index']
+    const [state, dispatch] = useContext(Context)
 
-    const selectedAssets = state.selectedAssets;
+    const selectedAssets = state.selectedAssets
 
-    const selected = template.assignedAsset && template.assignedAsset.asset_id;
+    const selected = template.assignedAsset && template.assignedAsset.asset_id
 
     useEffect(() => {
         if (!selected) {
-
         }
-    }, [selected]);
+    }, [selected])
 
     const removeAsset = (asset) => {
         if (asset) {
-            const newSelectedAssets = [];
-            selectedAssets && selectedAssets.map(ass => {
-                if (ass.asset_id !== asset.asset_id) {
-                    newSelectedAssets.push(ass);
-                }
-            });
-            dispatch({ type: 'SET_SELECTED_ASSETS', payload: newSelectedAssets });
+            const newSelectedAssets = []
+            selectedAssets &&
+                selectedAssets.map((ass) => {
+                    if (ass.asset_id !== asset.asset_id) {
+                        newSelectedAssets.push(ass)
+                    }
+                })
+            dispatch({ type: 'SET_SELECTED_ASSETS', payload: newSelectedAssets })
         }
     }
 
@@ -38,9 +38,9 @@ function TemplateIngredient(props) {
                 'text-base break-words',
                 'backdrop-filter backdrop-blur-sm border',
                 'shadow-md bg-paper',
-                {'border-primary': selected}
+                { 'border-primary': selected },
             )}
-            id={'AssetPreview_'+index}
+            id={'AssetPreview_' + index}
             onClick={() => removeAsset(template.assignedAsset)}
         >
             <div className={cn('')}>
@@ -51,7 +51,7 @@ function TemplateIngredient(props) {
                 <div>Template: {template.template.template_id}</div>
             </div>
         </div>
-    );
+    )
 }
 
-export default TemplateIngredient;
+export default TemplateIngredient

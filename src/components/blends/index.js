@@ -1,110 +1,114 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react'
 
-import {setQueryStringWithoutPageReload, getValues} from "../helpers/Helpers";
+import { setQueryStringWithoutPageReload, getValues } from '../helpers/Helpers'
 
-import qs from 'qs';
+import qs from 'qs'
 
-import NeftyBlendsList from "./NeftyBlendsList";
-import Page from "../common/layout/Page";
-import Content from "../common/layout/Content";
-import cn from "classnames";
-import {Tab, Tabs} from "react-bootstrap";
-import TabItem from "../tabitem/TabItem";
-import BlenderizerList from "./BlenderizerList";
-import {useRouter} from "next/router";
-import config from '../../config.json';
+import NeftyBlendsList from './NeftyBlendsList'
+import Page from '../common/layout/Page'
+import Content from '../common/layout/Content'
+import cn from 'classnames'
+import { Tab, Tabs } from 'react-bootstrap'
+import TabItem from '../tabitem/TabItem'
+import BlenderizerList from './BlenderizerList'
+import { useRouter } from 'next/router'
+import config from '../../config.json'
 
 const Blends = (props) => {
-    const values = getValues();
+    const values = getValues()
 
-    const keys = config.blend_contracts;
-    const ual = props['ual'] ? props['ual'] : {'activeUser': null};
+    const keys = config.blend_contracts
+    const ual = props['ual'] ? props['ual'] : { activeUser: null }
 
-    const activeUser = ual['activeUser'] && ual['activeUser']['accountName'];
-    const loggedOut = activeUser === null;
+    const activeUser = ual['activeUser'] && ual['activeUser']['accountName']
+    const loggedOut = activeUser === null
 
-    const [tabKey, setTabKey] = useState(process.browser ? (
-        values['tab'] && keys.includes(values['tab']) ? values['tab'] : 'nefty.blends'
-    ) : (props.tab && keys.includes(props.tab) ? props.tab : 'nefty.blends'));
+    const [tabKey, setTabKey] = useState(
+        process.browser
+            ? values['tab'] && keys.includes(values['tab'])
+                ? values['tab']
+                : 'nefty.blends'
+            : props.tab && keys.includes(props.tab)
+            ? props.tab
+            : 'nefty.blends',
+    )
 
-    const router = useRouter();
+    const router = useRouter()
 
     const pushQueryString = (qsValue) => {
-        const newPath =
-            window.location.pathname + '?' +
-            qsValue;
+        const newPath = window.location.pathname + '?' + qsValue
 
-        router.push(newPath, undefined, { shallow: true });
-    };
+        router.push(newPath, undefined, { shallow: true })
+    }
 
-    const initTabs = async(key, user, loggedOut, initial = false) => {
+    const initTabs = async (key, user, loggedOut, initial = false) => {
         if (key !== tabKey || initial) {
-            const query = values;
+            const query = values
 
-            query['tab'] = key;
-            if (user)
-                query['user'] = user;
-            else
-                delete query['user'];
+            query['tab'] = key
+            if (user) query['user'] = user
+            else delete query['user']
 
-            if (!initial)
-                pushQueryString(qs.stringify(query));
-            setTabKey(key);
+            if (!initial) pushQueryString(qs.stringify(query))
+            setTabKey(key)
         }
-    };
+    }
 
     useEffect(() => {
-        initTabs(tabKey, activeUser, loggedOut, true);
-    }, [tabKey, activeUser, loggedOut]);
+        initTabs(tabKey, activeUser, loggedOut, true)
+    }, [tabKey, activeUser, loggedOut])
 
     const login = () => {
-        ual.showModal();
-    };
+        ual.showModal()
+    }
 
     return (
         <Page>
             <Content headline="Blends">
                 <div className="container mx-auto">
-                    {loggedOut ? <div onClick={login}>
-                        Login
-                    </div> : keys.length > 1 ? <Tabs
-                        className={cn(
-                            'border-tabs',
-                            'flex h-12 my-10 rounded-md',
-                            'text-sm lg:text-base text-neutral',
-                            'border border-paper'
-                        )}
-                        defaultActiveKey={tabKey}
-                        id="collection-switch"
-                        onSelect={(k) => initTabs(k)}
-                    >
-                        <Tab
-                            eventKey="nefty.blends"
-                            title={
-                                <TabItem user={activeUser} target={'nefty.blends'} tabKey={tabKey} title={'Nefty Blends'} />
-                            }
+                    {loggedOut ? (
+                        <div onClick={login}>Login</div>
+                    ) : keys.length > 1 ? (
+                        <Tabs
+                            className={cn(
+                                'border-tabs',
+                                'flex h-12 my-10 rounded-md',
+                                'text-sm lg:text-base text-neutral',
+                                'border border-paper',
+                            )}
+                            defaultActiveKey={tabKey}
+                            id="collection-switch"
+                            onSelect={(k) => initTabs(k)}
                         >
-                            {tabKey === 'nefty.blends' &&
-                            <NeftyBlendsList user={activeUser} {...props} />
-                            }
-                        </Tab>
-                        <Tab
-                            eventKey="blenderizer"
-                            title={
-                                <TabItem target={'blenderizer'} tabKey={tabKey} title={'Blenderizer'} />
-                            }
-                        >
-                            {tabKey === 'blenderizer' &&
-                            <BlenderizerList user={activeUser} {...props} />
-                            }
-                        </Tab>
-                    </Tabs> : (keys.includes('blenderizer') ?
-                        <BlenderizerList user={activeUser} {...props} /> :
-                        <NeftyBlendsList user={activeUser} {...props} />)}
+                            <Tab
+                                eventKey="nefty.blends"
+                                title={
+                                    <TabItem
+                                        user={activeUser}
+                                        target={'nefty.blends'}
+                                        tabKey={tabKey}
+                                        title={'Nefty Blends'}
+                                    />
+                                }
+                            >
+                                {tabKey === 'nefty.blends' && <NeftyBlendsList user={activeUser} {...props} />}
+                            </Tab>
+                            <Tab
+                                eventKey="blenderizer"
+                                title={<TabItem target={'blenderizer'} tabKey={tabKey} title={'Blenderizer'} />}
+                            >
+                                {tabKey === 'blenderizer' && <BlenderizerList user={activeUser} {...props} />}
+                            </Tab>
+                        </Tabs>
+                    ) : keys.includes('blenderizer') ? (
+                        <BlenderizerList user={activeUser} {...props} />
+                    ) : (
+                        <NeftyBlendsList user={activeUser} {...props} />
+                    )}
                 </div>
             </Content>
         </Page>
-    );
-};
+    )
+}
 
-export default Blends;
+export default Blends

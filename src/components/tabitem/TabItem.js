@@ -1,8 +1,8 @@
-import React from "react";
-import cn from "classnames";
+import React from 'react'
+import cn from 'classnames'
 
 function TabItem(props) {
-    const {title, tabKey, target} = props;
+    const { title, tabKey, target } = props
 
     return (
         <div
@@ -12,16 +12,12 @@ function TabItem(props) {
                 'transition-opacity duration-500',
                 'hover:text-white hover:opacity-100 hover:underline',
                 'selected:text-white selected:opacity-100',
-                {'opacity-100 bg-primary text-secondary': tabKey === target},
+                { 'opacity-100 bg-primary text-secondary': tabKey === target },
             )}
         >
-            <div
-                className={cn(
-                    'my-auto px-5',
-                )}
-            >{title}</div>
+            <div className={cn('my-auto px-5')}>{title}</div>
         </div>
-    );
+    )
 }
 
-export default TabItem;
+export default TabItem

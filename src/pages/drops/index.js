@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 
-import qs from 'qs';
-import Drops from "../../components/drops";
+import qs from 'qs'
+import Drops from '../../components/drops'
 
 const DropsPage = (props) => {
-    return <Drops {...props} />;
-};
+    return <Drops {...props} />
+}
 
 DropsPage.getInitialProps = async (ctx) => {
-    const paths = ctx.asPath.split('/');
+    const paths = ctx.asPath.split('/')
 
-    return qs.parse(paths[1].replace('drops?', ''));
-};
+    return qs.parse(paths[1].replace('drops?', ''))
+}
 
-export default DropsPage;
+export default DropsPage

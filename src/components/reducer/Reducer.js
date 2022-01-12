@@ -3,66 +3,66 @@ const Reducer = (state, action) => {
         case 'SET_ASSET':
             return {
                 ...state,
-                asset: action.payload
-            };
+                asset: action.payload,
+            }
         case 'SET_AMOUNT':
             return {
                 ...state,
-                amount: action.payload
-            };
+                amount: action.payload,
+            }
         case 'SET_ACTION':
             return {
                 ...state,
-                action: action.payload
-            };
+                action: action.payload,
+            }
         case 'SET_TRIGGERED':
             return {
                 ...state,
-                triggered: action.payload
-            };
+                triggered: action.payload,
+            }
         case 'SET_SWITCHED_TAB':
             return {
                 ...state,
-                switchedTab: action.payload
-            };
+                switchedTab: action.payload,
+            }
         case 'SET_CALLBACK':
             return {
                 ...state,
-                callBack: action.payload
-            };
+                callBack: action.payload,
+            }
         case 'SET_COLLECTIONS':
             return {
                 ...state,
-                collections: action.payload
-            };
+                collections: action.payload,
+            }
         case 'SET_COLLECTION_DATA':
             return {
                 ...state,
-                collectionData: action.payload
-            };
+                collectionData: action.payload,
+            }
         case 'SET_TEMPLATE_DATA':
             return {
                 ...state,
-                templateData: action.payload
-            };
+                templateData: action.payload,
+            }
         case 'SET_SCHEMA_DATA':
             return {
                 ...state,
-                schemaData: action.payload
-            };
+                schemaData: action.payload,
+            }
         case 'SET_UNBOXED':
             return {
                 ...state,
-                unboxed: action.payload
-            };
+                unboxed: action.payload,
+            }
         case 'SET_PACK_DATA':
             return {
                 ...state,
-                packData: action.payload
-            };
+                packData: action.payload,
+            }
         default:
-            return state;
+            return state
     }
-};
+}
 
-export default Reducer;
+export default Reducer

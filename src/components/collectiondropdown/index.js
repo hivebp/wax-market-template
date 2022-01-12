@@ -1,3 +1,3 @@
 import CollectionDropdown from './CollectionDropdown'
 
-export default CollectionDropdown;
+export default CollectionDropdown

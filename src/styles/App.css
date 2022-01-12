@@ -1,25 +1,25 @@
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 5px;
+    width: 8px;
+    height: 5px;
 
-  @apply text-primary;
+    @apply text-primary;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: black;
-  width: 50%;
+    background: black;
+    width: 50%;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #f78e1e;
-  height: 50px;
-  width: 50px;
-  border-radius: 2px;
+    background: #f78e1e;
+    height: 50px;
+    width: 50px;
+    border-radius: 2px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+    background: #555;
 }

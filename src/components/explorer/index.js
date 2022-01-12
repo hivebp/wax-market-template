@@ -1,46 +1,51 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react'
 
-import {setQueryStringWithoutPageReload, getValues} from "../helpers/Helpers";
+import { setQueryStringWithoutPageReload, getValues } from '../helpers/Helpers'
 
-import {Tab, Tabs} from "react-bootstrap";
-import TabItem from "../tabitem/TabItem";
+import { Tab, Tabs } from 'react-bootstrap'
+import TabItem from '../tabitem/TabItem'
 
-import qs from 'qs';
-import cn from "classnames";
+import qs from 'qs'
+import cn from 'classnames'
 
-import AssetList from "./AssetList";
-import CollectionList from "./CollectionList";
-import Page from "../common/layout/Page"
+import AssetList from './AssetList'
+import CollectionList from './CollectionList'
+import Page from '../common/layout/Page'
 
 const Explorer = (props) => {
-    const ual = props['ual'] ? props['ual'] : {'activeUser': null};
+    const ual = props['ual'] ? props['ual'] : { activeUser: null }
 
-    const values = getValues();
+    const values = getValues()
 
-    const keys = ['collections', 'assets'];
+    const keys = ['collections', 'assets']
 
-    const [tabKey, setTabKey] = useState(process.browser ? (
-        values['tab'] && keys.includes(values['tab']) ? values['tab'] : 'collections'
-    ) : (props.tab && keys.includes(props.tab) ? props.tab : 'collections'));
+    const [tabKey, setTabKey] = useState(
+        process.browser
+            ? values['tab'] && keys.includes(values['tab'])
+                ? values['tab']
+                : 'collections'
+            : props.tab && keys.includes(props.tab)
+            ? props.tab
+            : 'collections',
+    )
 
-    const GetAssets = async(key, initial = false) => {
+    const GetAssets = async (key, initial = false) => {
         if (key !== tabKey || initial) {
-            const query = values;
+            const query = values
 
-            delete query['search_type'];
-            delete query['sort'];
-            query['tab'] = key;
-            delete query['offer_type'];
+            delete query['search_type']
+            delete query['sort']
+            query['tab'] = key
+            delete query['offer_type']
 
-            if (!initial)
-                setQueryStringWithoutPageReload(qs.stringify(query));
-            setTabKey(key);
+            if (!initial) setQueryStringWithoutPageReload(qs.stringify(query))
+            setTabKey(key)
         }
-    };
+    }
 
     useEffect(() => {
-        GetAssets(tabKey, true);
-    }, [tabKey]);
+        GetAssets(tabKey, true)
+    }, [tabKey])
 
     return (
         <Page>
@@ -49,7 +54,7 @@ const Explorer = (props) => {
                     'border-tabs',
                     'flex  h-12 my-10 rounded-md',
                     'text-sm lg:text-base text-neutral',
-                    'border border-paper'
+                    'border border-paper',
                 )}
                 defaultActiveKey={tabKey}
                 id="collection-switch"
@@ -57,27 +62,16 @@ const Explorer = (props) => {
             >
                 <Tab
                     eventKey="collections"
-                    title={
-                        <TabItem target={'collections'} tabKey={tabKey} title={'Collections'} />
-                    }
+                    title={<TabItem target={'collections'} tabKey={tabKey} title={'Collections'} />}
                 >
-                {tabKey === 'collections' &&
-                    <CollectionList ual={ual} />
-                }
+                    {tabKey === 'collections' && <CollectionList ual={ual} />}
                 </Tab>
-                <Tab
-                    eventKey="assets"
-                    title={
-                        <TabItem target={'assets'} tabKey={tabKey} title={'Assets'} />
-                    }
-                >
-                {tabKey === 'assets' &&
-                    <AssetList ual={ual} />
-                }
+                <Tab eventKey="assets" title={<TabItem target={'assets'} tabKey={tabKey} title={'Assets'} />}>
+                    {tabKey === 'assets' && <AssetList ual={ual} />}
                 </Tab>
             </Tabs>
         </Page>
-    );
-};
+    )
+}
 
-export default Explorer;
+export default Explorer

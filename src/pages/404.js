@@ -1,12 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-import "core-js/stable";
-import "regenerator-runtime/runtime";
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 
 const NotFound = () => {
-    return (
-        <div>Not Found</div>
-    );
-};
+    return <div>Not Found</div>
+}
 
-export default NotFound;
+export default NotFound

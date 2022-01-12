@@ -1,33 +1,33 @@
 .Dropdown-option {
-  @apply text-sm font-normal pl-6 pt-3 pb-2;
+    @apply text-sm font-normal pl-6 pt-3 pb-2;
 }
 
 .Dropdown-option.is-selected {
-  @apply text-primary bg-paper font-normal pl-6 pt-3 pb-2;
+    @apply text-primary bg-paper font-normal pl-6 pt-3 pb-2;
 }
 
 .Dropdown-option {
-  @apply text-neutral;
+    @apply text-neutral;
 }
 
 .Dropdown-placeholder {
-  @apply w-full text-sm pl-3;
+    @apply w-full text-sm pl-3;
 }
 
 .Dropdown-option:hover {
-  @apply bg-page text-primary;
+    @apply bg-page text-primary;
 }
 
 .Dropdown-control {
-  background: transparent;
-  @apply w-full text-neutral border border-paper;
+    background: transparent;
+    @apply w-full text-neutral border border-paper;
 }
 
 .Dropdown-menu {
-  border: none;
-  @apply bg-paper w-full top-full;
-  border-bottom-left-radius: 5%;
-  border-bottom-right-radius: 5%;
-  z-index: 4;
-  text-align: left;
+    border: none;
+    @apply bg-paper w-full top-full;
+    border-bottom-left-radius: 5%;
+    border-bottom-right-radius: 5%;
+    z-index: 4;
+    text-align: left;
 }

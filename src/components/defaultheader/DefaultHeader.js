@@ -1,6 +1,6 @@
-import config from "../../config.json";
+import config from '../../config.json'
 import Head from 'next/head'
-import React from "react";
+import React from 'react'
 
 const DefaultHeader = () => {
     return (
@@ -11,9 +11,9 @@ const DefaultHeader = () => {
             <meta id="twitter-title" property="twitter:title" content={config.market_title} />
             <meta id="twitter-description" property="twitter:description" content={config.market_description} />
             <meta id="twitter-image" property="twitter:image" content={config.header_image} />
-            <link id='page-image' rel="apple-touch-icon" href={config.header_image} />
+            <link id="page-image" rel="apple-touch-icon" href={config.header_image} />
         </Head>
-    );
-};
+    )
+}
 
-export default DefaultHeader;
+export default DefaultHeader
