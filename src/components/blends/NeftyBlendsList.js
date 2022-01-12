@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import { post } from 'superagent/lib/client'
+import { post } from '../../api/fetch'
 import config from '../../config.json'
 import { getCollectionHex } from '../api/fetch'
 import { getFilters, getValues } from '../helpers/Helpers'

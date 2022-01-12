@@ -18,6 +18,8 @@ const Navigation = React.memo((props) => {
     const [balance, setBalance] = useState(null)
     const [refundBalance, setRefundBalance] = useState(null)
 
+    console.log({ balance, refundBalance })
+
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
@@ -146,7 +148,7 @@ const Navigation = React.memo((props) => {
                                                 <img src="/arrow-drop-down.svg" className="w-5 h-5" alt="arrow-down" />
                                             </div>
 
-                                            {balance && (
+                                            {balance !== 0 && (
                                                 <div className={cn('font-light text-sm text-center')}>
                                                     {formatNumber(balance)} WAX
                                                 </div>
@@ -271,7 +273,7 @@ const Navigation = React.memo((props) => {
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>
-                                {refundBalance ? (
+                                {refundBalance !== 0 && (
                                     <div className={cn('font-light text-sm text-center')}>
                                         <div
                                             className={cn('cursor-pointer')}
@@ -280,8 +282,6 @@ const Navigation = React.memo((props) => {
                                             Refund: {formatNumber(refundBalance)} WAX
                                         </div>
                                     </div>
-                                ) : (
-                                    ''
                                 )}
                             </div>
                         </div>

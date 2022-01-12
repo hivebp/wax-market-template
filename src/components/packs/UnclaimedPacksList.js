@@ -1,7 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import { post } from 'superagent/lib/client'
-import { getAssets } from '../../api/fetch'
+import { getAssets, post } from '../../api/fetch'
 import config from '../../config.json'
 import AssetCard from '../assetcard/AssetCard'
 import MarketContent from '../common/layout/Content'
