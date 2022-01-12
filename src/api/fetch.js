@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Long from 'long'
 import config from '../config.json'
 import { getFilterParams } from './filter'
@@ -246,12 +245,11 @@ export const getAuction = (auctionId) => {
     return fetch(atomic_api + `/atomicmarket/v1/auctions/${auctionId}`).then((res) => res.json())
 }
 
-const post = (url, data) =>
-    axios({
+export const post = (url, data) =>
+    fetch(url, {
         method: 'post',
-        url: url,
-        data: data,
-    }).then((res) => res)
+        data: JSON.stringify(data),
+    }).then((res) => res.json())
 
 export const loadCollections = async () => {
     const body = {

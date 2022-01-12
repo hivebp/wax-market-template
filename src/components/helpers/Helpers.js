@@ -1,9 +1,8 @@
-import React from 'react'
-
 import cn from 'classnames'
 import qs from 'qs'
+import React from 'react'
+import { post } from '../../api/fetch'
 import config from '../../config.json'
-import { post } from 'superagent/lib/client'
 
 export const setQueryStringWithoutPageReload = (qsValue) => {
     const newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?' + qsValue

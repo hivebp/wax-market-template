@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node server.js",
+    "test": "jest"
   },
   "browser": {
     "fs": false,
@@ -18,8 +19,18 @@
     "fs": "empty"
   },
   "dependencies": {
+    "@eosdacio/ual-wax": "^1.5.1",
+    "@headlessui/react": "^1.4.2",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "classnames": "^2.3.1",
+    "long": "^5.2.0",
     "next": "11.1.0",
-    "react": "17.0.2"
+    "react": "17.0.2",
+    "react-dropdown": "^1.9.2",
+    "react-query": "^3.34.7",
+    "ual-anchor": "^1.1.4",
+    "ual-reactjs-renderer": "^0.3.1"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,13 +48,15 @@
     ]
   },
   "devDependencies": {
-    "sass": "1.38.0",
-    "express": "4.17.1",
     "@babel/core": "^7.15.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@tailwindcss/aspect-ratio": "^0.2.1",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.3.2",
     "babel-eslint": "10.1.0",
+    "babel-jest": "^27.4.6",
     "eslint": "7.32.0",
     "eslint-config-react-app": "6.0.0",
     "eslint-plugin-flowtype": "5.9.0",
@@ -51,7 +64,10 @@
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "4.2.0",
+    "express": "4.17.1",
+    "jest": "^27.4.7",
     "postcss": "^8.3.6",
+    "sass": "1.38.0",
     "tailwindcss": "^2.2.7"
   }
 }
