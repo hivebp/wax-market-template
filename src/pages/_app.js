@@ -59,6 +59,31 @@ const disptachCollectionsData = (dispatch, collections) => {
     if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
+const AppContainer = (props) => {
+    const [, dispatch] = useContext(Context)
+
+    useEffect(() => {
+        const initialize = async () => {
+            const collections = await loadCollections()
+            disptachCollectionsData(dispatch, collections)
+        }
+        initialize()
+    }, [])
+
+    return (
+        <div>
+            <WindowWrapper ual={props.ual} />
+            <div className={'h-screen overflow-y-hidden bg-page'}>
+                <Navigation ual={props.ual} />
+                <div className={'relative h-page-s md:h-page top-48 md:top-28 overflow-y-auto'}>
+                    {props.children}
+                    <Footer {...props} />
+                </div>
+            </div>
+        </div>
+    )
+}
+
 function MyApp({ Component, pageProps }) {
     useEffect(() => {
         if ('serviceWorker' in navigator) {
@@ -75,31 +100,6 @@ function MyApp({ Component, pageProps }) {
         }
     }, [])
 
-    const AppContainer = (props) => {
-        const [, dispatch] = useContext(Context)
-
-        useEffect(() => {
-            const initialize = async () => {
-                const collections = await loadCollections()
-                disptachCollectionsData(dispatch, collections)
-            }
-            initialize()
-        }, [])
-
-        return (
-            <div>
-                <WindowWrapper {...props} />
-                <div className={'h-screen overflow-y-hidden bg-page'}>
-                    <Navigation {...props} />
-                    <div className={'relative h-page-s md:h-page top-48 md:top-28 overflow-y-auto'}>
-                        <Component {...props} />
-                        <Footer {...props} />
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
     const ualProviderProps = useWallets(
         '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
         config.api_endpoint,
@@ -112,7 +112,9 @@ function MyApp({ Component, pageProps }) {
         <MarketWrapper>
             <UALProvider {...ualProviderProps}>
                 <QueryClientProvider client={queryClient}>
-                    <AppWithUAL {...pageProps} />
+                    <AppWithUAL {...pageProps}>
+                        <Component {...pageProps} />
+                    </AppWithUAL>
                 </QueryClientProvider>
             </UALProvider>
         </MarketWrapper>

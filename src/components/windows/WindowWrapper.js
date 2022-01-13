@@ -9,6 +9,13 @@ import SellWindow from './SellWindow'
 import TransferWindow from './TransferWindow'
 import UnboxWindow from './UnboxWindow'
 
+/**
+ *
+ * @param {{
+ *  ual: {}
+ * }} props
+ * @returns
+ */
 function WindowWrapper(props) {
     const ual = props['ual'] ? props['ual'] : { activeUser: null }
 

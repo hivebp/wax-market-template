@@ -9,6 +9,13 @@ import Logo from '../common/util/Logo'
 import { formatNumber } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 
+/**
+ *
+ * @param {{
+ *  ual: {}
+ * }} props
+ * @returns
+ */
 const Navigation = React.memo((props) => {
     const router = useRouter()
 
