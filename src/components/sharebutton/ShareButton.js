@@ -1,17 +1,16 @@
-import ShareWindow from "../windows/ShareWindow";
-import React, {useState} from "react";
-import cn from "classnames";
-
+import cn from 'classnames'
+import React, { useState } from 'react'
+import ShareWindow from '../windows/ShareWindow'
 
 function ShareButton(props) {
-    const link = props['link'];
-    const type = props['type'];
+    const link = props['link']
+    const type = props['type']
 
-    const [showPopup, setShowPopup] = useState(false);
+    const [showPopup, setShowPopup] = useState(false)
 
     const share = async (show) => {
-        setShowPopup(show);
-    };
+        setShowPopup(show)
+    }
 
     return type === 'asset' ? (
         <div>
@@ -30,8 +29,10 @@ function ShareButton(props) {
                 </div>
                 <div>Share</div>
             </div>
-            {showPopup ? <ShareWindow link={link} callBack={share}/> : '' }
-        </div>) : (<div>
+            {showPopup ? <ShareWindow link={link} callBack={share} /> : ''}
+        </div>
+    ) : (
+        <div>
             <div
                 className={cn(
                     'absolute w-5 h-5 mt-1 ml-0 opacity-70',
@@ -40,11 +41,13 @@ function ShareButton(props) {
                 )}
                 onClick={() => share(true)}
             >
-                <div><img src="/share-outline.svg" alt="share"/></div>
+                <div>
+                    <img src="/share-outline.svg" alt="share" />
+                </div>
             </div>
-            {showPopup ? <ShareWindow link={link} callBack={share}/> : '' }
+            {showPopup ? <ShareWindow link={link} callBack={share} /> : ''}
         </div>
-    );
+    )
 }
 
-export default ShareButton;
+export default ShareButton

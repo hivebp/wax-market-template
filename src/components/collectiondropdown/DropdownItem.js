@@ -1,32 +1,23 @@
-import React from "react";
-import Dropdown from "react-dropdown";
-import cn from "classnames";
+import cn from 'classnames'
+import React from 'react'
+import Dropdown from 'react-dropdown'
 
-const DropdownItem = ({header, options, onChange, value}) => {
+const DropdownItem = ({ header, options, onChange, value }) => {
     return (
-        <div className={cn(
-            'mb-6',
-        )}>
-            <div className={cn(
-                'w-full inline-block m-0',
-            )}>
-                <div className="text-neutral font-normal text-sm mb-2">
-                    {header}
-                </div>
+        <div className={cn('mb-6')}>
+            <div className={cn('w-full inline-block m-0')}>
+                <div className="text-neutral font-normal text-sm mb-2">{header}</div>
                 <Dropdown
                     options={options}
                     onChange={onChange}
                     value={value}
                     placeholder={header}
                     id="DropdownField4"
-                    className={cn(
-                        'w-full rounded-lg',
-                        'border border-solid border-paper'
-                    )}
+                    className={cn('w-full rounded-lg', 'border border-solid border-paper')}
                 />
             </div>
         </div>
-    );
+    )
 }
 
-export default DropdownItem;
+export default DropdownItem

@@ -1,24 +1,30 @@
-import React from "react";
-import moment from 'moment';
-import config from '../../config.json';
-import Link from '../common/util/input/Link';
+import format from 'date-fns/format'
+import React from 'react'
+import { isValidDate } from '../../api/date'
+import config from '../../config.json'
+import Link from '../common/util/input/Link'
 
 const AssetDetails = (props) => {
-    const asset = props.asset;
+    const asset = props.asset
 
-    const {name, asset_id, owner, schema, minted_at_time, template_mint} = asset;
+    const { name, asset_id, owner, schema, minted_at_time, template_mint } = asset
 
-    const utc = moment.unix(minted_at_time / 1000).utc().toDate();
-    const date = minted_at_time ? moment(utc).local().format('YYYY-MM-DD HH:mm:ss') : '';
+    const parsedDate = new Date(minted_at_time)
+
+    const date = isValidDate(parsedDate) ? format(date, 'yyyy-MM-dd HH:mm:ss') : ''
 
     return (
         <div className="text-sm text-white overflow-auto">
             <h4 className="inline-flex text-primary mb-4">
-                { asset.collection['img'] ? <div className="h-4 mr-3 rounded-lg overflow-hidden">
-                    <img src={config.ipfs + asset.collection['img']} className="collection-img" alt="none" />
-                </div> : '' }
+                {asset.collection['img'] ? (
+                    <div className="h-4 mr-3 rounded-lg overflow-hidden">
+                        <img src={config.ipfs + asset.collection['img']} className="collection-img" alt="none" />
+                    </div>
+                ) : (
+                    ''
+                )}
                 <Link href={`/collection/${asset.collection.collection_name}`}>
-                    <div className='NextLink'>{asset.collection.collection_name}</div>
+                    <div className="NextLink">{asset.collection.collection_name}</div>
                 </Link>
             </h4>
             <h2 className="text-left text-white text-3xl font-bold mb-4">
@@ -37,9 +43,7 @@ const AssetDetails = (props) => {
                 <tr>
                     <td className="text-left w-1/3">Issued Supply:</td>
                     <td className="text-right overflow-x-auto leading-5 max-w-td">
-                        <div className="inline-flex leading-6">
-                            {asset.template.issued_supply}
-                        </div>
+                        <div className="inline-flex leading-6">{asset.template.issued_supply}</div>
                     </td>
                 </tr>
                 <tr>
@@ -52,7 +56,7 @@ const AssetDetails = (props) => {
                 </tr>
             </table>
         </div>
-    );
-};
+    )
+}
 
-export default AssetDetails;
+export default AssetDetails

@@ -1,22 +1,17 @@
-import React from 'react';
-
-import qs from 'qs';
-import Auctions from "../../../components/auctions";
+import qs from 'qs'
+import React from 'react'
+import Auctions from '../../../components/auctions'
 
 const BidsPage = (props) => {
-    return <Auctions {...props} />;
-};
+    return <Auctions {...props} />
+}
 
 BidsPage.getInitialProps = async (ctx) => {
-    const c = ctx.query.user;
+    const user = ctx.query.user
+    const paths = ctx.asPath.split('/')
+    const values = qs.parse(paths[2].replace(user + '?', ''))
+    values['winner'] = user
+    return values
+}
 
-    const paths = ctx.asPath.split('/');
-
-    const values = qs.parse(paths[2].replace(c + '?', ''));
-
-    values['winner'] = c;
-
-    return values;
-};
-
-export default BidsPage;
+export default BidsPage

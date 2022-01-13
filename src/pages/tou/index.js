@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 const Tou = (props) => {
-    return <div></div>;
-};
+    return <div></div>
+}
 
-export default Tou;
+export default Tou
