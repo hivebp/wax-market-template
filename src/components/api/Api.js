@@ -392,6 +392,62 @@ export const getCollectionHex = (collection) => {
 }
 
 
+export const getBlend = async (blendId) => {
+    const body = {
+        "json": true,
+        "code": 'blend.nefty',
+        "scope": 'blend.nefty',
+        "table": "blends",
+        'table_key': '',
+        'lower_bound': blendId,
+        'upper_bound': blendId,
+        "index_position": 1,
+        'key_type': '',
+        "limit": 1,
+        "reverse": false,
+        "show_payer": false
+    }
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+
+    const res = await post(url, body);
+
+    if (res && res.status === 200 && res.data.rows.length > 0) {
+        return res.data.rows[0];
+    }
+
+    return null;
+};
+
+
+export const getBlenderizer = async (templateId) => {
+    const body = {
+        "json": true,
+        "code": 'blenderizerx',
+        "scope": 'blenderizerx',
+        "table": "blenders",
+        'table_key': '',
+        'lower_bound': templateId,
+        'upper_bound': templateId,
+        "index_position": 1,
+        'key_type': '',
+        "limit": 1,
+        "reverse": false,
+        "show_payer": false
+    }
+
+    const url = config.api_endpoint + '/v1/chain/get_table_rows';
+
+    const res = await post(url, body);
+
+    if (res && res.status === 200 && res.data.rows.length > 0) {
+        return res.data.rows[0];
+    }
+
+    return null;
+};
+
+
 export const getPacks = async (filters) => {
     const packs = [];
 
