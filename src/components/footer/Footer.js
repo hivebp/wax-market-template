@@ -82,9 +82,7 @@ const SocialList = ({ links = socialLinks }) => {
 const LinksList = ({ links = internalLinks }) => {
     return links.map((link, idx) => (
         <div className={cn('mb-3')} key={idx}>
-            <Link href={link.href}>
-                <a>{link.label}</a>
-            </Link>
+            <Link href={link.href}>{link.label}</Link>
         </div>
     ))
 }

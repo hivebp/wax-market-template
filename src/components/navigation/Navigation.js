@@ -9,33 +9,8 @@ import Logo from '../common/util/Logo'
 import { formatNumber } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 
-/**
- *
- * @param {{
- *  ual: {}
- * }} props
- * @returns
- */
-const Navigation = React.memo((props) => {
-    const router = useRouter()
-
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
-
-    const [isLoading, setIsLoading] = useState(null)
-    const [balance, setBalance] = useState(null)
-    const [refundBalance, setRefundBalance] = useState(null)
-
-    const activeUser = ual['activeUser']
-    const userName = activeUser ? activeUser['accountName'] : null
-
-    const performLogin = async () => {
-        ual.showModal()
-    }
-
-    const performLogout = () => {
-        ual.logout()
-    }
-
+const useClaimRefund = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const claimRefund = async (quantity) => {
         try {
             setIsLoading(true)
@@ -73,11 +48,45 @@ const Navigation = React.memo((props) => {
             }, 2000)
         }
     }
+    return { claimRefund, isLoading }
+}
+/**
+ *
+ * @param {{
+ *  ual: {}
+ * }} props
+ * @returns
+ */
+const Navigation = React.memo(({ ual = { activeUser: null } }) => {
+    const router = useRouter()
+
+    const [balance, setBalance] = useState(0)
+    const [refundBalance, setRefundBalance] = useState(0)
+
+    const { claimRefund, isLoading } = useClaimRefund()
+
+    const activeUser = ual['activeUser']
+    const userName = activeUser ? activeUser['accountName'] : null
+
+    const performLogin = async () => {
+        ual?.showModal()
+    }
+
+    const performLogout = () => {
+        ual?.logout()
+    }
 
     useEffect(() => {
-        getWaxBalance(userName).then(setBalance)
-        getRefundBalance(userName).then(setRefundBalance)
+        // when there is no userName, this would ask for any users balances
+        // that user might have a balance and you'll get a flash of data until it correctly
+        // updates with the userName
+        if (userName) {
+            getWaxBalance(userName).then(setBalance)
+            getRefundBalance(userName).then(setRefundBalance)
+        }
     }, [userName])
+
+    console.log({ balance, refundBalance })
 
     return (
         <div className={cn('fixed w-full h-48 md:h-28', 'bg-page shadow-sm border-b border-paper', 'z-30')}>

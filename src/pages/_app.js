@@ -59,7 +59,7 @@ const disptachCollectionsData = (dispatch, collections) => {
     if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
-const AppContainer = (props) => {
+const AppContainer = withUAL(({ ual, Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
 
     useEffect(() => {
@@ -72,17 +72,17 @@ const AppContainer = (props) => {
 
     return (
         <div>
-            <WindowWrapper ual={props.ual} />
+            <WindowWrapper ual={ual} />
             <div className={'h-screen overflow-y-hidden bg-page'}>
-                <Navigation ual={props.ual} />
+                <Navigation ual={ual} />
                 <div className={'relative h-page-s md:h-page top-48 md:top-28 overflow-y-auto'}>
-                    {props.children}
-                    <Footer {...props} />
+                    <Component ual={ual} {...pageProps} />
+                    <Footer />
                 </div>
             </div>
         </div>
     )
-}
+})
 
 function MyApp({ Component, pageProps }) {
     useEffect(() => {
@@ -106,15 +106,12 @@ function MyApp({ Component, pageProps }) {
         config.market_name,
     )
     const queryClient = new QueryClient()
-    const AppWithUAL = withUAL(AppContainer)
 
     return (
         <MarketWrapper>
             <UALProvider {...ualProviderProps}>
                 <QueryClientProvider client={queryClient}>
-                    <AppWithUAL {...pageProps}>
-                        <Component {...pageProps} />
-                    </AppWithUAL>
+                    <AppContainer pageProps={pageProps} Component={Component} />
                 </QueryClientProvider>
             </UALProvider>
         </MarketWrapper>
