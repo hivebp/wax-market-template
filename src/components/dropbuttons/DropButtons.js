@@ -2,6 +2,7 @@ import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
 import { millisecondsToString } from '../../api/date'
 import { getAccountStats, getWhiteList } from '../../api/fetch'
+import { useUAL } from '../../hooks/ual'
 import Button from '../common/util/input/Button'
 import Input from '../common/util/input/Input'
 import Link from '../common/util/input/Link'
@@ -17,7 +18,7 @@ const DropButtons = (props) => {
     const error = props['error']
     const isLoading = props['isLoading']
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 

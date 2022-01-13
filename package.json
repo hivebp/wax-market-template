@@ -10,7 +10,8 @@
         "build": "next build",
         "start": "NODE_ENV=production node server.js",
         "test": "jest",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "lint": "eslint src/**/*.js"
     },
     "browser": {
         "fs": false,

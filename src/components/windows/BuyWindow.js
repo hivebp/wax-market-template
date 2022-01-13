@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import React, { useState } from 'react'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import { formatNumber } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { purchaseSaleAction } from '../wax/Wax'
@@ -10,7 +11,8 @@ import WindowContent from './WindowContent'
 function BuyWindow(props) {
     const listing = props['listing']
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
+    const ual = useUAL()
+
     const activeUser = ual['activeUser']
     const callBack = props['callBack']
     const closeCallBack = props['closeCallBack']

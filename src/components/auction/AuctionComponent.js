@@ -65,7 +65,6 @@ const AuctionComponent = (props) => {
                     </div>
                 ))}
                 <MarketButtons
-                    ual={props['ual']}
                     asset={asset}
                     listing={auction}
                     handleBidPlaced={handleBidPlaced}

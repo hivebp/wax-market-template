@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import ErrorMessage from '../common/util/ErrorMessage'
 import { claimPack } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
@@ -18,7 +19,8 @@ function UnboxWindow(props) {
 
     const video = data['video'] ? (data['video'].includes('http') ? data['video'] : config.ipfs + data['video']) : ''
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
+    const ual = useUAL()
+
     const activeUser = ual['activeUser']
 
     const callBack = props['callBack']

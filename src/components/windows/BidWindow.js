@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import React, { useState } from 'react'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import Bids from '../auctions/Bids'
 import ErrorMessage from '../common/util/ErrorMessage'
 import Input from '../common/util/input/Input'
@@ -12,7 +13,8 @@ import WindowContent from './WindowContent'
 
 function BidWindow(props) {
     const listing = props['listing']
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
+    const ual = useUAL()
+
     const activeUser = ual['activeUser']
     const callBack = props['callBack']
     const userName = activeUser ? activeUser['accountName'] : null

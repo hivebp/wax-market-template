@@ -1,5 +1,5 @@
 import { Wax } from '@eosdacio/ual-wax'
-import { UALProvider, withUAL } from 'hive-ual-renderer'
+import { UALProvider } from 'hive-ual-renderer'
 import React, { useContext, useEffect, useMemo } from 'react'
 import 'react-dropdown/style.css'
 import 'regenerator-runtime/runtime'
@@ -58,7 +58,7 @@ const disptachCollectionsData = (dispatch, collections) => {
     if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
-const AppContainer = React.memo(({ ual, Component, pageProps }) => {
+const AppContainer = React.memo(({ Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
 
     useEffect(() => {
@@ -71,19 +71,17 @@ const AppContainer = React.memo(({ ual, Component, pageProps }) => {
 
     return (
         <div>
-            <WindowWrapper ual={ual} />
+            <WindowWrapper />
             <div className={'h-screen overflow-y-hidden bg-page'}>
-                <Navigation ual={ual} />
+                <Navigation />
                 <div className={'relative h-page-s md:h-page top-48 md:top-28 overflow-y-auto'}>
-                    <Component ual={ual} {...pageProps} />
+                    <Component {...pageProps} />
                     <Footer />
                 </div>
             </div>
         </div>
     )
 })
-
-const AppContainerUAL = withUAL(AppContainer)
 
 const loadServiceWorker = () =>
     window.addEventListener('load', () =>
@@ -104,7 +102,7 @@ function MyApp({ Component, pageProps }) {
         config.market_name,
     )
 
-    const container = useMemo(() => <AppContainerUAL pageProps={pageProps} Component={Component} />)
+    const container = useMemo(() => <AppContainer pageProps={pageProps} Component={Component} />)
 
     return (
         <MarketWrapper>

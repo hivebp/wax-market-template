@@ -2,6 +2,7 @@ import cn from 'classnames'
 import React, { useEffect, useState } from 'react'
 import { getListing } from '../../api/fetch'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import AssetDetails from '../asset/AssetDetails'
 import AssetImage from '../asset/AssetImage'
 import Page from '../common/layout/Page'
@@ -12,7 +13,7 @@ import MarketButtons from '../marketbuttons'
 const ListingComponent = (props) => {
     const [listing, setListing] = useState(props.listing)
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
@@ -80,7 +81,6 @@ const ListingComponent = (props) => {
                     </div>
                 ))}
                 <MarketButtons
-                    ual={props['ual']}
                     asset={asset}
                     listing={listing}
                     handleBought={handleBought}

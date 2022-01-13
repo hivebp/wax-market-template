@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import { Context } from '../marketwrapper'
 import ShareButton from '../sharebutton/ShareButton'
 
@@ -10,7 +11,7 @@ function MoreOptions(props) {
     const asset = props['asset']
     const listing = props['listing']
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 

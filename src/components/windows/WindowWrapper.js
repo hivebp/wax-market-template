@@ -53,7 +53,6 @@ const OutsideAlerter = (props) => {
 const availableActions = ['buy', 'unbox', 'claim', 'buy_drop', 'auction', 'bid', 'sell', 'transfer']
 
 const WindowWrapper = React.memo((props) => {
-    const ual = props.ual ?? { activeUser: null }
     const [state, dispatch] = useContext(Context)
     const { asset, amount, action, callBack } = state
 
@@ -70,7 +69,6 @@ const WindowWrapper = React.memo((props) => {
                 {action === 'sell' ? (
                     <SellWindow
                         asset={asset}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_ACTION', payload: '' })
                         }}
@@ -81,7 +79,6 @@ const WindowWrapper = React.memo((props) => {
                 {action === 'buy' ? (
                     <BuyWindow
                         listing={asset}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_ACTION', payload: '' })
                         }}
@@ -93,7 +90,6 @@ const WindowWrapper = React.memo((props) => {
                     <BuyDropWindow
                         drop={asset}
                         amount={amount}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_ACTION', payload: '' })
                         }}
@@ -104,7 +100,6 @@ const WindowWrapper = React.memo((props) => {
                 {action === 'auction' ? (
                     <AuctionWindow
                         asset={asset}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_ACTION', payload: '' })
                         }}
@@ -115,7 +110,6 @@ const WindowWrapper = React.memo((props) => {
                 {action === 'unbox' ? (
                     <UnboxWindow
                         asset={asset}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_ACTION', payload: '' })
                         }}
@@ -126,7 +120,6 @@ const WindowWrapper = React.memo((props) => {
                 {action === 'claim' ? (
                     <ClaimPopup
                         asset={asset}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_ACTION', payload: '' })
                         }}
@@ -137,7 +130,6 @@ const WindowWrapper = React.memo((props) => {
                 {action === 'bid' ? (
                     <BidWindow
                         listing={asset}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_ACTION', payload: '' })
                         }}
@@ -148,7 +140,6 @@ const WindowWrapper = React.memo((props) => {
                 {action === 'transfer' ? (
                     <TransferWindow
                         asset={asset}
-                        ual={ual}
                         closeCallBack={() => {
                             dispatch({ type: 'SET_RECEIVER', payload: '' })
                             dispatch({ type: 'SET_ACTION', payload: '' })

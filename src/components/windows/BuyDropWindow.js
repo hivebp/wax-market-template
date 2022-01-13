@@ -3,6 +3,7 @@ import PrivateKey from 'eosjs'
 import React, { useEffect, useState } from 'react'
 import { getAssets, getDelphiMedian, getDropKeys, getProofOwn, getWhiteList } from '../../api/fetch'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import { getValues } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import WindowButton from './WindowButton'
@@ -11,7 +12,8 @@ function BuyDropPopup(props) {
     const drop = props['drop']
     const amount = props['amount']
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
+    const ual = useUAL()
+
     const activeUser = ual['activeUser']
     const callBack = props['callBack']
     const closeCallBack = props['closeCallBack']

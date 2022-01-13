@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
 import { getCollection, getTemplate } from '../../api/fetch'
+import { useUAL } from '../../hooks/ual'
 import AssetImage from '../asset/AssetImage'
 import CheckIndicator from '../check/CheckIndicator'
 import Page from '../common/layout/Page'
@@ -22,7 +23,7 @@ const BlendComponent = (props) => {
     const [templates, setTemplates] = useState([])
     const { ingredients, display_data, collection_name } = blend
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
