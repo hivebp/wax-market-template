@@ -40,8 +40,8 @@ function SellWindow(props) {
             await announceSaleAction(asset_id, quantity, activeUser)
             callBack({ listed: true, price: quantity })
         } catch (e) {
+            console.error(e)
             callBack({ listed: false, error: e })
-            console.log(e)
             setError(e.message)
         } finally {
             setIsLoading(false)

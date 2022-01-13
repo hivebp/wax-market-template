@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
+import { getAuctions, getWonAuctions } from '../../api/fetch'
 import config from '../../config.json'
-import { getAuctions, getWonAuctions } from '../api/fetch'
 import AssetCard from '../assetcard/AssetCard'
 import MarketContent from '../common/layout/Content'
 import Page from '../common/layout/Page'

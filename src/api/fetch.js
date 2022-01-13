@@ -4,7 +4,7 @@ import { getCollectionHex } from './fetch_utils'
 import { filter } from './filter'
 import { query } from './query'
 
-export const { atomic_api, api_endpoint, packs_contracts } = config
+export const { atomic_api, api_endpoint, packs_contracts, default_collection } = config
 
 export const get = (url, parms) => fetch(query(url, parms)).then((res) => res.json())
 
@@ -127,6 +127,7 @@ export const getAsset = createGetter((assetId) => `/atomicmarket/v1/assets/${ass
 export const getCollection = createGetter((collection_name) => `/atomicassets/v1/collections/${collection_name}`)
 export const getSale = createGetter((saleId) => `/atomicmarket/v1/sales/${saleId}`)
 export const getAuction = createGetter((auctionId) => `/atomicmarket/v1/auctions/${auctionId}`)
+export const getPrices = createGetter((asset_id) => `/atomicmarket/v1/prices/assets?ids=${asset_id}`)
 
 export const getCollections = (collections) =>
     get(`${atomic_api}/atomicassets/v1/collections`, {
@@ -224,7 +225,7 @@ export const loadCollections = createTableGetter(
         upper_bound: config.market_name,
         table_key: '',
     }),
-    identity,
+    (result) => firstRow(result)?.collections || [default_collection],
 )
 
 const getNeftyblockspCollectionByHex = createTableGetter(
@@ -260,14 +261,11 @@ const getAtomicpacksxCollectionByKey = createTableGetter(
         table: 'packs',
         table_key: '',
     }),
-    (result) => {
-        console.log(result)
-        return {
-            rows: result?.rows || [],
-            more: result?.more || false,
-            nextIndex: result?.next_key ? parseInt(result?.next_key, 10) : null,
-        }
-    },
+    (result) => ({
+        rows: result?.rows || [],
+        more: result?.more || false,
+        nextIndex: result?.next_key ? parseInt(result?.next_key, 10) : null,
+    }),
 )
 
 /**
@@ -335,7 +333,7 @@ export const getRefundBalance = createTableGetter(
         index_position: 'primary',
         json: 'true',
         key_type: 'i64',
-        limit: 1,
+        limit: 1000,
         lower_bound: name,
         upper_bound: name,
         reverse: 'false',
@@ -407,21 +405,24 @@ const getDropByCollectionHex = createTableGetter(
     allRows,
 )
 
-const parseDropData = (drop) => ({
-    accountLimit: drop.account_limit,
-    accountLimitCooldown: drop.account_limit_cooldown,
-    assetsToMint: drop.assets_to_mint,
-    authRequired: drop.auth_required,
-    collectionName: drop.collection_name,
-    currentClaimed: drop.current_claimed,
-    description: JSON.parse(drop.display_data).description,
-    dropId: drop.drop_id,
-    endTime: drop.end_time,
-    listingPrice: drop.listing_price,
-    maxClaimable: drop.max_claimable,
-    name: displayData.name,
-    startTime: drop.start_time,
-})
+const parseDropData = (drop) => {
+    const displayData = JSON.parse(drop.display_data)
+    return {
+        accountLimit: drop.account_limit,
+        accountLimitCooldown: drop.account_limit_cooldown,
+        assetsToMint: drop.assets_to_mint,
+        authRequired: drop.auth_required,
+        collectionName: drop.collection_name,
+        currentClaimed: drop.current_claimed,
+        description: displayData.description,
+        dropId: drop.drop_id,
+        endTime: drop.end_time,
+        listingPrice: drop.listing_price,
+        maxClaimable: drop.max_claimable,
+        name: displayData.name,
+        startTime: drop.start_time,
+    }
+}
 
 export const getDrop = createTableGetter(
     (dropId) => ({

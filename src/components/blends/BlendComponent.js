@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import { getCollection, getTemplate } from '../api/fetch'
+import { getCollection, getTemplate } from '../../api/fetch'
 import AssetImage from '../asset/AssetImage'
 import CheckIndicator from '../check/CheckIndicator'
 import Page from '../common/layout/Page'

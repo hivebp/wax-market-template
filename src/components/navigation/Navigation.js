@@ -18,8 +18,6 @@ const Navigation = React.memo((props) => {
     const [balance, setBalance] = useState(null)
     const [refundBalance, setRefundBalance] = useState(null)
 
-    console.log({ balance, refundBalance })
-
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
@@ -59,7 +57,7 @@ const Navigation = React.memo((props) => {
                 },
             )
         } catch (e) {
-            console.log(e)
+            console.error(e)
         } finally {
             setTimeout(function () {
                 getWaxBalance(userName).then(setBalance)

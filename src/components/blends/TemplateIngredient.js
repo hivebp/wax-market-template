@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect } from 'react'
-import PreviewImage from '../assetcard/PreviewImage'
+import PreviewImage from '../droppreview/PreviewImage'
 import { Context } from '../marketwrapper'
 
 function TemplateIngredient(props) {

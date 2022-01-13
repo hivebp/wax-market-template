@@ -86,8 +86,8 @@ function UnboxWindow(props) {
         try {
             claimPack(pack, asset, activeUser).then((res) => loadResults(res))
         } catch (e) {
+            console.error(e)
             callBack({ unboxed: false, error: e })
-            console.log(e)
             setError(e.message)
         }
     }
@@ -126,8 +126,8 @@ function UnboxWindow(props) {
             )
             setTimeout(getPackResult, 3000)
         } catch (e) {
+            console.error(e)
             callBack({ unboxed: false, error: e })
-            console.log(e)
             setError(e.message)
         }
     }

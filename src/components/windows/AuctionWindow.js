@@ -44,8 +44,8 @@ function AuctionWindow(props) {
             await announceAuctionAction(asset_id, days, hours, minutes, quantity, activeUser)
             callBack({ auctioned: true })
         } catch (e) {
+            console.error(e)
             callBack({ auctioned: false, error: e.message })
-            console.log(e)
             setError(e.message)
         } finally {
             setIsLoading(false)

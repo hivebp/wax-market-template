@@ -1,5 +1,6 @@
 import format from 'date-fns/format'
 import React from 'react'
+import { isValidDate } from '../../api/date'
 import config from '../../config.json'
 import Link from '../common/util/input/Link'
 

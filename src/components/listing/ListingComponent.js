@@ -58,7 +58,7 @@ const ListingComponent = (props) => {
                 setCanceled(cancel)
             }
         } catch (e) {
-            console.log(e.message)
+            console.error(e.message)
             setCanceled(false)
             setError(e.message)
         }

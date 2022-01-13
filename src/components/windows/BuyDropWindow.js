@@ -240,6 +240,7 @@ function BuyDropPopup(props) {
 
         if (publicKey) {
             const signatureNonce = Math.floor(Math.random() * 2 ** 32)
+            // this might be broken: eosjs does not export default PrivateKey
             const dropPrivateKey = PrivateKey.fromString(key)
             const claimSignature = dropPrivateKey
                 .sign(`${drop.dropId}-${userName}-${signatureNonce}`, true, 'utf8')

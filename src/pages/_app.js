@@ -1,11 +1,11 @@
 import { Wax } from '@eosdacio/ual-wax'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
 import { UALProvider, withUAL } from 'ual-reactjs-renderer'
-import { getCollections, getPacks, getSchemas, getTemplates, useCollections } from '../api/fetch'
+import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import Footer from '../components/footer'
 import MarketWrapper, { Context } from '../components/marketwrapper'
 import Navigation from '../components/navigation/Navigation'
@@ -15,7 +15,7 @@ import '../styles/App.css'
 import '../styles/globals.css'
 import '../styles/Search.css'
 
-const { default_collection, packs_contracts } = config
+const { packs_contracts } = config
 
 const queryClient = new QueryClient()
 
@@ -49,19 +49,31 @@ const disptachCollectionsData = (dispatch, collections) => {
 }
 
 function MyApp({ Component, pageProps }) {
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').then(
+                    function (registration) {
+                        console.log('Service Worker registration successful with scope: ', registration.scope)
+                    },
+                    function (err) {
+                        console.log('Service Worker registration failed: ', err)
+                    },
+                )
+            })
+        }
+    }, [])
+
     const AppContainer = (props) => {
         const [, dispatch] = useContext(Context)
-        const [init, setInit] = useState(true)
-        const { data: collectionsData, error, loading } = useCollections()
 
         useEffect(() => {
-            if (init && !loading && (collectionsData || error)) {
-                setInit(false)
-                // when no error occured, collection data could be retrieved and it has collections, use them, else fallback
-                const collections = (!error && collectionsData?.rows?.[0]?.collections) || [default_collection]
+            const initialize = async () => {
+                const collections = await loadCollections()
                 disptachCollectionsData(dispatch, collections)
             }
-        }, [init, collectionsData])
+            initialize()
+        }, [])
 
         return (
             <div>

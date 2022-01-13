@@ -143,7 +143,7 @@ export const AssetCard = (props) => {
 
             setIsLoading(false)
         } catch (e) {
-            console.log(e.message)
+            console.error(e)
             setCanceled(false)
             setIsLoading(false)
             setError(e.message)
@@ -158,7 +158,7 @@ export const AssetCard = (props) => {
 
             setIsLoading(false)
         } catch (e) {
-            console.log(e.message)
+            console.error(e)
             setClaimed(false)
             setIsLoading(false)
             setError(e.message)

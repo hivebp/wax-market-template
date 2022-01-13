@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import { getCollection } from '../api/fetch'
+import { getCollection } from '../../api/fetch'
 import CollectionTitle from '../assetcard/CollectionTitle'
 import Link from '../common/util/input/Link'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'

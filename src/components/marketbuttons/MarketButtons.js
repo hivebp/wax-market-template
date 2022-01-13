@@ -72,7 +72,7 @@ export default function MarketButtons(props) {
             )
             handleCancel(true)
         } catch (e) {
-            console.log(e)
+            console.error(e)
             setListed(false)
             setError(e.message)
         } finally {
@@ -112,7 +112,7 @@ export default function MarketButtons(props) {
             )
             handleCancel(true)
         } catch (e) {
-            console.log(e)
+            console.error(e)
             setListed(false)
             setError(e.message)
         } finally {
@@ -152,7 +152,7 @@ export default function MarketButtons(props) {
             )
             handleClaim(true)
         } catch (e) {
-            console.log(e)
+            console.error(e)
             setListed(false)
             setError(e.message)
         } finally {

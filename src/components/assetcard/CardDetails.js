@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { GetPrices } from '../../api/fetch'
+import { getPrices } from '../../api/fetch'
 import { formatNumber } from '../helpers/Helpers'
 
 function CardDetails(props) {
@@ -29,7 +29,7 @@ function CardDetails(props) {
     const token_precision = priceInfo[asset_id] ? priceInfo[asset_id]['token_precision'] : null
 
     useEffect(() => {
-        if (visible && !priceInfo[asset_id]) GetPrices(asset_id).then((res) => loadPriceInfo(res, asset_id))
+        if (visible && !priceInfo[asset_id]) getPrices(asset_id).then((res) => loadPriceInfo(res, asset_id))
     }, [new_owner, visible, asset_id, index])
 
     return (

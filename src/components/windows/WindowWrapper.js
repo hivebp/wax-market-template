@@ -20,8 +20,6 @@ function WindowWrapper(props) {
     const action = state.action
     const callBack = state.callBack
 
-    console.log('WindowWrapper', { action, amount, asset })
-
     function useOutsideAlerter(ref, callBack) {
         useEffect(() => {
             /**

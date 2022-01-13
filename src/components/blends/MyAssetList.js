@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import { getAssets } from '../api/fetch'
+import { getAssets } from '../../api/fetch'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 import SelectableAssetPreview from './SelectableAssetPreview'

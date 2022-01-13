@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
+import { getDrops } from '../../api/fetch'
 import config from '../../config.json'
-import { getDrops } from '../api/fetch'
 import Content from '../common/layout/Content'
 import Page from '../common/layout/Page'
 import Header from '../common/util/Header'

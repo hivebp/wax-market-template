@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import { getDrop } from '../api/fetch'
+import { getDrop } from '../../api/fetch'
 import Page from '../common/layout/Page'
 import Header from '../common/util/Header'
 import DropButtons from '../dropbuttons/DropButtons'

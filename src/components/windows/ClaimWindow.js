@@ -95,8 +95,8 @@ function UnboxPopup(props) {
             }
             getPackResult()
         } catch (e) {
+            console.error(e)
             callBack({ unboxed: false, error: e })
-            console.log(e)
             setError(e.message)
         }
     }

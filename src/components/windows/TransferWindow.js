@@ -38,8 +38,8 @@ function TransferWindow(props) {
             await transferAction(asset.asset_id, memo, receiver, activeUser)
             callBack({ transferred: true, receiver: receiver })
         } catch (e) {
+            console.error(e)
             callBack({ transferred: false, error: e.message })
-            console.log(e)
             setError(e.message)
         } finally {
             setIsLoading(false)
