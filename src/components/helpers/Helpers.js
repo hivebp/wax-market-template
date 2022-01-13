@@ -69,23 +69,15 @@ export const getFilters = (values, collections, pageName, page = 1) => {
     }
 }
 
-export const parseAssetsToMint = async (assetData, templateData) => {
-    const assets = []
+export const parseAssetsToMint = (assetData, templateData) =>
+    assetData.reduce((assets, asset) => {
+        const templateId = asset.template_id.toString()
+        const matchedTemplate = templateData.data.find((template) => template.template_id.toString() === templateId)
 
-    assetData.map(async (asset) => {
-        const templateId = asset.template_id
-        const matchedTemplates = templateData.data.filter(
-            (template) => template.template_id.toString() === templateId.toString(),
-        )
+        if (matchedTemplate) assets.push(matchedTemplate)
 
-        if (matchedTemplates.length > 0) {
-            const template = matchedTemplates[0]
-            assets.push(template)
-        }
-    })
-
-    return assets
-}
+        return assets
+    }, [])
 
 export const createCollectionOption = (name) => {
     if (!name) return name

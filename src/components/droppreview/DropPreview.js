@@ -16,7 +16,7 @@ function DropPreview(props) {
     const { collectionName, collectionImage } = drop
 
     useEffect(() => {
-        parseAssetsToMint(drop.assetsToMint, templateData).then((res) => setAssets(res))
+        setAssets(parseAssetsToMint(drop.assetsToMint, templateData))
     }, [drop])
 
     return (
@@ -55,8 +55,8 @@ function DropPreview(props) {
                 <div className="relative">
                     <div className={cn('aspect-w-1 aspect-h-1 overflow-hidden')}>
                         {assets &&
-                            assets.map((asset) => (
-                                <div className="flex flex-1 h-full">
+                            assets.map((asset, i) => (
+                                <div key={i} className="flex flex-1 h-full">
                                     <PreviewImage {...props} asset={asset} />
                                 </div>
                             ))}

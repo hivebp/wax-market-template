@@ -12,6 +12,7 @@ import CardDetails from './CardDetails'
 import CardImage from './CardImage'
 import MoreOptions from './MoreOptions'
 export const AssetCard = (props) => {
+    console.log('rendering asset card')
     const [listing, setListing] = useState(props['listing'])
 
     const [assets, setAssets] = useState(props['assets'])
