@@ -28,7 +28,7 @@ export default function UnclaimedPacksList(props) {
     const getAssetsResult = (result, unboxer) => {
         const assets = []
         if (result && result.success) {
-            result.data.map((asset) => {
+            result.data.forEach((asset) => {
                 asset['unboxer'] = unboxer
                 assets.push(asset)
             })
@@ -43,9 +43,9 @@ export default function UnclaimedPacksList(props) {
 
         let unboxer = null
 
-        results.map((res) => {
+        results.forEach((res) => {
             if (res && res.status === 200 && res.body && res.body.rows) {
-                res.body.rows.map((row) => {
+                res.body.rows.forEach((row) => {
                     if (!unboxer) {
                         unboxer = row.unboxer
                     }
@@ -64,7 +64,7 @@ export default function UnclaimedPacksList(props) {
 
     const getUnclaimedPacks = async () => {
         const promises = []
-        config.packs_contracts.map((contract) => {
+        config.packs_contracts.forEach((contract) => {
             if (contract === 'atomicpacksx') {
                 const body = {
                     json: true,

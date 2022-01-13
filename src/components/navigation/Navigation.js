@@ -9,7 +9,7 @@ import Logo from '../common/util/Logo'
 import { formatNumber } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 
-const useClaimRefund = () => {
+const useClaimRefund = (userName, activeUser, setBalance, setRefundBalance) => {
     const [isLoading, setIsLoading] = useState(false)
     const claimRefund = async (quantity) => {
         try {
@@ -23,7 +23,7 @@ const useClaimRefund = () => {
                             authorization: [
                                 {
                                     actor: userName,
-                                    permission: activeUser['requestPermission'],
+                                    permission: activeUser.requestPermission,
                                 },
                             ],
                             data: {
@@ -41,6 +41,7 @@ const useClaimRefund = () => {
         } catch (e) {
             console.error(e)
         } finally {
+            // this seems scetchy... should update
             setTimeout(function () {
                 getWaxBalance(userName).then(setBalance)
                 getRefundBalance(userName).then(setRefundBalance)
@@ -50,23 +51,18 @@ const useClaimRefund = () => {
     }
     return { claimRefund, isLoading }
 }
-/**
- *
- * @param {{
- *  ual: {}
- * }} props
- * @returns
- */
-const Navigation = React.memo(({ ual = { activeUser: null } }) => {
+
+const Navigation = React.memo((props) => {
     const router = useRouter()
 
     const [balance, setBalance] = useState(0)
     const [refundBalance, setRefundBalance] = useState(0)
 
-    const { claimRefund, isLoading } = useClaimRefund()
-
+    const { ual = { activeUser: null } } = props
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
+
+    const { claimRefund, isLoading } = useClaimRefund(userName, activeUser, setBalance, setRefundBalance)
 
     const performLogin = async () => {
         ual?.showModal()
@@ -85,8 +81,6 @@ const Navigation = React.memo(({ ual = { activeUser: null } }) => {
             getRefundBalance(userName).then(setRefundBalance)
         }
     }, [userName])
-
-    console.log({ balance, refundBalance })
 
     return (
         <div className={cn('fixed w-full h-48 md:h-28', 'bg-page shadow-sm border-b border-paper', 'z-30')}>

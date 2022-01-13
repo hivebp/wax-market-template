@@ -1,10 +1,9 @@
 import { Wax } from '@eosdacio/ual-wax'
-import React, { useContext, useEffect } from 'react'
+import { UALProvider, withUAL } from 'hive-ual-renderer'
+import React, { useContext, useEffect, useMemo } from 'react'
 import 'react-dropdown/style.css'
-import { QueryClient, QueryClientProvider } from 'react-query'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
-import { UALProvider, withUAL } from 'ual-reactjs-renderer'
 import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import Footer from '../components/footer'
 import MarketWrapper, { Context } from '../components/marketwrapper'
@@ -59,7 +58,7 @@ const disptachCollectionsData = (dispatch, collections) => {
     if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
-const AppContainer = withUAL(({ ual, Component, pageProps }) => {
+const AppContainer = React.memo(({ ual, Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
 
     useEffect(() => {
@@ -84,20 +83,19 @@ const AppContainer = withUAL(({ ual, Component, pageProps }) => {
     )
 })
 
+const AppContainerUAL = withUAL(AppContainer)
+
+const loadServiceWorker = () =>
+    window.addEventListener('load', () =>
+        navigator.serviceWorker.register('/sw.js').then(
+            (registration) => console.log('Service Worker registration successful with scope: ', registration.scope),
+            (err) => console.log('Service Worker registration failed: ', err),
+        ),
+    )
+
 function MyApp({ Component, pageProps }) {
     useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/sw.js').then(
-                    function (registration) {
-                        console.log('Service Worker registration successful with scope: ', registration.scope)
-                    },
-                    function (err) {
-                        console.log('Service Worker registration failed: ', err)
-                    },
-                )
-            })
-        }
+        if ('serviceWorker' in navigator) loadServiceWorker()
     }, [])
 
     const ualProviderProps = useWallets(
@@ -105,15 +103,12 @@ function MyApp({ Component, pageProps }) {
         config.api_endpoint,
         config.market_name,
     )
-    const queryClient = new QueryClient()
+
+    const container = useMemo(() => <AppContainerUAL pageProps={pageProps} Component={Component} />)
 
     return (
         <MarketWrapper>
-            <UALProvider {...ualProviderProps}>
-                <QueryClientProvider client={queryClient}>
-                    <AppContainer pageProps={pageProps} Component={Component} />
-                </QueryClientProvider>
-            </UALProvider>
+            <UALProvider {...ualProviderProps}>{container}</UALProvider>
         </MarketWrapper>
     )
 }
