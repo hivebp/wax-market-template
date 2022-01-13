@@ -17,28 +17,39 @@ import '../styles/Search.css'
 
 const { packs_contracts } = config
 
-const queryClient = new QueryClient()
+let walletsStore = {}
+const useWallets = (chainId, apiEndpoint, appName) => {
+    const hash = `${chainId}-${apiEndpoint}-${appName}`
+    if (walletsStore[hash]) return walletsStore[hash]
 
-const waxNet = {
-    chainId: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
-    rpcEndpoints: [
-        {
-            protocol: 'https',
-            host: config.api_endpoint.replace('https://', '').replace('http://', ''),
-            port: 443,
-        },
-    ],
+    const waxNet = {
+        chainId,
+        rpcEndpoints: [
+            {
+                protocol: 'https',
+                host: apiEndpoint.replace(/https?:\/\//gi, ''),
+                port: 443,
+            },
+        ],
+    }
+
+    const authenticators = [
+        new Anchor([waxNet], {
+            appName,
+        }),
+        new Wax([waxNet], {
+            appName,
+        }),
+    ]
+
+    walletsStore[hash] = {
+        appName,
+        chains: [waxNet],
+        authenticators,
+    }
+
+    return walletsStore[hash]
 }
-
-const anchor = new Anchor([waxNet], {
-    appName: config.market_name,
-})
-
-const wax = new Wax([waxNet], {
-    appName: config.market_name,
-})
-
-const wallets = [wax, anchor]
 
 const disptachCollectionsData = (dispatch, collections) => {
     dispatch({ type: 'SET_COLLECTIONS', payload: collections })
@@ -89,11 +100,17 @@ function MyApp({ Component, pageProps }) {
         )
     }
 
+    const ualProviderProps = useWallets(
+        '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
+        config.api_endpoint,
+        config.market_name,
+    )
+    const queryClient = new QueryClient()
     const AppWithUAL = withUAL(AppContainer)
 
     return (
         <MarketWrapper>
-            <UALProvider chains={[waxNet]} authenticators={wallets} appName={config.market_name}>
+            <UALProvider {...ualProviderProps}>
                 <QueryClientProvider client={queryClient}>
                     <AppWithUAL {...pageProps} />
                 </QueryClientProvider>

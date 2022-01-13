@@ -73,11 +73,6 @@ export const usePost = (url, data) => useFetch(url, 'POST', data, true)
  * @param {any} result
  * @returns {any}
  */
-const identity = (result) => result
-/**
- * @param {any} result
- * @returns {any}
- */
 const firstRow = (result) => result?.rows?.[0] || null
 /**
  * @param {any} result
@@ -449,22 +444,4 @@ export const getDrops = async (filters) => {
     if (!filters.collections) return []
     const rows = await getDropByCollectionHex(getCollectionHex(filters.collections[0]))
     return rows.map((drop) => parseDropData(drop))
-}
-
-export const useCollections = () => {
-    const { data, error, loading, fetch } = usePost(`${api_endpoint}/v1/chain/get_table_rows`, {
-        code: 'marketmapper',
-        index_position: 'primary',
-        json: 'true',
-        key_type: 'i64',
-        limit: 1,
-        reverse: 'false',
-        scope: 'marketmapper',
-        show_payer: 'false',
-        table: 'mappings',
-        lower_bound: config.market_name,
-        upper_bound: config.market_name,
-        table_key: '',
-    })
-    return { data, error, loading, fetch }
 }
