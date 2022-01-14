@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import ErrorMessage from '../common/util/ErrorMessage'
 import { claimPack } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
@@ -9,7 +10,7 @@ import ResultWindow from './ResultWindow'
 import WindowButton from './WindowButton'
 import WindowContent from './WindowContent'
 
-function UnboxWindow(props) {
+function UnboxPopup(props) {
     const asset = props['asset']
 
     const { collection, schema, name, data } = asset
@@ -18,20 +19,20 @@ function UnboxWindow(props) {
 
     const video = data['video'] ? (data['video'].includes('http') ? data['video'] : config.ipfs + data['video']) : ''
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
+    const ual = useUAL()
+
     const activeUser = ual['activeUser']
 
     const callBack = props['callBack']
 
-    const userName = activeUser ? activeUser['accountName'] : null
     const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState()
+    const [error, setError] = useState(null)
     const closeCallBack = props['closeCallBack']
     const [animation, setAnimation] = useState(null)
     const [showAnimation, setShowAnimation] = useState(true)
     const [showResults, setShowResults] = useState(false)
+    const [results, setResults] = useState([])
     const [pack, setPack] = useState(null)
-    const [results, setResults] = useState(null)
     const [templates, setTemplates] = useState(null)
 
     const [state, dispatch] = useContext(Context)
@@ -54,7 +55,7 @@ function UnboxWindow(props) {
 
     useEffect(() => {
         Promise.all([state.packData, state.templateData]).then((res) => parsePacks(res))
-    }, [])
+    }, [pack === null])
 
     const loadResults = (templateIds) => {
         if (templateIds && templateIds.length > 0) {
@@ -74,7 +75,9 @@ function UnboxWindow(props) {
                 const video = data ? data.video : null
                 const bgColor = pack.displayData.animation.drawing.bg_color
 
-                setAnimation({ video: video, bgColor: bgColor })
+                if (video) {
+                    setAnimation({ video: video, bgColor: bgColor })
+                }
             }
         } else {
             throw 'Could not load Pack'
@@ -83,48 +86,16 @@ function UnboxWindow(props) {
     }
 
     const getPackResult = () => {
-        try {
-            claimPack(pack, asset, activeUser).then((res) => loadResults(res))
-        } catch (e) {
-            console.error(e)
-            callBack({ unboxed: false, error: e })
-            setError(e.message)
-        }
+        claimPack(pack, asset, activeUser).then((res) => loadResults(res))
     }
 
-    const unbox = async () => {
+    const claim = async () => {
         setIsLoading(true)
         try {
             if (!pack) {
                 throw 'Unable to Load Pack'
             }
-            await activeUser.signTransaction(
-                {
-                    actions: [
-                        {
-                            account: 'atomicassets',
-                            name: 'transfer',
-                            authorization: [
-                                {
-                                    actor: userName,
-                                    permission: activeUser['requestPermission'],
-                                },
-                            ],
-                            data: {
-                                from: userName,
-                                memo: 'unbox',
-                                to: pack.contract,
-                                asset_ids: [asset.asset_id],
-                            },
-                        },
-                    ],
-                },
-                {
-                    expireSeconds: 300,
-                    blocksBehind: 0,
-                },
-            )
-            setTimeout(getPackResult, 3000)
+            getPackResult()
         } catch (e) {
             console.error(e)
             callBack({ unboxed: false, error: e })
@@ -177,10 +148,9 @@ function UnboxWindow(props) {
             />
             <div className="text-xl sm:text-2xl md:text-3xl mt-4 lg:mt-0 text-center">{name}</div>
             <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
-            <div className="text-base sm:text-lg text-center my-0 md:my-4">
-                {`Are you sure you want to unbox ${name}?`}
-            </div>
+            <div className="text-lg text-left my-4">{`Claim ${name}?`}</div>
             {error ? <ErrorMessage error={error} /> : ''}
+
             {isLoading ? (
                 <div className="mb-2">
                     <LoadingIndicator />
@@ -188,11 +158,11 @@ function UnboxWindow(props) {
             ) : (
                 <div className={cn('relative m-auto mt-5 h-20 lg:h-8', 'flex justify-evenly lg:justify-end')}>
                     <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                    <WindowButton text="Unbox" onClick={unbox} id={'unbox-button'} />
+                    <WindowButton text="Claim" onClick={claim} id={'unbox-button'} />
                 </div>
             )}
         </div>
     )
 }
 
-export default UnboxWindow
+export default UnboxPopup

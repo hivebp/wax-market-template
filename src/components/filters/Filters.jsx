@@ -2,6 +2,7 @@ import cn from 'classnames'
 import { useRouter } from 'next/router'
 import qs from 'qs'
 import React, { useContext, useEffect, useState } from 'react'
+import { useUAL } from '../../hooks/ual'
 import CollectionDropdown from '../collectiondropdown'
 import DropdownItem from '../collectiondropdown/DropdownItem'
 import Input from '../common/util/input/Input'
@@ -22,7 +23,7 @@ function Filters(props) {
     const winner = props['winner']
     const bidder = props['bidder']
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 

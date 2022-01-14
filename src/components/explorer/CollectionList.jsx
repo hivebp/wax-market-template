@@ -6,8 +6,6 @@ import { Context } from '../marketwrapper'
 import CollectionCard from './CollectionCard'
 
 function CollectionList(props) {
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
-
     const [state, dispatch] = useContext(Context)
 
     const [collections, setCollections] = useState([])
@@ -33,7 +31,7 @@ function CollectionList(props) {
                 <LoadingIndicator />
             ) : (
                 collections.map((collection, index) => (
-                    <CollectionCard key={collection.collection + '_' + index} collection={collection} ual={ual} />
+                    <CollectionCard key={collection.collection + '_' + index} collection={collection} />
                 ))
             )}
         </div>

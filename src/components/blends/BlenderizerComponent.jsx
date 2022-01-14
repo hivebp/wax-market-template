@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
 import { getCollection, getTemplate } from '../../api/fetch'
+import { useUAL } from '../../hooks/ual'
 import AssetImage from '../asset/AssetImage'
 import CheckIndicator from '../check/CheckIndicator'
 import Page from '../common/layout/Page'
@@ -11,8 +12,9 @@ import { Context } from '../marketwrapper'
 import MyAssetList from './MyAssetList'
 import TemplateIngredient from './TemplateIngredient'
 
-const BlendComponent = (props) => {
+const BlenderizerComponent = (props) => {
     const blend = props.blend
+    const template = props.template
     const [state, dispatch] = useContext(Context)
 
     const [collection, setCollection] = useState(null)
@@ -20,9 +22,12 @@ const BlendComponent = (props) => {
     const [isLoadingBlend, setIsLoadingBlend] = useState(false)
     const [wasBlended, setWasBlended] = useState(false)
     const [templates, setTemplates] = useState([])
-    const { ingredients, display_data, collection_name } = blend
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const { mixture, target } = blend
+
+    const collection_name = template.collection.collection_name
+
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
@@ -32,45 +37,40 @@ const BlendComponent = (props) => {
     const searchTemplates = []
     const assignedAssetIds = []
 
-    ingredients.map((ingredient) => {
-        if (ingredient[0] === 'TEMPLATE_INGREDIENT') {
-            for (let i = 0; i < ingredient[1].amount; i++) {
-                let assignedAsset = null
-                selectedAssets &&
-                    selectedAssets.map((asset) => {
-                        if (
-                            !assignedAsset &&
-                            !assignedAssetIds.includes(asset['asset_id']) &&
-                            asset.template.template_id.toString() === ingredient[1].template_id.toString()
-                        ) {
-                            assignedAsset = asset
-                            assignedAssetIds.push(asset['asset_id'])
-                        }
-                    })
+    mixture.map((ingredient) => {
+        let assignedAsset = null
 
-                if (!Object.keys(searchTemplates).includes(ingredient[1].template_id)) {
-                    searchTemplates[ingredient[1].template_id] = {
-                        collection_name: ingredient[1].collection_name,
-                    }
+        selectedAssets &&
+            selectedAssets.map((asset) => {
+                if (
+                    !assignedAsset &&
+                    !assignedAssetIds.includes(asset['asset_id']) &&
+                    asset.template.template_id.toString() === ingredient.toString()
+                ) {
+                    assignedAsset = asset
+                    assignedAssetIds.push(asset['asset_id'])
                 }
+            })
 
-                templates.map((template) => {
-                    if (template.template_id.toString() === ingredient[1].template_id.toString()) {
-                        templatesNeeded.push({
-                            template: template,
-                            assignedAsset: assignedAsset,
-                        })
-                    }
-                })
+        if (!Object.keys(searchTemplates).includes(ingredient)) {
+            searchTemplates[ingredient] = {
+                collection_name: collection_name,
             }
         }
+
+        templates.map((template) => {
+            if (template.template_id.toString() === ingredient.toString()) {
+                templatesNeeded.push({
+                    template: template,
+                    assignedAsset: assignedAsset,
+                })
+            }
+        })
     })
 
-    const data = JSON.parse(display_data)
+    const { image, name } = template
 
-    const { image, name } = data
-
-    const title = `Check out ${blend.name}`
+    const title = `Check out the Blend for ${name}`
 
     const parseTemplates = (res) => {
         const temps = []
@@ -118,9 +118,9 @@ const BlendComponent = (props) => {
                         ],
                         data: {
                             from: userName,
-                            memo: 'blend:' + blend.blend_id,
+                            memo: target,
                             asset_ids: selectedAssets.map((asset) => asset.asset_id),
-                            to: 'blend.nefty',
+                            to: 'blenderizerx',
                         },
                     },
                 ],
@@ -131,6 +131,8 @@ const BlendComponent = (props) => {
             },
         )
         setWasBlended(true)
+
+        dispatch({ type: 'SET_SELECTED_ASSETS', payload: null })
     }
 
     const ready =
@@ -142,7 +144,7 @@ const BlendComponent = (props) => {
 
     return (
         <Page id="BlendPage">
-            <Header title={title} image={image} description={data['description']} />
+            <Header title={title} image={image} description={''} />
             {isLoading ? (
                 <LoadingIndicator />
             ) : (
@@ -152,14 +154,14 @@ const BlendComponent = (props) => {
                             <div className="w-full md:w-96 flex flex-col items-center">
                                 <div
                                     className={cn(
-                                        'relative w-full text-center rounded-md overflow-hidden',
+                                        'relative w-full text-center ' + 'rounded-md overflow-hidden',
                                         'text-base break-words',
-                                        'backdrop-filter backdrop-blur-sm border border-paper',
+                                        'backdrop-filter backdrop-blur-sm ' + 'border border-paper',
                                         'shadow-md bg-paper',
                                     )}
                                 >
-                                    <AssetImage asset={{ data: { img: image } }} />
-                                    <div className={cn('absolute w-full bottom-4 left-1/2 transform -translate-x-1/2')}>
+                                    <AssetImage asset={template} />
+                                    <div className={cn('relative w-full bottom-3 left-1/2 transform -translate-x-1/2')}>
                                         {name}
                                     </div>
                                 </div>
@@ -218,4 +220,4 @@ const BlendComponent = (props) => {
     )
 }
 
-export default BlendComponent
+export default BlenderizerComponent

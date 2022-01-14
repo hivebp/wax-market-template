@@ -4,6 +4,7 @@ import qs from 'qs'
 import React, { useEffect, useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import Content from '../common/layout/Content'
 import Page from '../common/layout/Page'
 import { getValues } from '../helpers/Helpers'
@@ -15,7 +16,7 @@ const Blends = (props) => {
     const values = getValues()
 
     const keys = config.blend_contracts
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
+    const ual = useUAL()
 
     const activeUser = ual['activeUser'] && ual['activeUser']['accountName']
     const loggedOut = activeUser === null

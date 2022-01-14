@@ -1,56 +1,63 @@
 import cn from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
+import Bids from '../auctions/Bids'
 import ErrorMessage from '../common/util/ErrorMessage'
 import Input from '../common/util/input/Input'
 import { formatNumber } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import { announceSaleAction } from '../wax/Wax'
+import { bidAction } from '../wax/Wax'
 import WindowButton from './WindowButton'
 import WindowContent from './WindowContent'
 
-function SellWindow(props) {
-    const asset = props['asset']
+function BidWindow(props) {
+    const listing = props['listing']
+    const ual = useUAL()
 
-    const { collection, schema, name, data, asset_id } = asset
-
-    const image = data['img'] ? (data['img'].includes('http') ? data['img'] : config.ipfs + data['img']) : ''
-
-    const video = data['video'] ? (data['video'].includes('http') ? data['video'] : config.ipfs + data['video']) : ''
-
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
     const activeUser = ual['activeUser']
-
     const callBack = props['callBack']
-
     const userName = activeUser ? activeUser['accountName'] : null
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState()
     const closeCallBack = props['closeCallBack']
-    const [sellPrice, setSellPrice] = useState(0)
 
-    useEffect(() => {}, [])
+    const { price, assets, seller, bids, auction_id } = listing
 
-    const sell = async () => {
-        if (!sellPrice) return
-        const quantity = parseFloat(sellPrice)
+    const asset = assets[0]
+
+    const numBids = bids ? bids.length : 0
+
+    const { collection, schema, name, data } = asset
+
+    const image = data['img'] ? (data['img'].includes('http') ? data['img'] : config.ipfs + data['img']) : ''
+    const video = data['video'] ? (data['video'].includes('http') ? data['video'] : config.ipfs + data['video']) : ''
+    const listing_price = price['amount'] / Math.pow(10, price['token_precision'])
+
+    const [sellPrice, setSellPrice] = useState(!bids || bids.length === 0 ? listing_price : listing_price * 1.10000001)
+
+    const validBid = (price) => {
+        if (!price) return false
+        return price >= (numBids === 0 ? listing_price : listing_price * 1.10000001)
+    }
+
+    const bid = async () => {
         closeCallBack()
+        if (!validBid(sellPrice)) {
+            setError('Invalid Bid')
+            return false
+        }
+        const quantity = parseFloat(sellPrice)
         setIsLoading(true)
         try {
-            await announceSaleAction(asset_id, quantity, activeUser)
-            callBack({ listed: true, price: quantity })
+            await bidAction(auction_id, quantity, activeUser)
+            callBack({ bidPlaced: true })
         } catch (e) {
-            console.error(e)
-            callBack({ listed: false, error: e })
             setError(e.message)
+            callBack({ bidPlaced: false, error: e.message })
         } finally {
             setIsLoading(false)
         }
-    }
-
-    const cancel = () => {
-        callBack({ listed: false, offer: 0 })
-        closeCallBack()
     }
 
     const changePrice = (e) => {
@@ -58,8 +65,10 @@ function SellWindow(props) {
         if (/^\d*\.?\d*$/.test(val)) setSellPrice(val)
     }
 
-    let cut = sellPrice - 0.04 * sellPrice
-    if (collection['market_fee']) cut = cut - collection['market_fee'] * sellPrice
+    const cancel = () => {
+        callBack({ bidPlaced: false })
+        closeCallBack()
+    }
 
     return (
         <div
@@ -75,18 +84,19 @@ function SellWindow(props) {
             )}
         >
             <img
-                className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4 "
+                className="absolute z-50 cursor-pointer top-4 right-4 w-4 h-4"
                 onClick={cancel}
                 src="/close_btn.svg"
                 alt="X"
             />
             <div className="text-xl sm:text-2xl md:text-3xl mt-4 lg:mt-0 text-center">{name}</div>
             <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
+            <Bids bids={bids} />
             <div className="text-base sm:text-lg text-center my-0 md:my-4">
-                {`Are you sure you want to sell ${name} for ${formatNumber(sellPrice)} WAX?`}
+                {`Do you want to bid ${formatNumber(sellPrice)} WAX for this Item?`}
             </div>
             {error ? <ErrorMessage error={error} /> : ''}
-            <div className={cn('m-auto lg:mb-4 py-1', 'flex flex-row items-center justify-evenly flex-wrap')}>
+            <div className={cn('relative m-auto lg:mb-10 py-1', 'flex flex-row items-center justify-evenly flex-wrap')}>
                 <div className="flex items-center">Price</div>
                 <div className={cn('flex flex-row', 'items-center')}>
                     <Input
@@ -98,37 +108,9 @@ function SellWindow(props) {
                     />
                 </div>
             </div>
-            {collection['market_fee'] || collection['market_fee'] === 0 ? (
-                <div
-                    className={cn(
-                        'flex flex-row justify-around',
-                        'p-5 mt-2 lg:mt-6',
-                        'border border-solid rounded-2xl border-gray-300',
-                    )}
-                >
-                    <div className="flex flex-col justify-center items-center">
-                        <div>2%</div>
-                        <div>Market Fee</div>
-                    </div>
-                    <div className="flex flex-col justify-center items-center">
-                        <div>2%</div>
-                        <div>WAX Fee</div>
-                    </div>
-                    <div className="flex flex-col justify-center items-center">
-                        <div>{collection['market_fee'] * 100}%</div>
-                        <div>Collection Fee</div>
-                    </div>
-                    <div className="flex flex-col justify-center items-center">
-                        <div>{cut} WAX</div>
-                        <div>Your Cut</div>
-                    </div>
-                </div>
-            ) : (
-                <LoadingIndicator />
-            )}
             <div className={cn('relative m-auto mt-5 h-20 lg:h-8', 'flex justify-evenly lg:justify-end')}>
                 <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                <WindowButton text="Sell" onClick={sell} />
+                {userName !== seller ? <WindowButton text="Bid" onClick={bid} /> : ''}
             </div>
             {isLoading ? (
                 <div className="absolute t-0 w-full h-full backdrop-filter backdrop-blur-md">
@@ -141,4 +123,4 @@ function SellWindow(props) {
     )
 }
 
-export default SellWindow
+export default BidWindow

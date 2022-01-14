@@ -1,15 +1,15 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
 import { getAssets } from '../../api/fetch'
+import { useUAL } from '../../hooks/ual'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 import SelectableAssetPreview from './SelectableAssetPreview'
-
 function MyAssetList(props) {
     const templates = props['templates']
     const [state, dispatch] = useContext(Context)
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 

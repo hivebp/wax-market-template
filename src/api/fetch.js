@@ -6,21 +6,62 @@ import { query } from './query'
 
 export const { atomic_api, api_endpoint, packs_contracts, default_collection } = config
 
-export const get = (url, parms) => fetch(query(url, parms)).then((res) => res.json())
+/**
+ *
+ * @param {string} url
+ * @param {any=} data
+ * @returns {Promise<unknown>}
+ */
+export const get = (url, data) => fetch(query(url, data)).then((res) => res.json())
 
+/**
+ *
+ * @param {string} url
+ * @param {any=} data
+ * @returns {Promise<unknown>}
+ */
 export const post = (url, data) =>
     fetch(url, {
         method: 'post',
         body: JSON.stringify(data),
     }).then((res) => res.json())
 
-export const useFetch = (url, method = 'GET', body = undefined, autofetch = false) => {
-    const [state, setState] = useState({
+/**
+ *
+ * @param {any} val
+ * @returns {val is { code: any }}
+ */
+const hasCode = (val) => 'code' in val
+
+/**
+ * @typedef {{ data: unknown, error: any, loading: boolean, fetch: () => Promise<unknown> }} UseFetchResult
+ */
+
+/**
+ *
+ * @param {string} url
+ * @param {'GET' | 'POST'=} method
+ * @param {any=} bodyData
+ * @param {boolean=} autofetch
+ * @returns {UseFetchResult}
+ */
+export const useFetch = (url, method = 'GET', bodyData = undefined, autofetch = false) => {
+    /**
+     * @typedef {Object} FetchState
+     * @property {unknown | undefined} data
+     * @property {boolean} loading
+     * @property {any | undefined} error
+     * @property {AbortController | undefined} controller
+     */
+
+    /** @type {FetchState} */
+    const initialState = {
         data: undefined,
         error: undefined,
         loading: false,
         controller: undefined,
-    })
+    }
+    const [state, setState] = useState(initialState)
 
     const request = async () => {
         if (state.controller) state.controller.abort()
@@ -29,10 +70,11 @@ export const useFetch = (url, method = 'GET', body = undefined, autofetch = fals
         setState((state) => ({ ...state, loading: true, controller }))
 
         try {
+            /** @type {Response} */
             const response = await fetch(url, {
                 signal: controller.signal,
                 method,
-                body: body ? JSON.stringify(body) : undefined,
+                body: bodyData ? JSON.stringify(bodyData) : undefined,
             })
 
             const data = await response.json()
@@ -44,11 +86,12 @@ export const useFetch = (url, method = 'GET', body = undefined, autofetch = fals
                 controller: undefined,
             })
         } catch (err) {
-            if (err.code === 'ECONNABORTED') return
+            if (hasCode(err) && err.code === 'ECONNABORTED') return
             setState((state) => ({
                 data: state.data,
-                error: err.code === 'ECONNABORTED' ? undefined : err,
+                error: hasCode(err) && err.code === 'ECONNABORTED' ? undefined : err,
                 loading: false,
+                controller: undefined,
             }))
         }
 
@@ -66,7 +109,17 @@ export const useFetch = (url, method = 'GET', body = undefined, autofetch = fals
     return { data: state.data, error: state.error, loading: state.loading, fetch: request }
 }
 
+/**
+ * @param {string} url
+ * @param {any} data
+ * @returns {UseFetchResult}
+ */
 export const useGet = (url, data) => useFetch(query(url, data), 'GET', undefined, true)
+/**
+ * @param {string} url
+ * @param {any} data
+ * @returns {UseFetchResult}
+ */
 export const usePost = (url, data) => useFetch(url, 'POST', data, true)
 
 /**
@@ -81,49 +134,88 @@ const firstRow = (result) => result?.rows?.[0] || null
 const allRows = (result) => result?.rows || []
 
 /**
- * @template T
+ *
+ * @typedef {Object} TableGetterResponseData
+ * @property {any[]} rows
+ * @property {boolean} more
+ * @property {string} next_key
+ */
+
+/**
+ * @template DataGenerator - Function that generates the query data
  * @template Result
- * @param {string} url
- * @param {(...args: T) => any} dataGenerator
- * @param {(result: any) => Result} map
- * @return {(...args: T) => Promise<Result>}
+ * @param {DataGenerator} dataGenerator
+ * @param {(result: TableGetterResponseData) => Result} mapFn
+ * @return {(...args: Parameters<DataGenerator>) => Promise<Result>}
  */
 const createTableGetter =
     (dataGenerator, mapFn) =>
     async (...args) =>
+        // @ts-ignore
         mapFn(await post(`${api_endpoint}/v1/chain/get_table_rows`, dataGenerator(...args)))
 
 /**
  * Creates a function that fetches the resulting path and returns the json data of the response.
- * @template T
- * @param {(...args: T) => string} pathGenerator
- * @return {(...args: T) => Promise<unknown>}
+ * @template PathGenerator - Function that generates the path to fetch data from
+ * @param {PathGenerator} pathGenerator
+ * @return {(...args: Parameters<PathGenerator>) => Promise<unknown>}
  */
 const createGetter =
     (pathGenerator) =>
     async (...args) =>
+        // @ts-ignore
         get(`${atomic_api}${pathGenerator(...args)}`)
 
-export const getSchemas = createGetter((filters) => `/atomicassets/v1/schemas?${filter(filters)}`)
-export const getTemplates = createGetter((filters) => `/atomicassets/v1/templates?has_assets=true${filter(filters)}`)
-export const getListings = createGetter((filters) => `/atomicmarket/v1/sales?state=1${filter(filters)}`)
-export const getListing = createGetter((listingId) => `/atomicmarket/v1/sales/${listingId}`)
-export const getAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${filter(filters)}`)
-export const getWonAuctions = createGetter((filters) => `/atomicmarket/v1/auctions?state=3&${filter(filters)}`)
-export const getBids = createGetter((filters) => `/atomicmarket/v1/auctions?state=1&${filter(filters)}`)
-export const getSales = createGetter((filters) => `/atomicmarket/v1/sales?state=3${filter(filters)}`)
-export const getListingsById = createGetter((asset_id) => `/atomicmarket/v1/sales?&limit=1&asset_id=${asset_id}`)
-export const getAuctionsById = createGetter((asset_id) => `/atomicmarket/v1/auctions?&limit=1&asset_id=${asset_id}`)
-export const getAssets = createGetter((filters) => `/atomicmarket/v1/assets?${filter(filters)}`)
-export const getTemplate = createGetter(
-    (templateId, collectionName) => `/atomicassets/v1/templates/${collectionName}/${templateId}`,
+export const getSchemas = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) => `/atomicassets/v1/schemas?${filter(filters)}`,
 )
-export const getAsset = createGetter((assetId) => `/atomicmarket/v1/assets/${assetId}`)
-export const getCollection = createGetter((collection_name) => `/atomicassets/v1/collections/${collection_name}`)
-export const getSale = createGetter((saleId) => `/atomicmarket/v1/sales/${saleId}`)
-export const getAuction = createGetter((auctionId) => `/atomicmarket/v1/auctions/${auctionId}`)
-export const getPrices = createGetter((asset_id) => `/atomicmarket/v1/prices/assets?ids=${asset_id}`)
+export const getTemplates = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) =>
+        `/atomicassets/v1/templates?has_assets=true${filter(filters)}`,
+)
+export const getListings = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) => `/atomicmarket/v1/sales?state=1${filter(filters)}`,
+)
+export const getAuctions = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) => `/atomicmarket/v1/auctions?state=1&${filter(filters)}`,
+)
+export const getWonAuctions = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) => `/atomicmarket/v1/auctions?state=3&${filter(filters)}`,
+)
+export const getBids = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) => `/atomicmarket/v1/auctions?state=1&${filter(filters)}`,
+)
+export const getSales = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) => `/atomicmarket/v1/sales?state=3${filter(filters)}`,
+)
+export const getAssets = createGetter(
+    (/** @type {import("./filter").FilterType=} */ filters) => `/atomicmarket/v1/assets?${filter(filters)}`,
+)
+export const getListing = createGetter((/** @type {string} */ listingId) => `/atomicmarket/v1/sales/${listingId}`)
+export const getListingsById = createGetter(
+    (/** @type {string} */ asset_id) => `/atomicmarket/v1/sales?&limit=1&asset_id=${asset_id}`,
+)
+export const getAuctionsById = createGetter(
+    (/** @type {string} */ asset_id) => `/atomicmarket/v1/auctions?&limit=1&asset_id=${asset_id}`,
+)
+export const getTemplate = createGetter(
+    (/** @type {string} */ templateId, /** @type {string} */ collectionName) =>
+        `/atomicassets/v1/templates/${collectionName}/${templateId}`,
+)
+export const getAsset = createGetter((/** @type {string} */ assetId) => `/atomicmarket/v1/assets/${assetId}`)
+export const getCollection = createGetter(
+    (/** @type {string} */ collection_name) => `/atomicassets/v1/collections/${collection_name}`,
+)
+export const getSale = createGetter((/** @type {string} */ saleId) => `/atomicmarket/v1/sales/${saleId}`)
+export const getAuction = createGetter((/** @type {string} */ auctionId) => `/atomicmarket/v1/auctions/${auctionId}`)
+export const getPrices = createGetter(
+    (/** @type {string} */ asset_id) => `/atomicmarket/v1/prices/assets?ids=${asset_id}`,
+)
 
+/**
+ * @param {string[]} collections
+ * @returns
+ */
 export const getCollections = (collections) =>
     get(`${atomic_api}/atomicassets/v1/collections`, {
         page: '1',
@@ -134,7 +226,7 @@ export const getCollections = (collections) =>
     })
 
 export const getAccountStats = createTableGetter(
-    (user, dropID) => ({
+    (/** @type {string} */ user, /** @type {string} */ dropID) => ({
         json: true,
         code: 'neftyblocksd',
         scope: user,
@@ -152,7 +244,7 @@ export const getAccountStats = createTableGetter(
 )
 
 export const getDropKeys = createTableGetter(
-    (dropId) => ({
+    (/** @type {string} */ dropId) => ({
         code: 'neftyblocksd',
         index_position: 'primary',
         json: 'true',
@@ -170,7 +262,7 @@ export const getDropKeys = createTableGetter(
 )
 
 export const getWhiteList = createTableGetter(
-    (dropId, userName) => ({
+    (/** @type {string} */ dropId, /** @type {string} */ userName) => ({
         code: 'neftyblocksd',
         index_position: 'primary',
         json: 'true',
@@ -188,7 +280,7 @@ export const getWhiteList = createTableGetter(
 )
 
 export const getProofOwn = createTableGetter(
-    (dropId) => ({
+    (/** @type {string} */ dropId) => ({
         code: 'neftyblocksd',
         index_position: 'primary',
         json: 'true',
@@ -224,7 +316,7 @@ export const loadCollections = createTableGetter(
 )
 
 const getNeftyblockspCollectionByHex = createTableGetter(
-    (collectionHex) => ({
+    (/** @type {string} */ collectionHex) => ({
         code: 'neftyblocksp',
         index_position: 2,
         json: 'true',
@@ -242,7 +334,7 @@ const getNeftyblockspCollectionByHex = createTableGetter(
 )
 
 const getAtomicpacksxCollectionByKey = createTableGetter(
-    (lower_bound) => ({
+    (/** @type {number} */ lower_bound) => ({
         code: 'atomicpacksx',
         index_position: 'primary',
         json: 'true',
@@ -265,37 +357,64 @@ const getAtomicpacksxCollectionByKey = createTableGetter(
 
 /**
  *
- * @param {{ collections: string [] }} filters
- * @returns {any[]}
+ * @typedef {Object} PackDataType
+ * @property {string} packId
+ * @property {string} unlockTime
+ * @property {string} templateId
+ * @property {string} rollCounter
+ * @property {string} displayData
+ * @property {string} contract
+ */
+
+/**
+ *
+ * @param {import('./filter').FilterType} filters
+ * @returns {Promise<PackDataType[]>}
  */
 export const getPacks = async ({ collections = [] } = {}) => {
+    /**
+     * @type {PackDataType[]}
+     */
     const packs = []
 
     await Promise.all(
         packs_contracts.map(async (contract) => {
             switch (contract) {
                 case 'neftyblocksp':
-                    collections.forEach(async (collection) => {
-                        const collectionHex = getCollectionHex(collection)
+                    await Promise.all(
+                        collections.map(async (collection) => {
+                            const collectionHex = getCollectionHex(collection)
 
-                        const rows = await getNeftyblockspCollectionByHex(collectionHex)
-                        rows.forEach((pack) => {
-                            packs.push({
-                                packId: pack.pack_id,
-                                unlockTime: pack.unlock_time,
-                                templateId: pack.pack_template_id,
-                                rollCounter: pack.rollCounter,
-                                displayData: JSON.parse(pack.display_data),
-                                contract: 'neftyblocksp',
+                            const rows = await getNeftyblockspCollectionByHex(collectionHex)
+                            rows.forEach((pack) => {
+                                packs.push({
+                                    packId: pack.pack_id,
+                                    unlockTime: pack.unlock_time,
+                                    templateId: pack.pack_template_id,
+                                    rollCounter: pack.rollCounter,
+                                    displayData: JSON.parse(pack.display_data),
+                                    contract: 'neftyblocksp',
+                                })
                             })
-                        })
-                    })
+                        }),
+                    )
                     break
 
                 case 'atomicpacksx':
-                    let lower_bound = 0
+                    /**
+                     * @type {number | null}
+                     **/
+                    let lower_bound
+                    lower_bound = 0
 
                     while (lower_bound !== null) {
+                        /**
+                         * @type {{
+                         *  rows: any[]
+                         *  nextIndex: number | null
+                         *  more: boolean
+                         * }}
+                         **/
                         const { rows, nextIndex, more } = await getAtomicpacksxCollectionByKey(lower_bound)
                         rows.filter((pack) => collections.includes(pack.collection_name)).forEach((pack) => {
                             packs.push({
@@ -320,10 +439,15 @@ export const getPacks = async ({ collections = [] } = {}) => {
     return packs
 }
 
+/**
+ *
+ * @param {string} waxValue
+ * @returns {number}
+ */
 const waxValueToFloat = (waxValue) => parseFloat(waxValue.replace(' WAX', ''))
 
 export const getRefundBalance = createTableGetter(
-    (name) => ({
+    (/** @type {string} */ name) => ({
         code: 'atomicmarket',
         index_position: 'primary',
         json: 'true',
@@ -337,16 +461,19 @@ export const getRefundBalance = createTableGetter(
         table: 'balances',
         table_key: '',
     }),
-    (result) =>
-        allRows(result).reduce(
-            (wax, { quantities }) =>
+    (result) => {
+        /** @type {number} */
+        const refundBalance = allRows(result).reduce(
+            (/** @type {number} */ wax, /** @type {{ quantities?: string[]}} */ { quantities = [] }) =>
                 quantities.reduce((wax, quantity) => (wax + quantity ? waxValueToFloat(quantity) : 0), wax),
             0,
-        ),
+        )
+        return refundBalance
+    },
 )
 
 export const getWaxBalance = createTableGetter(
-    (name) => ({
+    (/** @type {string} */ name) => ({
         code: 'eosio.token',
         index_position: 'primary',
         json: 'true',
@@ -359,7 +486,7 @@ export const getWaxBalance = createTableGetter(
         table_key: '',
     }),
     (result) =>
-        allRows(result).reduce((wax, { balance }) => {
+        allRows(result).reduce((/** @type {number} */ wax, { balance }) => {
             return wax + waxValueToFloat(balance)
         }, 0),
 )
@@ -382,8 +509,43 @@ export const getDelphiMedian = createTableGetter(
     (result) => firstRow(result)?.median || null,
 )
 
+export const getBlend = createTableGetter(
+    (/** @type {string} */ blendId) => ({
+        json: true,
+        code: 'blend.nefty',
+        scope: 'blend.nefty',
+        table: 'blends',
+        table_key: '',
+        lower_bound: blendId,
+        upper_bound: blendId,
+        index_position: 1,
+        key_type: '',
+        limit: 1,
+        reverse: false,
+        show_payer: false,
+    }),
+    firstRow,
+)
+
+export const getBlenderizer = createTableGetter(
+    (/** @type {string} */ templateId) => ({
+        json: true,
+        code: 'blenderizerx',
+        scope: 'blenderizerx',
+        table: 'blenders',
+        table_key: '',
+        lower_bound: templateId,
+        upper_bound: templateId,
+        index_position: 1,
+        key_type: '',
+        limit: 1,
+        reverse: false,
+        show_payer: false,
+    }),
+    firstRow,
+)
 const getDropByCollectionHex = createTableGetter(
-    (collectionHex) => ({
+    (/** @type {string} */ collectionHex) => ({
         code: config.drops_contract,
         index_position: 2,
         json: 'true',
@@ -400,7 +562,8 @@ const getDropByCollectionHex = createTableGetter(
     allRows,
 )
 
-const parseDropData = (drop) => {
+// @TODO
+const parseDropData = (/** @type {any} */ drop) => {
     const displayData = JSON.parse(drop.display_data)
     return {
         accountLimit: drop.account_limit,
@@ -420,7 +583,7 @@ const parseDropData = (drop) => {
 }
 
 export const getDrop = createTableGetter(
-    (dropId) => ({
+    (/** @type {string} */ dropId) => ({
         code: config.drops_contract,
         index_position: 'primary',
         json: 'true',
@@ -440,62 +603,12 @@ export const getDrop = createTableGetter(
     },
 )
 
+/**
+ *
+ * @param {import('./filter').FilterType} filters
+ */
 export const getDrops = async (filters) => {
     if (!filters.collections) return []
     const rows = await getDropByCollectionHex(getCollectionHex(filters.collections[0]))
     return rows.map((drop) => parseDropData(drop))
 }
-
-export const getBlend = async (blendId) => {
-    const body = {
-        "json": true,
-        "code": 'blend.nefty',
-        "scope": 'blend.nefty',
-        "table": "blends",
-        'table_key': '',
-        'lower_bound': blendId,
-        'upper_bound': blendId,
-        "index_position": 1,
-        'key_type': '',
-        "limit": 1,
-        "reverse": false,
-        "show_payer": false
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows';
-
-    const res = await post(url, body);
-
-    if (res && res.status === 200 && res.data.rows.length > 0) {
-        return res.data.rows[0];
-    }
-
-    return null;
-};
-
-export const getBlenderizer = async (templateId) => {
-    const body = {
-        "json": true,
-        "code": 'blenderizerx',
-        "scope": 'blenderizerx',
-        "table": "blenders",
-        'table_key': '',
-        'lower_bound': templateId,
-        'upper_bound': templateId,
-        "index_position": 1,
-        'key_type': '',
-        "limit": 1,
-        "reverse": false,
-        "show_payer": false
-    }
-
-    const url = config.api_endpoint + '/v1/chain/get_table_rows';
-
-    const res = await post(url, body);
-
-    if (res && res.status === 200 && res.data.rows.length > 0) {
-        return res.data.rows[0];
-    }
-
-    return null;
-};

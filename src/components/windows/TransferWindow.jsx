@@ -1,71 +1,66 @@
 import cn from 'classnames'
 import React, { useState } from 'react'
 import config from '../../config.json'
-import Bids from '../auctions/Bids'
+import { useUAL } from '../../hooks/ual'
 import ErrorMessage from '../common/util/ErrorMessage'
 import Input from '../common/util/input/Input'
-import { formatNumber } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
-import { bidAction } from '../wax/Wax'
+import { transferAction } from '../wax/Wax'
 import WindowButton from './WindowButton'
 import WindowContent from './WindowContent'
 
-function BidWindow(props) {
-    const listing = props['listing']
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
+function TransferWindow(props) {
+    const asset = props['asset']
+
+    const { collection, schema, name, data } = asset
+
+    const image = data['img'] ? (data['img'].includes('http') ? data['img'] : config.ipfs + data['img']) : ''
+
+    const video = data['video'] ? (data['video'].includes('http') ? data['video'] : config.ipfs + data['video']) : ''
+
+    const ual = useUAL()
+
     const activeUser = ual['activeUser']
+
     const callBack = props['callBack']
+    const [receiver, setReceiver] = useState('')
+    const [memo, setMemo] = useState('')
+
     const userName = activeUser ? activeUser['accountName'] : null
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState()
     const closeCallBack = props['closeCallBack']
 
-    const { price, assets, seller, bids, auction_id } = listing
-
-    const asset = assets[0]
-
-    const numBids = bids ? bids.length : 0
-
-    const { collection, schema, name, data } = asset
-
-    const image = data['img'] ? (data['img'].includes('http') ? data['img'] : config.ipfs + data['img']) : ''
-    const video = data['video'] ? (data['video'].includes('http') ? data['video'] : config.ipfs + data['video']) : ''
-    const listing_price = price['amount'] / Math.pow(10, price['token_precision'])
-
-    const [sellPrice, setSellPrice] = useState(!bids || bids.length === 0 ? listing_price : listing_price * 1.10000001)
-
-    const validBid = (price) => {
-        if (!price) return false
-        return price >= (numBids === 0 ? listing_price : listing_price * 1.10000001)
-    }
-
-    const bid = async () => {
+    const transfer = async () => {
+        if (!receiver) return
         closeCallBack()
-        if (!validBid(sellPrice)) {
-            setError('Invalid Bid')
-            return false
-        }
-        const quantity = parseFloat(sellPrice)
         setIsLoading(true)
+
         try {
-            await bidAction(auction_id, quantity, activeUser)
-            callBack({ bidPlaced: true })
+            await transferAction(asset.asset_id, memo, receiver, activeUser)
+            callBack({ transferred: true, receiver: receiver })
         } catch (e) {
+            console.error(e)
+            callBack({ transferred: false, error: e.message })
             setError(e.message)
-            callBack({ bidPlaced: false, error: e.message })
         } finally {
             setIsLoading(false)
         }
     }
 
-    const changePrice = (e) => {
-        const val = e.target.value
-        if (/^\d*\.?\d*$/.test(val)) setSellPrice(val)
+    const cancel = () => {
+        callBack({ transferred: false, receiver: null, offer: 0 })
+        closeCallBack()
     }
 
-    const cancel = () => {
-        callBack({ bidPlaced: false })
-        closeCallBack()
+    const changeReceiver = (e) => {
+        const val = e.target.value
+        setReceiver(val.trim().toLowerCase())
+    }
+
+    const changeMemo = (e) => {
+        const val = e.target.value
+        setMemo(val)
     }
 
     return (
@@ -89,27 +84,35 @@ function BidWindow(props) {
             />
             <div className="text-xl sm:text-2xl md:text-3xl mt-4 lg:mt-0 text-center">{name}</div>
             <WindowContent image={image} video={video} collection={collection['name']} schema={schema['schema_name']} />
-            <Bids bids={bids} />
             <div className="text-base sm:text-lg text-center my-0 md:my-4">
-                {`Do you want to bid ${formatNumber(sellPrice)} WAX for this Item?`}
+                {`Are you sure you want to transfer ${name} to ${receiver}?`}
             </div>
             {error ? <ErrorMessage error={error} /> : ''}
-            <div className={cn('relative m-auto lg:mb-10 py-1', 'flex flex-row items-center justify-evenly flex-wrap')}>
-                <div className="flex items-center">Price</div>
+            <div className={cn('relative m-auto lg:mb-10 py-1', 'flex flex-row items-center justify-evenly')}>
                 <div className={cn('flex flex-row', 'items-center')}>
                     <Input
                         type="text"
-                        className="w-full bg-gray-700"
-                        placeholder="Price"
-                        onChange={changePrice}
-                        value={sellPrice ? sellPrice : ''}
+                        className="w-11/12 bg-gray-700"
+                        placeholder="Receiver"
+                        onChange={changeReceiver}
+                        value={receiver ? receiver : ''}
+                    />
+                </div>
+                <div className={cn('flex flex-row', 'items-center')}>
+                    <Input
+                        type="text"
+                        className="w-11/12 bg-gray-700"
+                        placeholder="Memo"
+                        onChange={changeMemo}
+                        value={memo ? memo : ''}
                     />
                 </div>
             </div>
             <div className={cn('relative m-auto mt-5 h-20 lg:h-8', 'flex justify-evenly lg:justify-end')}>
                 <WindowButton text="Cancel" onClick={cancel} className="text-neutral bg-paper border-neutral" />
-                {userName !== seller ? <WindowButton text="Bid" onClick={bid} /> : ''}
+                <WindowButton text="Transfer" onClick={transfer} disabled={!receiver} />
             </div>
+
             {isLoading ? (
                 <div className="absolute t-0 w-full h-full backdrop-filter backdrop-blur-md">
                     <LoadingIndicator text="Loading Transaction" />
@@ -121,4 +124,4 @@ function BidWindow(props) {
     )
 }
 
-export default BidWindow
+export default TransferWindow

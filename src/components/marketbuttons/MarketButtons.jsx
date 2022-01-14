@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
+import { useUAL } from '../../hooks/ual'
 import CheckIndicator from '../check/CheckIndicator'
 import { formatPrice } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
@@ -10,7 +11,7 @@ export default function MarketButtons(props) {
     const listing = props['listing']
     const sale = props['sale']
 
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 

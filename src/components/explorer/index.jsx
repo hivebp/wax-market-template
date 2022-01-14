@@ -9,8 +9,6 @@ import AssetList from './AssetList'
 import CollectionList from './CollectionList'
 
 const Explorer = (props) => {
-    const ual = props['ual'] ? props['ual'] : { activeUser: null }
-
     const values = getValues()
 
     const keys = ['collections', 'assets']
@@ -60,10 +58,10 @@ const Explorer = (props) => {
                     eventKey="collections"
                     title={<TabItem target={'collections'} tabKey={tabKey} title={'Collections'} />}
                 >
-                    {tabKey === 'collections' && <CollectionList ual={ual} />}
+                    {tabKey === 'collections' && <CollectionList />}
                 </Tab>
                 <Tab eventKey="assets" title={<TabItem target={'assets'} tabKey={tabKey} title={'Assets'} />}>
-                    {tabKey === 'assets' && <AssetList ual={ual} />}
+                    {tabKey === 'assets' && <AssetList />}
                 </Tab>
             </Tabs>
         </Page>

@@ -9,7 +9,9 @@ const ExplorerPage = (props) => {
 ExplorerPage.getInitialProps = async (ctx) => {
     const paths = ctx.asPath.split('/')
 
-    return qs.parse(paths[1].replace('explorer?', ''))
+    const props = qs.parse(paths[1].replace('explorer?', ''))
+
+    return props
 }
 
 export default ExplorerPage

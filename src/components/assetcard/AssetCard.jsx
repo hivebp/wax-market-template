@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { millisecondsToString } from '../../api/date'
 import { getAsset, getAuctionsById, getListingsById } from '../../api/fetch'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import Link from '../common/util/input/Link'
 import SvgIcon from '../common/util/SvgIcon'
 import { formatMintInfo } from '../helpers/Helpers'
@@ -11,8 +12,8 @@ import MarketButtons from '../marketbuttons'
 import CardDetails from './CardDetails'
 import CardImage from './CardImage'
 import MoreOptions from './MoreOptions'
+
 export const AssetCard = (props) => {
-    console.log('rendering asset card')
     const [listing, setListing] = useState(props['listing'])
 
     const [assets, setAssets] = useState(props['assets'])
@@ -25,7 +26,7 @@ export const AssetCard = (props) => {
 
     const [update, setUpdate] = useState({})
     const [frontVisible, setFrontVisible] = useState(true)
-    const ual = props['ual'] ? props['ual'] : { activeUser: '' }
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
     const [showMenu, setShowMenu] = useState(false)
@@ -275,7 +276,6 @@ export const AssetCard = (props) => {
             </div>
             <MoreOptions
                 setShowMenu={setShowMenu}
-                ual={props['ual']}
                 showMenu={showMenu}
                 asset={asset}
                 handleTransfer={handleTransfer}
@@ -358,7 +358,6 @@ export const AssetCard = (props) => {
 
             {frontVisible ? (
                 <MarketButtons
-                    ual={props['ual']}
                     asset={asset}
                     listing={listing}
                     bidPlaced={bidPlaced}
