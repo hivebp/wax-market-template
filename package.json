@@ -34,6 +34,7 @@
         "next": "^11.1.0",
         "react": "17.0.2",
         "react-bootstrap": "^2.1.0",
+        "react-dom": "^17.0.2",
         "react-dropdown": "^1.9.2",
         "react-query": "^3.34.7",
         "react-share": "^4.4.0",
