@@ -381,21 +381,23 @@ export const getPacks = async ({ collections = [] } = {}) => {
         packs_contracts.map(async (contract) => {
             switch (contract) {
                 case 'neftyblocksp':
-                    collections.forEach(async (collection) => {
-                        const collectionHex = getCollectionHex(collection)
+                    await Promise.all(
+                        collections.map(async (collection) => {
+                            const collectionHex = getCollectionHex(collection)
 
-                        const rows = await getNeftyblockspCollectionByHex(collectionHex)
-                        rows.forEach((pack) => {
-                            packs.push({
-                                packId: pack.pack_id,
-                                unlockTime: pack.unlock_time,
-                                templateId: pack.pack_template_id,
-                                rollCounter: pack.rollCounter,
-                                displayData: JSON.parse(pack.display_data),
-                                contract: 'neftyblocksp',
+                            const rows = await getNeftyblockspCollectionByHex(collectionHex)
+                            rows.forEach((pack) => {
+                                packs.push({
+                                    packId: pack.pack_id,
+                                    unlockTime: pack.unlock_time,
+                                    templateId: pack.pack_template_id,
+                                    rollCounter: pack.rollCounter,
+                                    displayData: JSON.parse(pack.display_data),
+                                    contract: 'neftyblocksp',
+                                })
                             })
-                        })
-                    })
+                        }),
+                    )
                     break
 
                 case 'atomicpacksx':
@@ -601,7 +603,11 @@ export const getDrop = createTableGetter(
     },
 )
 
-export const getDrops = async (/** @type {{ collections: string[]}} */ filters) => {
+/**
+ *
+ * @param {import('./filter').FilterType} filters
+ */
+export const getDrops = async (filters) => {
     if (!filters.collections) return []
     const rows = await getDropByCollectionHex(getCollectionHex(filters.collections[0]))
     return rows.map((drop) => parseDropData(drop))
