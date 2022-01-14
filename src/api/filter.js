@@ -1,5 +1,31 @@
 import { query } from './query'
 
+/**
+ * @typedef {Object} FilterType
+ * @property {string[]=} collections
+ * @property {string=} page
+ * @property {boolean=} bundles
+ * @property {string=} user
+ * @property {string=} schema
+ * @property {string=} name
+ * @property {string=} limit
+ * @property {string=} orderDir
+ * @property {string=} sortBy
+ * @property {string=} asset_id
+ * @property {string=} rarity
+ * @property {string=} variant
+ * @property {string=} seller
+ * @property {string[]=} ids
+ * @property {string=} bidder
+ * @property {string=} winner
+ * @property {string[]=} template_ids
+ * @property {string=} template_id
+ */
+
+/**
+ * @param {FilterType} filter
+ * @returns {string}
+ */
 export const filter = ({
     collections,
     page,

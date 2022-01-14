@@ -1,5 +1,10 @@
 import Long from 'long'
 
+/**
+ *
+ * @param {number[]} bytes
+ * @returns {string}
+ */
 const bytesToHex = (bytes) => {
     let leHex = ''
     for (const b of bytes) {
@@ -9,6 +14,11 @@ const bytesToHex = (bytes) => {
     return leHex
 }
 
+/**
+ *
+ * @param {string} ch
+ * @returns {number}
+ */
 const charidx = (ch) => {
     const idx = '.12345abcdefghijklmnopqrstuvwxyz'.indexOf(ch)
     if (idx === -1) throw new TypeError(`Invalid character: '${ch}'`)
