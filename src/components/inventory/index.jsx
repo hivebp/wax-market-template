@@ -55,7 +55,7 @@ const Inventory = (props) => {
     }
 
     const scrollUp = () => {
-        if (process.browser) {
+        if (typeof window === 'undefined') {
             const element = document.getElementById('MarketPage')
             element.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
         }

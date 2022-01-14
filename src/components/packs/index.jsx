@@ -14,7 +14,7 @@ const Packs = (props) => {
     const keys = ['mypacks', 'unclaimed']
 
     const [tabKey, setTabKey] = useState(
-        process.browser
+        typeof window === 'undefined'
             ? values['tab'] && keys.includes(values['tab'])
                 ? values['tab']
                 : 'mypacks'

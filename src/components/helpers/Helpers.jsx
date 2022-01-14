@@ -17,7 +17,8 @@ export const setQueryStringWithoutPageReload = (qsValue) => {
 
 export const getValues = () => {
     let values = []
-    if (process.browser) values = qs.parse(window.location.search.substr(1, window.location.search.length - 1))
+    if (typeof window === 'undefined')
+        values = qs.parse(window.location.search.substr(1, window.location.search.length - 1))
 
     return values
 }

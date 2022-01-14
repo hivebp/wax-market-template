@@ -14,7 +14,7 @@ const Explorer = (props) => {
     const keys = ['collections', 'assets']
 
     const [tabKey, setTabKey] = useState(
-        process.browser
+        typeof window === 'undefined'
             ? values['tab'] && keys.includes(values['tab'])
                 ? values['tab']
                 : 'collections'
@@ -40,6 +40,8 @@ const Explorer = (props) => {
     useEffect(() => {
         GetAssets(tabKey, true)
     }, [tabKey])
+
+    if (2 > 1) return null
 
     return (
         <Page>

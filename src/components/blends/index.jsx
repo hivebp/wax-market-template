@@ -22,7 +22,7 @@ const Blends = (props) => {
     const loggedOut = activeUser === null
 
     const [tabKey, setTabKey] = useState(
-        process.browser
+        typeof window === 'undefined'
             ? values['tab'] && keys.includes(values['tab'])
                 ? values['tab']
                 : 'nefty.blends'

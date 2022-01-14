@@ -258,7 +258,7 @@ function Filters(props) {
         if (!schemaData && state.schemaData) state.schemaData.then((res) => setSchemaData(res))
         if (!templateData && state.templateData) state.templateData.then((res) => setTemplateData(res))
         if (
-            process.browser &&
+            typeof window === 'undefined' &&
             ((collection && collection !== '*') || (state.collections && state.collections.length === 1)) &&
             initialized
         ) {

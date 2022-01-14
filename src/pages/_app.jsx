@@ -1,6 +1,6 @@
 import { Wax } from '@eosdacio/ual-wax'
 import { UALProvider } from 'hive-ual-renderer'
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
@@ -16,7 +16,18 @@ import '../styles/Search.css'
 
 const { packs_contracts } = config
 
+/**
+ * @type {Record<string, any>}
+ */
 let walletsStore = {}
+
+/**
+ *
+ * @param {string} chainId
+ * @param {string} apiEndpoint
+ * @param {string} appName
+ * @returns
+ */
 const useWallets = (chainId, apiEndpoint, appName) => {
     const hash = `${chainId}-${apiEndpoint}-${appName}`
     if (walletsStore[hash]) return walletsStore[hash]
@@ -32,14 +43,7 @@ const useWallets = (chainId, apiEndpoint, appName) => {
         ],
     }
 
-    const authenticators = [
-        new Anchor([waxNet], {
-            appName,
-        }),
-        new Wax([waxNet], {
-            appName,
-        }),
-    ]
+    const authenticators = [new Anchor([waxNet], { appName }), new Wax([waxNet], { appName })]
 
     walletsStore[hash] = {
         appName,
@@ -58,7 +62,7 @@ const disptachCollectionsData = (dispatch, collections) => {
     if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
-const AppContainer = React.memo(({ Component, pageProps }) => {
+const AppContainer = ({ Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
 
     useEffect(() => {
@@ -70,7 +74,7 @@ const AppContainer = React.memo(({ Component, pageProps }) => {
     }, [])
 
     return (
-        <div>
+        <>
             <WindowWrapper />
             <div className={'h-screen overflow-y-hidden bg-page'}>
                 <Navigation />
@@ -79,9 +83,9 @@ const AppContainer = React.memo(({ Component, pageProps }) => {
                     <Footer />
                 </div>
             </div>
-        </div>
+        </>
     )
-})
+}
 
 const loadServiceWorker = () =>
     window.addEventListener('load', () =>
@@ -102,11 +106,11 @@ function MyApp({ Component, pageProps }) {
         config.market_name,
     )
 
-    const container = useMemo(() => <AppContainer pageProps={pageProps} Component={Component} />)
-
     return (
         <MarketWrapper>
-            <UALProvider {...ualProviderProps}>{container}</UALProvider>
+            <UALProvider {...ualProviderProps}>
+                <AppContainer pageProps={pageProps} Component={Component} />
+            </UALProvider>
         </MarketWrapper>
     )
 }
