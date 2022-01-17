@@ -44,8 +44,8 @@ export default function UnclaimedPacksList(props) {
         let unboxer = null
 
         results.forEach((res) => {
-            if (res && res.status === 200 && res.body && res.body.rows) {
-                res.body.rows.forEach((row) => {
+            if (res && res.rows) {
+                res.rows.forEach((row) => {
                     if (!unboxer) {
                         unboxer = row.unboxer
                     }
