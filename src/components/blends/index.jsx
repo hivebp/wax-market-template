@@ -98,7 +98,7 @@ const Blends = (props) => {
                                 {tabKey === 'blenderizer' && <BlenderizerList user={activeUser} {...props} />}
                             </Tab>
                         </Tabs>
-                    ) : keys.includes('blenderizer') ? (
+                    ) : keys.includes('blenderizerx') ? (
                         <BlenderizerList user={activeUser} {...props} />
                     ) : (
                         <NeftyBlendsList user={activeUser} {...props} />
