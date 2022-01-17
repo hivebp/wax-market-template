@@ -120,8 +120,8 @@ export const claimPack = async (pack, asset, activeUser) => {
     const origin_roll_ids = []
     const result_templates = []
 
-    if (res && res.status === 200 && res.body && res.body.rows) {
-        res.body.rows.map((item) => {
+    if (res && res.rows) {
+        res.rows.map((item) => {
             origin_roll_ids.push(parseInt(item.origin_roll_id))
             result_templates.push(parseInt(item.template_id))
             return null

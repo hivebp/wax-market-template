@@ -43,9 +43,9 @@ function BlenderizerList(props) {
 
             const url = config.api_endpoint + '/v1/chain/get_table_rows'
             const res = await post(url, body)
-            nextKey = res.body && res.body.next_key
+            nextKey = res && res.next_key
 
-            res.body.rows.map((row) => {
+            res && res.rows && res.rows.map((row) => {
                 if (state.collections.includes(row.collection)) {
                     blends.push(row)
                 }
