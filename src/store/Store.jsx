@@ -57,12 +57,12 @@ const createResource = (fetcher) =>
         data: [],
         state: RESOURCE_STATE_INITIAL,
         lastLoaded: undefined,
-        load: async (...args) => {
+        load: async (/** @type {Parameters<typeof fetcher>} */ ...args) => {
             set({ state: RESOURCE_STATE_LOADING })
             const data = await fetcher(...args)
             set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), data: data })
         },
-        getData: (...args) => {
+        getData: (/** @type {Parameters<typeof fetcher>} */ ...args) => {
             const { data, state, load } = get()
             if (state === RESOURCE_STATE_INITIAL) load(...args)
             return data

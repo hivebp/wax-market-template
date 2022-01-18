@@ -43,6 +43,7 @@ const useWallets = (chainId, apiEndpoint, appName) => {
         ],
     }
 
+    // @ts-ignore - appName is not required by Wax (still in here for historical reasons)
     const authenticators = [new Anchor([waxNet], { appName }), new Wax([waxNet], { appName })]
 
     walletsStore[hash] = {
