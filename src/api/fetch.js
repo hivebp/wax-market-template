@@ -10,9 +10,10 @@ export const { atomic_api, api_endpoint, packs_contracts, default_collection } =
  *
  * @param {string} url
  * @param {any=} data
+ * @param {RequestInit=} init
  * @returns {Promise<unknown>}
  */
-export const get = (url, data) => fetch(query(url, data)).then((res) => res.json())
+export const get = (url, data, init) => fetch(query(url, data), init).then((res) => res.json())
 
 /**
  *
@@ -158,13 +159,13 @@ const createTableGetter =
  * Creates a function that fetches the resulting path and returns the json data of the response.
  * @template PathGenerator - Function that generates the path to fetch data from
  * @param {PathGenerator} pathGenerator
- * @return {(...args: Parameters<PathGenerator>) => Promise<unknown>}
+ * @return {(param: Parameters<PathGenerator>[0], controller?: AbortController) => Promise<unknown>}
  */
 const createGetter =
     (pathGenerator) =>
-    async (...args) =>
+    async (param, controller = new AbortController()) =>
         // @ts-ignore
-        get(`${atomic_api}${pathGenerator(...args)}`)
+        get(`${atomic_api}${pathGenerator(param)}`, undefined, { signal: controller.signal })
 
 export const getSchemas = createGetter(
     (/** @type {import("./filter").FilterType=} */ filters) => `/atomicassets/v1/schemas?${filter(filters)}`,
@@ -250,7 +251,7 @@ export const getSchemas = createGetter(
  * @property {any} mutable_data
  * @property {string} name
  * @property {string} owner
- * @property {[{market_contract: "atomicmarket",…}]} prices
+ * @property {any[]} prices
  * @property {any[]} sales
  * @property {Schema} schema
  * @property {Template} template
@@ -287,23 +288,25 @@ export const getAssets = createGetter(
 )
 export const getListing = createGetter((/** @type {string} */ listingId) => `/atomicmarket/v1/sales/${listingId}`)
 export const getListingsById = createGetter(
-    (/** @type {string} */ asset_id) => `/atomicmarket/v1/sales?&limit=1&asset_id=${asset_id}`,
+    (/** @type {string} */ assetId) => `/atomicmarket/v1/sales?&limit=1&asset_id=${assetId}`,
 )
 export const getAuctionsById = createGetter(
-    (/** @type {string} */ asset_id) => `/atomicmarket/v1/auctions?&limit=1&asset_id=${asset_id}`,
+    (/** @type {string} */ assetId) => `/atomicmarket/v1/auctions?&limit=1&asset_id=${assetId}`,
 )
+
+// @TODO this needs to be fixed, move from (string, string) to ({ templateId, collectionName })
 export const getTemplate = createGetter(
     (/** @type {string} */ templateId, /** @type {string} */ collectionName) =>
         `/atomicassets/v1/templates/${collectionName}/${templateId}`,
 )
 export const getAsset = createGetter((/** @type {string} */ assetId) => `/atomicmarket/v1/assets/${assetId}`)
 export const getCollection = createGetter(
-    (/** @type {string} */ collection_name) => `/atomicassets/v1/collections/${collection_name}`,
+    (/** @type {string} */ collectionName) => `/atomicassets/v1/collections/${collectionName}`,
 )
 export const getSale = createGetter((/** @type {string} */ saleId) => `/atomicmarket/v1/sales/${saleId}`)
 export const getAuction = createGetter((/** @type {string} */ auctionId) => `/atomicmarket/v1/auctions/${auctionId}`)
 export const getPrices = createGetter(
-    (/** @type {string} */ asset_id) => `/atomicmarket/v1/prices/assets?ids=${asset_id}`,
+    (/** @type {string} */ assetId) => `/atomicmarket/v1/prices/assets?ids=${assetId}`,
 )
 
 /**

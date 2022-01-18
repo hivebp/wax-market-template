@@ -14,7 +14,7 @@ import CardImage from './CardImage'
 import MoreOptions from './MoreOptions'
 
 /**
- * @type {import('react').FC<{ listing: any, assets: any[], index: string, sale: string, page: string }>}
+ * @type {import('react').FC<{ listing?: any, assets: any[], index: number | string, sale?: string, page: string }>}
  */
 export const AssetCard = (props) => {
     const [listing, setListing] = useState(props['listing'])

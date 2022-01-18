@@ -52,32 +52,67 @@ export const RESOURCE_STATE_LOADED = 'loaded'
 
 /**
  * @template Data
- * @param {(...args: any[]) => Promise<Data>} fetcher
+ * @param {(param: any, controller: AbortController) => Promise<Data>} fetcher
  */
 const createResource = (fetcher) =>
     create((set, get) => ({
         data: [],
         state: RESOURCE_STATE_INITIAL,
         lastLoaded: undefined,
-        load: async (/** @type {Parameters<typeof fetcher>} */ ...args) => {
-            set({ state: RESOURCE_STATE_LOADING })
-            const data = await fetcher(...args)
-            set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), data: data })
+        lastRequest: undefined,
+        load: (/** @type {any} */ param) => {
+            const { state, lastRequest } = get()
+            // if we are already loaded, check if the params are the same
+            switch (state) {
+                case RESOURCE_STATE_LOADED: {
+                    if (lastRequest?.param === param) {
+                        console.warn('try to refresh the store, this is currently not supported')
+                        return // do nothing
+                    }
+                    break
+                }
+                case RESOURCE_STATE_LOADING: {
+                    if (lastRequest?.param === param) {
+                        console.debug('called load again with the same params')
+                        return () => lastRequest.controller.abort()
+                    }
+                    // params changed, abort the previous request and start a new one
+                }
+            }
+
+            const controller = new AbortController()
+            const start = async () => {
+                // initiate the request, save request info
+                set({ state: RESOURCE_STATE_LOADING, lastRequest: { param, controller } })
+                const data = await fetcher(param, controller)
+                set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), data: data })
+            }
+
+            start()
+            return () => {
+                const { data, state } = get()
+                console.log({ state, data })
+                if (state === RESOURCE_STATE_LOADING) {
+                    console.log('>>> aborting')
+                    set({ state: data.length ? RESOURCE_STATE_LOADED : RESOURCE_STATE_INITIAL })
+                    controller.abort()
+                }
+            }
         },
-        getData: (/** @type {Parameters<typeof fetcher>} */ ...args) => {
+        getData: (/** @type {any} */ param) => {
             const { data, state, load } = get()
-            if (state === RESOURCE_STATE_INITIAL) load(...args)
+            if (state === RESOURCE_STATE_INITIAL) load(param)
             return data
         },
     }))
 
 /** @type {(collections: string[]) => Promise<import('../api/fetch').CollectionData[]>} */
-const fetchCollectionsData = async (collections) => (await getCollections(collections)).data
+const fetchCollectionsData = async (...args) => (await getCollections(...args)).data
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Template[]>} */
-const fetchTemplates = async (filter) => (await getTemplates(filter)).data
+const fetchTemplates = async (...args) => (await getTemplates(...args)).data
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Asset[]>} */
 // @ts-ignore
-const fetchAssets = async (filter) => (await getAssets(filter)).data
+const fetchAssets = async (...args) => (await getAssets(...args)).data
 
 const useCollectionStore = createResource(loadCollections)
 const useCollectionDataStore = createResource(fetchCollectionsData)

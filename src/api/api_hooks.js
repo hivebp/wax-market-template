@@ -27,7 +27,7 @@ export const useCollectionData = () => {
         error: null,
     }))
     useEffect(() => {
-        if (collections.length) load(collections)
+        if (collections.length) return load(collections)
     }, [collections])
     return { data, loading, error }
 }
@@ -42,7 +42,7 @@ export const useTemplates = () => {
         error: null,
     }))
     useEffect(() => {
-        if (collections.length) load({ collections, limit: 1000 })
+        if (collections.length) return load({ collections, limit: 1000 })
     }, [collections])
     return { data, loading, error }
 }
@@ -56,7 +56,7 @@ export const useSchemas = () => {
         error: null,
     }))
     useEffect(() => {
-        if (collections.length) load({ collections })
+        if (collections.length) return load({ collections })
     }, [collections])
     return { data, loading, error }
 }
@@ -70,7 +70,7 @@ export const usePacks = () => {
         error: null,
     }))
     useEffect(() => {
-        if (collections.length) load({ collections })
+        if (collections.length) return load({ collections })
     }, [collections])
     return { data, loading, error }
 }
@@ -88,7 +88,7 @@ export const useAssets = (filter = undefined) => {
         error: null,
     }))
     useEffect(() => {
-        if (filter) load(filter)
+        if (filter) return load(filter)
     }, [filter])
     return { data, loading, error }
 }

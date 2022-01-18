@@ -8,10 +8,12 @@ import { getFilters, useQuerystring } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import Pagination from '../pagination/Pagination'
 
-function AssetList(props) {
+/**
+ * @type {React.FC}
+ */
+const AssetList = () => {
     const { data: collections, loading: collectionsLoading } = useCollections()
     const [values] = useQuerystring()
-    console.log(values, useQuerystring)
 
     const [page, setPage] = useState(1)
 
@@ -29,9 +31,8 @@ function AssetList(props) {
 
     return (
         <AssetListContent>
-            <pre>{JSON.stringify(filters, null, 2)}</pre>
             <div className={cn('w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5', 'max-w-filter')}>
-                <Filters {...props} searchPage={'assets'} />
+                <Filters searchPage={'assets'} />
             </div>
             <div className={cn('w-full sm:2/3 md:w-3/4')}>
                 {loading ? (
@@ -47,9 +48,9 @@ function AssetList(props) {
                         >
                             {assets
                                 ? assets.map((asset, index) => (
-                                      <AssetCard {...props} key={index} index={index} assets={[asset]} />
+                                      <AssetCard key={index} index={index} assets={[asset]} page="assets" />
                                   ))
-                                : ''}
+                                : null}
                         </div>
                         {pageination}
                     </>
