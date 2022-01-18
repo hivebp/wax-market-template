@@ -1,22 +1,43 @@
-import { useContext, useEffect } from 'react'
-import { useLoader } from '../store/selectors'
-import { Context } from '../store/Store'
+import { useEffect } from 'react'
+import { useStore } from '../store/Store'
 
-export const useCollections = () => {
-    const [state, dispatch] = useContext(Context)
-    const collectionsLoader = useLoader('collections')
+/** @returns {string[]} */
+export const useCollections = () => useStore((state) => state.collections().getData())
 
+/** @returns {import('./fetch').CollectionData[]} */
+export const useCollectionData = () => {
+    const collections = useCollections()
+    const [load, data] = useStore((state) => [state.collectionData().load, state.collectionData().data])
     useEffect(() => {
-        console.log('useCollections: collectionsLoader', collectionsLoader)
-        dispatch({ type: 'START_LOADING', payload: 'collections' })
-    }, [collectionsLoader === 'initial'])
-
-    console.log('useCollections', state)
-    return state.collections
+        if (collections.length) load(collections)
+    }, [collections])
+    return data
 }
 
-export const useAssets = () => {
-    const [state, dispatch] = useContext(Context)
-
-    console.log('useAssets', state)
+/** @return {import('./fetch').Template[]} */
+export const useTemplates = () => {
+    const collections = useCollections()
+    const [load, data] = useStore((state) => [state.templates().load, state.templates().data])
+    useEffect(() => {
+        if (collections.length) load({ collections, limit: 1000 })
+    }, [collections])
+    return data
+}
+/** @return {import('./fetch').Schema[]} */
+export const useSchemas = () => {
+    const collections = useCollections()
+    const [load, data] = useStore((state) => [state.schemas().load, state.schemas().data])
+    useEffect(() => {
+        if (collections.length) load({ collections })
+    }, [collections])
+    return data
+}
+/** @return {import('./fetch').Pack[]} */
+export const usePacks = () => {
+    const collections = useCollections()
+    const [load, data] = useStore((state) => [state.packs().load, state.packs().data])
+    useEffect(() => {
+        if (collections.length) load({ collections })
+    }, [collections])
+    return data
 }

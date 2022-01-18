@@ -38,7 +38,8 @@
         "react-dropdown": "^1.9.2",
         "react-query": "^3.34.7",
         "react-share": "^4.4.0",
-        "ual-anchor": "^1.1.4"
+        "ual-anchor": "^1.1.4",
+        "zustand": "^3.6.9"
     },
     "eslintConfig": {
         "extends": "react-app"

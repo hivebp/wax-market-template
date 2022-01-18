@@ -13,6 +13,7 @@ import { initialState } from './state'
 const Reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'START_LOADING':
+            console.log(action)
             return { ...state, loaders: { ...state.loaders, [action.payload]: true } }
         case 'FINISH_LOADING':
             return { ...state, loaders: { ...state.loaders, [action.payload]: false } }

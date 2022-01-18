@@ -4,7 +4,6 @@ import React, { useContext, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
-import { useCollections } from '../api/api_hooks'
 import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import Footer from '../components/footer'
 import MarketWrapper, { Context } from '../components/marketwrapper'
@@ -61,13 +60,10 @@ const useWallets = (chainId, apiEndpoint, appName) => {
  */
 const disptachCollectionsData = (dispatch, collections) => {
     dispatch({ type: 'SET_COLLECTIONS', payload: collections })
-    dispatch({ type: 'FINISH_LOADING', payload: 'collections' })
-    if (false) {
-        dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollections(collections) })
-        dispatch({ type: 'SET_TEMPLATE_DATA', payload: getTemplates({ collections: collections, limit: 1000 }) })
-        dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({ collections: collections }) })
-        if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
-    }
+    dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollections(collections) })
+    dispatch({ type: 'SET_TEMPLATE_DATA', payload: getTemplates({ collections: collections, limit: 1000 }) })
+    dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({ collections: collections }) })
+    if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
 /**
@@ -75,12 +71,16 @@ const disptachCollectionsData = (dispatch, collections) => {
  */
 const AppContainer = ({ Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
-    const collections = useCollections()
+    // const collections = useCollections()
+    // const collectionData = useCollectionData()
+    // const templates = useTemplates()
+    // const schema = useSchemas()
+    // const packs = usePacks()
 
+    /* This will keep the old functionality available, but will be replaced by the useHooks above */
     useEffect(() => {
         const initialize = async () => {
             const collectionsX = await loadCollections()
-            console.log({ collections, collectionsX })
             disptachCollectionsData(dispatch, collectionsX)
         }
         initialize()

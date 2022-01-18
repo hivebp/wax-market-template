@@ -169,6 +169,70 @@ const createGetter =
 export const getSchemas = createGetter(
     (/** @type {import("./filter").FilterType=} */ filters) => `/atomicassets/v1/schemas?${filter(filters)}`,
 )
+
+/**
+ * @template Data
+ * @typedef {Object} APIResponse
+ * @property {Data[]} data
+ * @property {number} query_time
+ * @property {boolean} success
+ */
+
+/**
+ *
+ * @typedef {Object} CollectionData
+ * @property {boolean} allow_notify
+ * @property {string} author
+ * @property {string[]} authorized_accounts
+ * @property {string} collection_name
+ * @property {string} contract
+ * @property {string} created_at_block
+ * @property {string} created_at_time
+ * @property {any} data
+ * @property {string} img
+ * @property {number} market_fee
+ * @property {string} name
+ * @property {any[]} notify_accounts
+ */
+
+/**
+ * @typedef {Object} Template
+ * @property {CollectionData} collection
+ * @property {string} contract
+ * @property {string} created_at_block
+ * @property {string} created_at_time
+ * @property {any} immutable_data
+ * @property {boolean} is_burnable
+ * @property {boolean} is_transferable
+ * @property {string} issued_supply
+ * @property {string} max_supply
+ * @property {string} name
+ * @property {any} schema
+ * @property {string} template_id
+ */
+
+/**
+ * @typedef {Object} Schema
+ * @property {CollectionData} collection
+ * @property {string} contract
+ * @property {string} created_at_block
+ * @property {string} created_at_time
+ * @property {any[]} format
+ * @property {string} schema_name
+ */
+
+/**
+ * @typedef {Object} Pack
+ * @property {string} packId
+ * @property {string} unlockTime
+ * @property {string} templateId
+ * @property {string} rollCounter
+ * @property {string} displayData
+ * @property {string} contract
+ */
+
+/** @type {(filters: import("./filter").FilterType) => Promise<APIResponse<Template>>}  */
+// @ts-ignore
 export const getTemplates = createGetter(
     (/** @type {import("./filter").FilterType=} */ filters) =>
         `/atomicassets/v1/templates?has_assets=true${filter(filters)}`,
@@ -214,9 +278,10 @@ export const getPrices = createGetter(
 
 /**
  * @param {string[]} collections
- * @returns
+ * @returns {Promise<APIResponse<CollectionData>>}
  */
 export const getCollections = (collections) =>
+    // @ts-ignore
     get(`${atomic_api}/atomicassets/v1/collections`, {
         page: '1',
         limit: '10',
@@ -357,23 +422,12 @@ const getAtomicpacksxCollectionByKey = createTableGetter(
 
 /**
  *
- * @typedef {Object} PackDataType
- * @property {string} packId
- * @property {string} unlockTime
- * @property {string} templateId
- * @property {string} rollCounter
- * @property {string} displayData
- * @property {string} contract
- */
-
-/**
- *
  * @param {import('./filter').FilterType} filters
- * @returns {Promise<PackDataType[]>}
+ * @returns {Promise<Pack[]>}
  */
 export const getPacks = async ({ collections = [] } = {}) => {
     /**
-     * @type {PackDataType[]}
+     * @type {Pack[]}
      */
     const packs = []
 
