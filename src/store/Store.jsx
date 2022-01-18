@@ -1,6 +1,8 @@
 import React, { createContext, useReducer } from 'react'
 import create from 'zustand'
-import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
+import { getAssets, getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
+import { queryParams } from '../api/query'
+// import { queryParams } from '../api/query'
 import reducer from './reducer'
 import { initialState } from './state'
 
@@ -73,19 +75,43 @@ const createResource = (fetcher) =>
 const fetchCollectionsData = async (collections) => (await getCollections(collections)).data
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Template[]>} */
 const fetchTemplates = async (filter) => (await getTemplates(filter)).data
+/** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Asset[]>} */
+// @ts-ignore
+const fetchAssets = async (filter) => (await getAssets(filter)).data
 
-const useCollectionsStore = createResource(loadCollections)
+const useCollectionStore = createResource(loadCollections)
 const useCollectionDataStore = createResource(fetchCollectionsData)
 const useTemplateStore = createResource(fetchTemplates)
 const useSchemaStore = createResource(getSchemas)
 const usePackStore = createResource(getPacks)
+const useAssetStore = createResource(fetchAssets)
+
+const useLocationStore = create((set, get) => ({
+    pathname: typeof window === 'undefined' ? '/' : window.location.pathname,
+    query: queryParams,
+    /**
+     * @param {import('../api/query').QueryParams} queryparams
+     * @returns {string} new pathname
+     **/
+    updateQuery: (queryparams) => {
+        set({ query: queryparams })
+        const path = `${get().pathname}?${new URLSearchParams(queryparams)}`
+        return path
+    },
+    init:
+        typeof window === 'undefined'
+            ? () => {}
+            : () => set({ pathname: window.location.pathname, query: queryParams() }),
+}))
 
 export const useStore = create(() => ({
-    collections: useCollectionsStore,
+    assets: useAssetStore,
     collectionData: useCollectionDataStore,
-    templates: useTemplateStore,
-    schemas: useSchemaStore,
+    collections: useCollectionStore,
+    location: useLocationStore,
     packs: usePackStore,
+    schemas: useSchemaStore,
+    templates: useTemplateStore,
 }))
 
 /**

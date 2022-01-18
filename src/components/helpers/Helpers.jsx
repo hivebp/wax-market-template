@@ -1,29 +1,50 @@
 import cn from 'classnames'
-import qs from 'qs'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { post } from '../../api/fetch'
+import { queryParams } from '../../api/query'
 import config from '../../config.json'
+import { useStore } from '../../store/Store'
 
-export const setQueryStringWithoutPageReload = (qsValue) => {
-    const newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?' + qsValue
-    const newPath = window.location.pathname + '?' + qsValue
+/**
+ * @typedef {import('../../api/query').QueryParams} QueryParams
+ */
 
-    const oldState = window.history.state
-    oldState.path = newPath
-    oldState.url = newurl
+/**
+ * @type {() => [QueryParams, (queryparams: QueryParams) => void]}
+ */
+export const useQuerystring =
+    typeof window === 'undefined'
+        ? // stub for SSR…
+          () => {
+              console.log('using SSR')
+              return [{}, () => {}]
+          }
+        : () => {
+              const router = useRouter()
+              const { query, updateQuery } = useStore((state) => ({
+                  query: state.location().query,
+                  updateQuery: state.location().updateQuery,
+              }))
+              /**
+               * @param {QueryParams} queryparams
+               */
+              const updateQueryString = (queryparams) => {
+                  console.log(queryparams)
+                  const newPath = updateQuery(queryparams)
+                  router.push(newPath, undefined, { shallow: true })
+              }
+              return [query, updateQueryString]
+          }
 
-    window.history.replaceState(oldState, '', newPath)
-}
+export const getValues = () => queryParams()
 
-export const getValues = () => {
-    let values = []
-    if (typeof window !== 'undefined')
-        values = qs.parse(window.location.search.substr(1, window.location.search.length - 1))
-
-    return values
-}
-
-const getDefaultSort = (pageName) => {
+/**
+ *
+ * @param {string} pageName
+ * @returns
+ */
+const getDefaultSortByPageName = (pageName) => {
     switch (pageName) {
         case 'inventory':
             return 'transferred_desc'
@@ -39,13 +60,22 @@ const getDefaultSort = (pageName) => {
     return 'created_desc'
 }
 
+/**
+ *
+ * @param {QueryParams} values
+ * @param {string[]} collections
+ * @param {string} pageName
+ * @param {number=} page
+ * @returns {import('../../api/filter').FilterType}
+ */
 export const getFilters = (values, collections, pageName, page = 1) => {
+    console.log(values, collections)
     const collection = values['collection'] ? values['collection'] : '*'
     const schema = pageName === 'packs' ? 'boxes' : values['schema'] ? values['schema'] : ''
     const name = values['name'] ? values['name'] : ''
     const rarity = values['rarity'] ? values['rarity'] : ''
     const variant = values['variant'] ? values['variant'] : ''
-    const sortBy = values['sort'] ? values['sort'] : getDefaultSort(pageName)
+    const sortBy = values['sort'] ? values['sort'] : getDefaultSortByPageName(pageName)
     const seller = values['seller'] ? values['seller'] : ''
     const user = values['user'] ? values['user'] : ''
     const bundles = values['bundles'] ? values['bundles'] : ''
@@ -53,20 +83,20 @@ export const getFilters = (values, collections, pageName, page = 1) => {
     const winner = values['winner'] ? values['winner'] : ''
 
     return {
-        collections: collections.filter((item) => (!collection || collection === '*' ? true : item === collection)),
-        schema: schema,
-        page: page,
         limit: config.limit,
+        collections: !collection || collection === '*' ? collections : [collection],
+        schema,
+        page: '' + page,
         orderDir: getOrderDir(sortBy),
         sortBy: getSortBy(sortBy),
-        seller: seller,
-        user: user,
-        bundles: bundles,
-        name: name,
-        rarity: rarity,
-        variant: variant,
-        bidder: bidder,
-        winner: winner,
+        seller,
+        user,
+        bundles: Boolean(bundles),
+        name,
+        rarity,
+        variant,
+        bidder,
+        winner,
     }
 }
 

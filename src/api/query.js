@@ -1,4 +1,8 @@
 /**
+ * @typedef {Record<string, string>} QueryParams
+ */
+
+/**
  *
  * @param {string} path
  * @param {Record<string, number | string | string[]> | URLSearchParams=} params
@@ -17,7 +21,7 @@ export const query = (path, params = undefined) => {
  * @returns
  */
 export const iteratorToObject = (entries) => {
-    /** @type {Record<string, string>} */
+    /** @type {QueryParams} */
     const result = {}
     for (const [key, value] of entries) {
         // each 'entry' is a [key, value] tupple
@@ -25,3 +29,6 @@ export const iteratorToObject = (entries) => {
     }
     return result
 }
+
+export const queryParams = () =>
+    iteratorToObject(new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search).entries())

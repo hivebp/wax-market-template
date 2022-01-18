@@ -231,6 +231,36 @@ export const getSchemas = createGetter(
  * @property {string} contract
  */
 
+/**
+ * @typedef {Object} Asset
+ * @property {string} asset_id
+ * @property {any[]} auctions
+ * @property {any[]} backed_tokens
+ * @property {any} burned_at_block
+ * @property {any} burned_at_time
+ * @property {any} burned_by_account
+ * @property {CollectionData} collection
+ * @property {string} contract
+ * @property {any} data
+ * @property {any} immutable_data
+ * @property {true} is_burnable
+ * @property {true} is_transferable
+ * @property {string} minted_at_block
+ * @property {string} minted_at_time
+ * @property {any} mutable_data
+ * @property {string} name
+ * @property {string} owner
+ * @property {[{market_contract: "atomicmarket",…}]} prices
+ * @property {any[]} sales
+ * @property {Schema} schema
+ * @property {Template} template
+ * @property {string} template_mint
+ * @property {string} transferred_at_block
+ * @property {string} transferred_at_time
+ * @property {string} updated_at_block
+ * @property {string} updated_at_time
+ */
+
 /** @type {(filters: import("./filter").FilterType) => Promise<APIResponse<Template>>}  */
 // @ts-ignore
 export const getTemplates = createGetter(

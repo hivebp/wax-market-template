@@ -6,10 +6,12 @@ import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
 import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import Footer from '../components/footer'
+import { useQuerystring } from '../components/helpers/Helpers'
 import MarketWrapper, { Context } from '../components/marketwrapper'
 import Navigation from '../components/navigation/Navigation'
 import WindowWrapper from '../components/windows/WindowWrapper'
 import config from '../config.json'
+import { useStore } from '../store/Store'
 import '../styles/App.css'
 import '../styles/globals.css'
 import '../styles/Search.css'
@@ -72,11 +74,11 @@ const disptachCollectionsData = (dispatch, collections) => {
  */
 const AppContainer = ({ Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
-    // const collections = useCollections()
-    // const collectionData = useCollectionData()
-    // const templates = useTemplates()
-    // const schema = useSchemas()
-    // const packs = usePacks()
+    // const { data: collections } = useCollections()
+    // const { data: collectionData } = useCollectionData()
+    // const { data: templates } = useTemplates()
+    // const { data: schema } = useSchemas()
+    // const { data: packs } = usePacks()
 
     /* This will keep the old functionality available, but will be replaced by the useHooks above */
     useEffect(() => {
@@ -86,11 +88,13 @@ const AppContainer = ({ Component, pageProps }) => {
         }
         initialize()
     }, [])
+    const [query] = useQuerystring()
 
     return (
         <>
             <WindowWrapper />
             <div className={'h-screen overflow-y-hidden bg-page'}>
+                <pre>{JSON.stringify(query, null, 2)}</pre>
                 <Navigation />
                 <div className={'relative h-page-s md:h-page top-48 md:top-28 overflow-y-auto'}>
                     <Component {...pageProps} />
@@ -116,6 +120,9 @@ const MyApp = ({ Component, pageProps }) => {
     useEffect(() => {
         if ('serviceWorker' in navigator) loadServiceWorker()
     }, [])
+
+    const initLocation = useStore((state) => state.location().init)
+    useEffect(() => initLocation(), [])
 
     const ualProviderProps = useWallets(
         '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
