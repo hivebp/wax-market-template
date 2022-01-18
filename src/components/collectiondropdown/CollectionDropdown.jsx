@@ -77,7 +77,7 @@ const CollectionDropdown = React.memo((props) => {
     }
 
     useEffect(() => {
-        if (typeof window === 'undefined' && !collections && initialized) {
+        if (typeof window !== 'undefined' && !collections && initialized) {
             state.collectionData.then((res) => createCollectionDropDownOptions(res))
         }
     }, [collection, state, initialized])

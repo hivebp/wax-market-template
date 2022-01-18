@@ -1,47 +1,45 @@
 import cn from 'classnames'
-import qs from 'qs'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import Page from '../common/layout/Page'
-import { getValues, setQueryStringWithoutPageReload } from '../helpers/Helpers'
-import TabItem from '../tabitem/TabItem'
-import AssetList from './AssetList'
-import CollectionList from './CollectionList'
+import TabItem from '../tabs/TabItem'
+import CollectionList from './AssetList'
+import AssetList from './CollectionList'
 
-const Explorer = (props) => {
-    const values = getValues()
+/**
+ * @typedef {'collections' | 'assets'} ExplorerTab
+ */
 
-    const keys = ['collections', 'assets']
+/**
+ * @type {ExplorerTab[]}
+ */
+export const explorerTabs = ['collections', 'assets']
 
-    const [tabKey, setTabKey] = useState(
-        typeof window === 'undefined'
-            ? values['tab'] && keys.includes(values['tab'])
-                ? values['tab']
-                : 'collections'
-            : props.tab && keys.includes(props.tab)
-            ? props.tab
-            : 'collections',
-    )
+/**
+ * @type {ExplorerTab}
+ */
+export const DEFAULT_EXPLORER_TAB = explorerTabs[0]
 
-    const GetAssets = async (key, initial = false) => {
-        if (key !== tabKey || initial) {
-            const query = values
+/**
+ *
+ * @param {string} tab
+ * @returns {tab is ExplorerTab}
+ */
+// @ts-ignore
+export const isExplorerTab = (tab) => explorerTabs.includes(tab)
 
-            delete query['search_type']
-            delete query['sort']
-            query['tab'] = key
-            delete query['offer_type']
+/**
+ *
+ * @param {string | null | undefined} maybeTab
+ * @returns {ExplorerTab}
+ */
+export const getTabFromString = (maybeTab) => (maybeTab && isExplorerTab(maybeTab) ? maybeTab : DEFAULT_EXPLORER_TAB)
 
-            if (!initial) setQueryStringWithoutPageReload(qs.stringify(query))
-            setTabKey(key)
-        }
-    }
-
-    useEffect(() => {
-        GetAssets(tabKey, true)
-    }, [tabKey])
-
-    if (2 > 1) return null
+/**
+ * @type {React.FC<{ tab: ExplorerTab }>}
+ */
+export const Explorer = (props) => {
+    const [tabKey, setTabKey] = useState(props.tab)
 
     return (
         <Page>
@@ -54,7 +52,7 @@ const Explorer = (props) => {
                 )}
                 defaultActiveKey={tabKey}
                 id="collection-switch"
-                onSelect={(k) => GetAssets(k)}
+                onSelect={(k) => setTabKey(getTabFromString(k))}
             >
                 <Tab
                     eventKey="collections"

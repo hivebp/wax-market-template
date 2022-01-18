@@ -2,7 +2,10 @@ import cn from 'classnames'
 import React, { useEffect } from 'react'
 import config from '../../config.json'
 
-function CardImage(props) {
+/**
+ * @type {import('react').FC<{ index: string | number, asset: any }>}
+ **/
+const CardImage = (props) => {
     const index = props['index']
     const asset = props['asset']
 
@@ -32,7 +35,7 @@ function CardImage(props) {
                         src={video}
                         autoPlay={true}
                         muted={true}
-                        preload={true}
+                        preload="auto"
                         poster={image ? image : ''}
                     />
                 )

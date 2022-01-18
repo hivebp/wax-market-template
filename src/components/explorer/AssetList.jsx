@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
+import { useCollections } from '../../api/api_hooks'
 import { getAssets } from '../../api/fetch'
 import AssetCard from '../assetcard/AssetCard'
 import AssetListContent from '../common/layout/Content'
@@ -11,6 +12,8 @@ import Pagination from '../pagination/Pagination'
 
 function AssetList(props) {
     const [state, dispatch] = useContext(Context)
+
+    const collections = useCollections()
 
     const [assets, setAssets] = useState([])
     const [page, setPage] = useState(1)
@@ -34,6 +37,8 @@ function AssetList(props) {
     useEffect(() => {
         if (initialized) initAssets(page)
     }, [page, initialized])
+
+    // const assetsX = useAssets()
 
     return (
         <AssetListContent>

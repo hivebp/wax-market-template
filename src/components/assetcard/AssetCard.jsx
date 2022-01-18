@@ -13,6 +13,9 @@ import CardDetails from './CardDetails'
 import CardImage from './CardImage'
 import MoreOptions from './MoreOptions'
 
+/**
+ * @type {import('react').FC<{ listing: any, assets: any[], index: string, sale: string, page: string }>}
+ */
 export const AssetCard = (props) => {
     const [listing, setListing] = useState(props['listing'])
 
@@ -323,7 +326,7 @@ export const AssetCard = (props) => {
                     }
                 >
                     <div className="flex flex-1 justify-center h-full">
-                        <CardImage {...props} asset={asset} index={selectedAsset} />
+                        <CardImage asset={asset} index={selectedAsset} />
                     </div>
                 </Link>
                 {assets.length > 1 && (

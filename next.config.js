@@ -17,6 +17,10 @@ module.exports = {
     env: {
         version: '0.0.1',
     },
+    // experimental: {
+    //     reactRoot: true,
+    //     concurrentFeatures: true,
+    // },
     typescript: {
         // !! WARN !!
         // Dangerously allow production builds to successfully complete even if

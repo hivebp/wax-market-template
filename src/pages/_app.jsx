@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
+import { useCollections } from '../api/api_hooks'
 import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import Footer from '../components/footer'
 import MarketWrapper, { Context } from '../components/marketwrapper'
@@ -54,21 +55,33 @@ const useWallets = (chainId, apiEndpoint, appName) => {
     return walletsStore[hash]
 }
 
+/**
+ * @param {React.Dispatch<any>} dispatch
+ * @param {string[]} collections
+ */
 const disptachCollectionsData = (dispatch, collections) => {
     dispatch({ type: 'SET_COLLECTIONS', payload: collections })
-    dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollections(collections) })
-    dispatch({ type: 'SET_TEMPLATE_DATA', payload: getTemplates({ collections: collections, limit: 1000 }) })
-    dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({ collections: collections }) })
-    if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
+    dispatch({ type: 'FINISH_LOADING', payload: 'collections' })
+    if (false) {
+        dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollections(collections) })
+        dispatch({ type: 'SET_TEMPLATE_DATA', payload: getTemplates({ collections: collections, limit: 1000 }) })
+        dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({ collections: collections }) })
+        if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
+    }
 }
 
+/**
+ * @type {React.FC<{Component: React.ComponentType<any>, pageProps: any}>}
+ */
 const AppContainer = ({ Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
+    const collections = useCollections()
 
     useEffect(() => {
         const initialize = async () => {
-            const collections = await loadCollections()
-            disptachCollectionsData(dispatch, collections)
+            const collectionsX = await loadCollections()
+            console.log({ collections, collectionsX })
+            disptachCollectionsData(dispatch, collectionsX)
         }
         initialize()
     }, [])
@@ -95,7 +108,10 @@ const loadServiceWorker = () =>
         ),
     )
 
-function MyApp({ Component, pageProps }) {
+/**
+ * @type {React.FC<{Component: React.ComponentType<any>, pageProps: any}>}
+ */
+const MyApp = ({ Component, pageProps }) => {
     useEffect(() => {
         if ('serviceWorker' in navigator) loadServiceWorker()
     }, [])

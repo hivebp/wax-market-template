@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import Page from '../common/layout/Page'
 import { getValues, setQueryStringWithoutPageReload } from '../helpers/Helpers'
-import TabItem from '../tabitem/TabItem'
+import TabItem from '../tabs/TabItem'
 import MyPacksList from './MyPacksList'
 import UnclaimedPacksList from './UnclaimedPacksList'
 
@@ -14,7 +14,7 @@ const Packs = (props) => {
     const keys = ['mypacks', 'unclaimed']
 
     const [tabKey, setTabKey] = useState(
-        typeof window === 'undefined'
+        typeof window !== 'undefined'
             ? values['tab'] && keys.includes(values['tab'])
                 ? values['tab']
                 : 'mypacks'
