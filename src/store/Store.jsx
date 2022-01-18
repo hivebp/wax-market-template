@@ -88,7 +88,7 @@ const useAssetStore = createResource(fetchAssets)
 
 const useLocationStore = create((set, get) => ({
     pathname: typeof window === 'undefined' ? '/' : window.location.pathname,
-    query: queryParams,
+    query: queryParams(),
     /**
      * @param {import('../api/query').QueryParams} queryparams
      * @returns {string} new pathname

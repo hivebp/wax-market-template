@@ -16,10 +16,7 @@ import { useStore } from '../../store/Store'
 export const useQuerystring =
     typeof window === 'undefined'
         ? // stub for SSR…
-          () => {
-              console.log('using SSR')
-              return [{}, () => {}]
-          }
+          () => [{}, () => {}]
         : () => {
               const router = useRouter()
               const { query, updateQuery } = useStore((state) => ({
