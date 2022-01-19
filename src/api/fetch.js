@@ -296,8 +296,8 @@ export const getAuctionsById = createGetter(
 
 // @TODO this needs to be fixed, move from (string, string) to ({ templateId, collectionName })
 export const getTemplate = createGetter(
-    (/** @type {string} */ templateId, /** @type {string} */ collectionName) =>
-        `/atomicassets/v1/templates/${collectionName}/${templateId}`,
+    /** @param {{templateId: string, collectionName: string }} */
+    ({ collectionName, templateId }) => `/atomicassets/v1/templates/${collectionName}/${templateId}`,
 )
 export const getAsset = createGetter((/** @type {string} */ assetId) => `/atomicmarket/v1/assets/${assetId}`)
 export const getCollection = createGetter(

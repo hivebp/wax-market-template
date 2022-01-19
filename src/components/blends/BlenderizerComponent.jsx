@@ -33,8 +33,11 @@ const BlenderizerComponent = (props) => {
 
     const selectedAssets = state.selectedAssets
 
+    /** @type {{ template: any, assignedAsset: any }[]} */
     const templatesNeeded = []
+    /** @type {string[]} */
     const searchTemplates = []
+    /** @type {string[]} */
     const assignedAssetIds = []
 
     mixture.map((ingredient) => {
@@ -89,7 +92,7 @@ const BlenderizerComponent = (props) => {
     useEffect(() => {
         Promise.all(
             Object.keys(searchTemplates).map((template_id) => {
-                return getTemplate(template_id, searchTemplates[template_id])
+                return getTemplate({ templateId: template_id, collectionName: searchTemplates[template_id] })
             }),
         ).then((res) => parseTemplates(res))
 

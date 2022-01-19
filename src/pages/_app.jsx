@@ -6,7 +6,6 @@ import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
 import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import Footer from '../components/footer'
-import { useQuerystring } from '../components/helpers/Helpers'
 import MarketWrapper, { Context } from '../components/marketwrapper'
 import Navigation from '../components/navigation/Navigation'
 import WindowWrapper from '../components/windows/WindowWrapper'
@@ -88,13 +87,11 @@ const AppContainer = ({ Component, pageProps }) => {
         }
         initialize()
     }, [])
-    const [query] = useQuerystring()
 
     return (
         <>
             <WindowWrapper />
             <div className={'h-screen overflow-y-hidden bg-page'}>
-                <pre>{JSON.stringify(query, null, 2)}</pre>
                 <Navigation />
                 <div className={'relative h-page-s md:h-page top-48 md:top-28 overflow-y-auto'}>
                     <Component {...pageProps} />
