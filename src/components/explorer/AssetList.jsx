@@ -32,7 +32,19 @@ const AssetList = () => {
     return (
         <AssetListContent>
             <div className={cn('w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5', 'max-w-filter')}>
-                <Filters searchPage={'assets'} />
+                <Filters
+                    defaultSort="created_desc"
+                    sortOptions={[
+                        {
+                            value: 'created_desc',
+                            label: 'Created (Newest)',
+                        },
+                        {
+                            value: 'created_asc',
+                            label: 'Created (Oldest)',
+                        },
+                    ]}
+                />
             </div>
             <div className={cn('w-full sm:2/3 md:w-3/4')}>
                 {loading ? (

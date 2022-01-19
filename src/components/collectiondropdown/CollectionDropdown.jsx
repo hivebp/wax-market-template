@@ -23,7 +23,7 @@ const CollectionDropdown = React.memo((props) => {
     const { data: collections } = useCollections()
     const { data: collectionData, loading } = useCollectionData()
 
-    const [state, dispatch] = useContext(Context)
+    const [, dispatch] = useContext(Context)
 
     const { collection } = props
 

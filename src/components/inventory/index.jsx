@@ -70,7 +70,20 @@ const Inventory = (props) => {
             <Header title={title} description={description} image={config.market_image} />
             <MarketContent>
                 <div className={cn('w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5', 'max-w-filter')}>
-                    <Filters {...props} searchPage={'inventory'} />
+                    <Filters
+                        {...props}
+                        defaultSort="transferred_desc"
+                        sortOptions={[
+                            {
+                                value: 'transferred_desc',
+                                label: 'Received (Last)',
+                            },
+                            {
+                                value: 'transferred_asc',
+                                label: 'Received (First)',
+                            },
+                        ]}
+                    />
                 </div>
                 <div className={cn('w-full sm:2/3 md:w-3/4')}>
                     <Pagination items={assets && assets.data} page={page} setPage={setPage} />

@@ -1,19 +1,25 @@
 import cn from 'classnames'
-import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useUAL } from '../../hooks/ual'
 import CollectionDropdown from '../collectiondropdown'
 import DropdownItem from '../collectiondropdown/DropdownItem'
 import Input from '../common/util/input/Input'
-import { getValues, useQuerystring } from '../helpers/Helpers'
+import { useQuerystring } from '../helpers/Helpers'
 import { Context } from '../marketwrapper'
+
+/**
+ *
+ * @typedef {Record<'value' | 'label', string>} SortOptions
+ */
 
 /**
  * @typedef {Object} FilterProps
  * @property {string} [className]
  * @property {string} [searchPage]
+ * @property {string} [defaultSort]
  * @property {string} [winner]
  * @property {string} [bidder]
+ * @property {SortOptions[]} sortOptions
  **/
 
 /**
@@ -21,7 +27,6 @@ import { Context } from '../marketwrapper'
  */
 const Filters = (props) => {
     const [values, updateQuerystring] = useQuerystring()
-    const record = getValues()
 
     const collection = values['collection'] ? values['collection'] : '*'
     const schema = values['schema'] ? values['schema'] : ''
@@ -30,30 +35,15 @@ const Filters = (props) => {
     const variant = values['variant'] ? values['variant'] : ''
     const seller = values['seller'] ? values['seller'] : ''
     const bundles = values['bundles'] ? values['bundles'] === 'true' : false
-    const searchPage = props['searchPage']
+    const searchPage = values['searchPage'] ? values['searchPage'] : ''
     const winner = props['winner']
     const bidder = props['bidder']
 
     const ual = useUAL()
-    const activeUser = ual['activeUser']
+    const activeUser = ual?.['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
-    const getDefaultSort = (page) => {
-        switch (page) {
-            case 'inventory':
-                return 'transferred_desc'
-            case 'market':
-                return 'created_desc'
-            case 'assets':
-                return 'created_desc'
-            case 'auctions':
-                return 'ending_asc'
-            default:
-                return 'name_asc'
-        }
-    }
-
-    const sortBy = values['sort'] ? values['sort'] : getDefaultSort(searchPage)
+    const sortBy = values['sort'] ?? props.defaultSort ?? 'name_asc'
 
     const [state, dispatch] = useContext(Context)
 
@@ -62,92 +52,20 @@ const Filters = (props) => {
     const [rarityDropdownOptions, setRarityDropdownOptions] = useState(null)
     const [variantDropdownOptions, setVariantDropdownOptions] = useState(null)
 
-    const sortDropdownOptions = []
-
-    if (searchPage === 'inventory') {
-        sortDropdownOptions.push({
-            value: 'transferred_desc',
-            label: 'Received (Last)',
-        })
-        sortDropdownOptions.push({
-            value: 'transferred_asc',
-            label: 'Received (First)',
-        })
-    }
-
-    if (searchPage === 'market') {
-        sortDropdownOptions.push({
-            value: 'created_desc',
-            label: 'Date (Newest)',
-        })
-        sortDropdownOptions.push({
-            value: 'created_asc',
-            label: 'Date (Oldest)',
-        })
-        sortDropdownOptions.push({
-            value: 'price_asc',
-            label: 'Price (Lowest)',
-        })
-        sortDropdownOptions.push({
-            value: 'price_desc',
-            label: 'Price (Highest)',
-        })
-    }
-
-    if (searchPage === 'auctions') {
-        sortDropdownOptions.push({
-            value: 'ending_desc',
-            label: 'Ending (Latest)',
-        })
-        sortDropdownOptions.push({
-            value: 'ending_asc',
-            label: 'Ending (Soonest)',
-        })
-        sortDropdownOptions.push({
-            value: 'created_desc',
-            label: 'Date (Newest)',
-        })
-        sortDropdownOptions.push({
-            value: 'created_asc',
-            label: 'Date (Oldest)',
-        })
-        sortDropdownOptions.push({
-            value: 'price_asc',
-            label: 'Price (Lowest)',
-        })
-        sortDropdownOptions.push({
-            value: 'price_desc',
-            label: 'Price (Highest)',
-        })
-    }
-
-    if (searchPage === 'assets') {
-        sortDropdownOptions.push({
-            value: 'created_desc',
-            label: 'Created (Newest)',
-        })
-        sortDropdownOptions.push({
-            value: 'created_asc',
-            label: 'Created (Oldest)',
-        })
-    }
-
-    sortDropdownOptions.push({
-        value: 'mint_asc',
-        label: 'Mint (Lowest)',
-    })
-
-    sortDropdownOptions.push({
-        value: 'mint_desc',
-        label: 'Mint (Highest)',
-    })
+    const sortDropdownOptions = [
+        ...props.sortOptions,
+        {
+            value: 'mint_asc',
+            label: 'Mint (Lowest)',
+        },
+        {
+            value: 'mint_desc',
+            label: 'Mint (Highest)',
+        },
+    ]
 
     const [schemaData, setSchemaData] = useState(null)
     const [templateData, setTemplateData] = useState(null)
-
-    const router = useRouter()
-
-    const pushQueryString = updateQuerystring
 
     const getSchemasResult = (collection) => {
         if (schemaData['success']) {
@@ -288,7 +206,7 @@ const Filters = (props) => {
         delete query['rarity']
         delete query['variant']
 
-        pushQueryString(query)
+        updateQuerystring(query)
     }
 
     const onSelectName = (e) => {
@@ -296,7 +214,7 @@ const Filters = (props) => {
 
         query['name'] = e ? e.value : ''
 
-        pushQueryString(query)
+        updateQuerystring(query)
     }
 
     const onSelectRarity = (e) => {
@@ -304,7 +222,7 @@ const Filters = (props) => {
 
         query['rarity'] = e ? e.value : ''
 
-        pushQueryString(query)
+        updateQuerystring(query)
     }
 
     const onSelectVariant = (e) => {
@@ -312,7 +230,7 @@ const Filters = (props) => {
 
         query['variant'] = e ? e.value : ''
 
-        pushQueryString(query)
+        updateQuerystring(query)
     }
 
     const onSelectSorting = (e) => {
@@ -320,7 +238,7 @@ const Filters = (props) => {
 
         query['sort'] = e ? e.value : ''
 
-        pushQueryString(query)
+        updateQuerystring(query)
     }
 
     const checkMyListings = (e) => {
@@ -329,7 +247,7 @@ const Filters = (props) => {
         if (query['seller'] === userName) delete query['seller']
         else query['seller'] = userName
 
-        pushQueryString(query)
+        updateQuerystring(query)
     }
 
     const checkBundles = (e) => {
@@ -338,13 +256,13 @@ const Filters = (props) => {
         if (query['bundles'] === 'true') delete query['bundles']
         else query['bundles'] = 'true'
 
-        pushQueryString(query)
+        updateQuerystring(query)
     }
 
     return (
         <div>
             <h3 className={cn('text-neutral font-bold text-xl mb-4')}>Filters</h3>
-            <CollectionDropdown collection={collection} pushQueryString={pushQueryString} />
+            <CollectionDropdown collection={collection} />
             {schemaDropdownOptions ? (
                 <DropdownItem
                     header="Schema"
