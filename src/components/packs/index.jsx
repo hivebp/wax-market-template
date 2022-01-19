@@ -1,20 +1,19 @@
 import cn from 'classnames'
-import qs from 'qs'
 import React, { useEffect, useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import Page from '../common/layout/Page'
-import { getValues, setQueryStringWithoutPageReload } from '../helpers/Helpers'
-import TabItem from '../tabitem/TabItem'
+import { useQuerystring } from '../helpers/Helpers'
+import TabItem from '../tabs/TabItem'
 import MyPacksList from './MyPacksList'
 import UnclaimedPacksList from './UnclaimedPacksList'
 
 const Packs = (props) => {
-    const values = getValues()
+    const [values, updateQuerystring] = useQuerystring()
 
     const keys = ['mypacks', 'unclaimed']
 
     const [tabKey, setTabKey] = useState(
-        process.browser
+        typeof window !== 'undefined'
             ? values['tab'] && keys.includes(values['tab'])
                 ? values['tab']
                 : 'mypacks'
@@ -33,7 +32,7 @@ const Packs = (props) => {
             query['tab'] = key
             delete query['offer_type']
 
-            if (!initial) setQueryStringWithoutPageReload(qs.stringify(query))
+            if (!initial) updateQuerystring(query)
             setTabKey(key)
         }
     }

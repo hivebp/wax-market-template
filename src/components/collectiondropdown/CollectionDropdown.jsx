@@ -1,92 +1,74 @@
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import cn from 'classnames'
-import qs from 'qs'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useMemo } from 'react'
+import { useCollectionData, useCollections } from '../../api/api_hooks'
 import config from '../../config.json'
-import { createCollectionImageOption, createCollectionOption, getValues } from '../helpers/Helpers'
+import { createCollectionImageOption, createCollectionOption, useQuerystring } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 
-const CollectionDropdown = React.memo((props) => {
-    const values = getValues()
+const { ipfs } = config
 
-    const [collections, setCollections] = useState(null)
-    const [allCollections, setAllCollections] = useState([])
+/**
+ * @typedef {{ value: string, title: string, label: string, image: string }} Option
+ */
+
+/**
+ * This component selects a collection and updates the querystring with the selected collection.collection_name
+ * @type {React.FC<{ collection: string }>}
+ */
+const CollectionDropdown = React.memo((props) => {
+    const [values, updateQuerystring] = useQuerystring()
+    const { data: collections } = useCollections()
+    const { data: collectionData, loading } = useCollectionData()
+
     const [state, dispatch] = useContext(Context)
 
-    const pushQueryString = props['pushQueryString']
+    const { collection } = props
 
-    const collection = props['collection']
+    const getDefaultOption = () => ({ value: '', label: '-', title: '-', image: '' })
 
-    const getDefaultOption = () => ({ value: '', label: '-', title: '-' })
+    /**
+     *
+     * @param {import('../../api/fetch').CollectionData[]} data
+     * @returns {Option[]}
+     */
+    const createCollections = (data) =>
+        data.map(({ collection_name, name, data }) => ({
+            value: collection_name,
+            title: name,
+            label: name,
+            image: ipfs + data.img,
+        }))
 
-    const initialized = state.collectionData !== null && state.collectionData !== undefined
-
-    const createCollections = (data, search = '') => {
-        const collections = []
-
-        data.map((element) => {
-            if (!collections.find((a) => a.value === element))
-                if (
-                    !search ||
-                    element['name'].toLowerCase().includes(search.toLowerCase()) ||
-                    element['collection_name'].toLowerCase().includes(search.toLowerCase())
-                )
-                    collections.push({
-                        value: element['collection_name'],
-                        title: element['name'],
-                        label: element['name'],
-                        image: config.ipfs + element['data']['img'],
-                    })
-        })
-
-        return collections
-    }
-
-    const [collectionDropDownOptions, setCollectionDropDownOptions] = useState(
-        collections ? createCollections(collections, false, 'All Collections', true) : [getDefaultOption()],
+    const collectionDropDownOptions = useMemo(
+        () => (collections ? createCollections(collectionData) : [getDefaultOption()]),
+        [collectionData],
     )
 
-    const onSearchCollection = (e, collections) => {
-        setCollectionDropDownOptions(createCollections(collections, e.target.value))
+    /**
+     * @param {Option | null} option
+     */
+    const onSelectCollection = (option) => {
+        const query = { ...values }
+        const collection = option?.value ?? '*'
+
+        delete query.schema
+        delete query.name
+        delete query.rarity
+        delete query.variant
+        query.collection = collection
+
+        // @TODO LEGACY
+        dispatch({ type: 'SET_SELECTED_COLLECTION', payload: collection })
+        updateQuerystring(query)
     }
 
-    const onSelectCollection = (e) => {
-        const query = values
-
-        const newCollection = e ? e.value : '*'
-
-        delete query['schema']
-        delete query['name']
-        delete query['rarity']
-        delete query['variant']
-
-        query['collection'] = newCollection
-
-        dispatch({ type: 'SET_SELECTED_COLLECTION', payload: newCollection })
-
-        pushQueryString(qs.stringify(query))
-    }
-
-    const createCollectionDropDownOptions = (collections) => {
-        if (collections && collections['data']) {
-            setCollectionDropDownOptions(createCollections(collections['data'], false, 'All Collections', true))
-            setCollections(collections['data'])
-        }
-    }
-
-    useEffect(() => {
-        if (process.browser && !collections && initialized) {
-            state.collectionData.then((res) => createCollectionDropDownOptions(res))
-        }
-    }, [collection, state, initialized])
-
-    const getCollectionOption = (options, collection) => {
-        return options.map((item) => item.value).indexOf(collection)
-    }
-
-    const option = collection && collection !== '*' ? getCollectionOption(collectionDropDownOptions, collection) : -1
+    const defaultValue = useMemo(
+        () => (collection === '*' ? -1 : collectionDropDownOptions.findIndex((option) => option.value === collection)),
+        [collectionData],
+    )
 
     return collections && collections.length > 1 ? (
         <div className="w-full mb-8">
@@ -99,31 +81,33 @@ const CollectionDropdown = React.memo((props) => {
                             'border-2 border-solid border-paper rounded',
                         )}
                     >
-                        <Autocomplete
-                            multiple={false}
-                            options={collectionDropDownOptions}
-                            getOptionLabel={(option) => (option ? option.title : null)}
-                            renderOption={(option) => (
-                                <React.Fragment>
-                                    {option.image
-                                        ? createCollectionImageOption(option.title, option.image)
-                                        : createCollectionOption(option.title)}
-                                </React.Fragment>
-                            )}
-                            defaultValue={option > -1 ? collectionDropDownOptions[option] : null}
-                            id="collection-box"
-                            style={{ width: '100%' }}
-                            popupIcon={null}
-                            onChange={(event, newValue) => {
-                                onSelectCollection(newValue)
-                            }}
-                            onInput={(e) => onSearchCollection(e, collections)}
-                            renderInput={(params) => (
-                                <div className={option && option > 0 ? 'flex w-full h-8' : 'text-netural opacity-100'}>
-                                    <TextField {...params} variant="standard" placeholder={'Collection'} />
-                                </div>
-                            )}
-                        />
+                        {collectionData.length && !loading ? (
+                            <Autocomplete
+                                multiple={false}
+                                options={collectionDropDownOptions}
+                                getOptionLabel={(option) => option.title}
+                                renderOption={(option) => (
+                                    <React.Fragment>
+                                        {option.image
+                                            ? createCollectionImageOption(option.title, option.image)
+                                            : createCollectionOption(option.title)}
+                                    </React.Fragment>
+                                )}
+                                defaultValue={collectionDropDownOptions[defaultValue] || null}
+                                getOptionSelected={(option, value) => option.value === value.value}
+                                id="collection-box"
+                                style={{ width: '100%' }}
+                                popupIcon={null}
+                                onChange={(_, option) => onSelectCollection(option)}
+                                renderInput={(params) => (
+                                    <div
+                                        className={defaultValue !== -1 ? 'flex w-full h-8' : 'text-netural opacity-100'}
+                                    >
+                                        <TextField {...params} variant="standard" placeholder={'Collection'} />
+                                    </div>
+                                )}
+                            />
+                        ) : null}
                     </div>
                 </div>
             ) : (

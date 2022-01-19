@@ -1,17 +1,17 @@
-import qs from 'qs'
 import React from 'react'
-import Explorer from '../../components/explorer'
+import { ensureString } from '../../api/utils'
+import { Explorer, getTabFromString } from '../../components/explorer'
 
+/**
+ * @type {import('next').NextPage<{ tab: import('../../components/explorer').ExplorerTab }>}
+ */
 const ExplorerPage = (props) => {
     return <Explorer {...props} />
 }
 
 ExplorerPage.getInitialProps = async (ctx) => {
-    const paths = ctx.asPath.split('/')
-
-    const props = qs.parse(paths[1].replace('explorer?', ''))
-
-    return props
+    const tab = ctx.query.tab
+    return { tab: getTabFromString(ensureString(tab)) }
 }
 
 export default ExplorerPage

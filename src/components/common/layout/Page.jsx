@@ -1,7 +1,10 @@
 import cn from 'classnames'
 import React from 'react'
 
-export default function Page({ className, children, onScroll, id }) {
+/**
+ * @type {React.FC<Partial<{ className: string, onScroll: VoidFunction, id: string }>>}
+ */
+export const Page = ({ className, children, onScroll, id }) => {
     return (
         <div
             className={cn(
@@ -17,3 +20,5 @@ export default function Page({ className, children, onScroll, id }) {
         </div>
     )
 }
+
+export default Page

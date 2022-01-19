@@ -1,16 +1,27 @@
 import cn from 'classnames'
 import { useRouter } from 'next/router'
-import qs from 'qs'
 import React, { useContext, useEffect, useState } from 'react'
 import { useUAL } from '../../hooks/ual'
 import CollectionDropdown from '../collectiondropdown'
 import DropdownItem from '../collectiondropdown/DropdownItem'
 import Input from '../common/util/input/Input'
-import { getValues } from '../helpers/Helpers'
+import { getValues, useQuerystring } from '../helpers/Helpers'
 import { Context } from '../marketwrapper'
 
-function Filters(props) {
-    const values = getValues()
+/**
+ * @typedef {Object} FilterProps
+ * @property {string} [className]
+ * @property {string} [searchPage]
+ * @property {string} [winner]
+ * @property {string} [bidder]
+ **/
+
+/**
+ * @type {React.FC<FilterProps>}
+ */
+const Filters = (props) => {
+    const [values, updateQuerystring] = useQuerystring()
+    const record = getValues()
 
     const collection = values['collection'] ? values['collection'] : '*'
     const schema = values['schema'] ? values['schema'] : ''
@@ -136,11 +147,7 @@ function Filters(props) {
 
     const router = useRouter()
 
-    const pushQueryString = (qsValue) => {
-        const newPath = window.location.pathname + '?' + qsValue
-
-        router.push(newPath, undefined, { shallow: true })
-    }
+    const pushQueryString = updateQuerystring
 
     const getSchemasResult = (collection) => {
         if (schemaData['success']) {
@@ -258,7 +265,7 @@ function Filters(props) {
         if (!schemaData && state.schemaData) state.schemaData.then((res) => setSchemaData(res))
         if (!templateData && state.templateData) state.templateData.then((res) => setTemplateData(res))
         if (
-            process.browser &&
+            typeof window !== 'undefined' &&
             ((collection && collection !== '*') || (state.collections && state.collections.length === 1)) &&
             initialized
         ) {
@@ -281,7 +288,7 @@ function Filters(props) {
         delete query['rarity']
         delete query['variant']
 
-        pushQueryString(qs.stringify(query))
+        pushQueryString(query)
     }
 
     const onSelectName = (e) => {
@@ -289,7 +296,7 @@ function Filters(props) {
 
         query['name'] = e ? e.value : ''
 
-        pushQueryString(qs.stringify(query))
+        pushQueryString(query)
     }
 
     const onSelectRarity = (e) => {
@@ -297,7 +304,7 @@ function Filters(props) {
 
         query['rarity'] = e ? e.value : ''
 
-        pushQueryString(qs.stringify(query))
+        pushQueryString(query)
     }
 
     const onSelectVariant = (e) => {
@@ -305,7 +312,7 @@ function Filters(props) {
 
         query['variant'] = e ? e.value : ''
 
-        pushQueryString(qs.stringify(query))
+        pushQueryString(query)
     }
 
     const onSelectSorting = (e) => {
@@ -313,7 +320,7 @@ function Filters(props) {
 
         query['sort'] = e ? e.value : ''
 
-        pushQueryString(qs.stringify(query))
+        pushQueryString(query)
     }
 
     const checkMyListings = (e) => {
@@ -322,7 +329,7 @@ function Filters(props) {
         if (query['seller'] === userName) delete query['seller']
         else query['seller'] = userName
 
-        pushQueryString(qs.stringify(query))
+        pushQueryString(query)
     }
 
     const checkBundles = (e) => {
@@ -331,7 +338,7 @@ function Filters(props) {
         if (query['bundles'] === 'true') delete query['bundles']
         else query['bundles'] = 'true'
 
-        pushQueryString(qs.stringify(query))
+        pushQueryString(query)
     }
 
     return (

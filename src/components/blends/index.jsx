@@ -8,7 +8,7 @@ import { useUAL } from '../../hooks/ual'
 import Content from '../common/layout/Content'
 import Page from '../common/layout/Page'
 import { getValues } from '../helpers/Helpers'
-import TabItem from '../tabitem/TabItem'
+import TabItem from '../tabs/TabItem'
 import BlenderizerList from './BlenderizerList'
 import NeftyBlendsList from './NeftyBlendsList'
 
@@ -22,7 +22,7 @@ const Blends = (props) => {
     const loggedOut = activeUser === null
 
     const [tabKey, setTabKey] = useState(
-        process.browser
+        typeof window !== 'undefined'
             ? values['tab'] && keys.includes(values['tab'])
                 ? values['tab']
                 : 'nefty.blends'

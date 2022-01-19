@@ -1,6 +1,10 @@
 const express = require('express')
 const next = require('next')
 
+process.title = 'wax-marketplace (server, node)'
+// const hostname = process.env.HOSTNAME ?? 'localhost'
+// const port = parseInt(process.env.PORT, 10) || 3001
+
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()

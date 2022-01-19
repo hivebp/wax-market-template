@@ -1,6 +1,6 @@
 import { Wax } from '@eosdacio/ual-wax'
 import { UALProvider } from 'hive-ual-renderer'
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
@@ -10,13 +10,25 @@ import MarketWrapper, { Context } from '../components/marketwrapper'
 import Navigation from '../components/navigation/Navigation'
 import WindowWrapper from '../components/windows/WindowWrapper'
 import config from '../config.json'
+import { useStore } from '../store/Store'
 import '../styles/App.css'
 import '../styles/globals.css'
 import '../styles/Search.css'
 
 const { packs_contracts } = config
 
+/**
+ * @type {Record<string, any>}
+ */
 let walletsStore = {}
+
+/**
+ *
+ * @param {string} chainId
+ * @param {string} apiEndpoint
+ * @param {string} appName
+ * @returns
+ */
 const useWallets = (chainId, apiEndpoint, appName) => {
     const hash = `${chainId}-${apiEndpoint}-${appName}`
     if (walletsStore[hash]) return walletsStore[hash]
@@ -32,14 +44,8 @@ const useWallets = (chainId, apiEndpoint, appName) => {
         ],
     }
 
-    const authenticators = [
-        new Anchor([waxNet], {
-            appName,
-        }),
-        new Wax([waxNet], {
-            appName,
-        }),
-    ]
+    // @ts-ignore - appName is not required by Wax (still in here for historical reasons)
+    const authenticators = [new Anchor([waxNet], { appName }), new Wax([waxNet], { appName })]
 
     walletsStore[hash] = {
         appName,
@@ -50,6 +56,10 @@ const useWallets = (chainId, apiEndpoint, appName) => {
     return walletsStore[hash]
 }
 
+/**
+ * @param {React.Dispatch<any>} dispatch
+ * @param {string[]} collections
+ */
 const disptachCollectionsData = (dispatch, collections) => {
     dispatch({ type: 'SET_COLLECTIONS', payload: collections })
     dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollections(collections) })
@@ -58,19 +68,28 @@ const disptachCollectionsData = (dispatch, collections) => {
     if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })
 }
 
-const AppContainer = React.memo(({ Component, pageProps }) => {
+/**
+ * @type {React.FC<{Component: React.ComponentType<any>, pageProps: any}>}
+ */
+const AppContainer = ({ Component, pageProps }) => {
     const [, dispatch] = useContext(Context)
+    // const { data: collections } = useCollections()
+    // const { data: collectionData } = useCollectionData()
+    // const { data: templates } = useTemplates()
+    // const { data: schema } = useSchemas()
+    // const { data: packs } = usePacks()
 
+    /* This will keep the old functionality available, but will be replaced by the useHooks above */
     useEffect(() => {
         const initialize = async () => {
-            const collections = await loadCollections()
-            disptachCollectionsData(dispatch, collections)
+            const collectionsX = await loadCollections()
+            disptachCollectionsData(dispatch, collectionsX)
         }
         initialize()
     }, [])
 
     return (
-        <div>
+        <>
             <WindowWrapper />
             <div className={'h-screen overflow-y-hidden bg-page'}>
                 <Navigation />
@@ -79,9 +98,9 @@ const AppContainer = React.memo(({ Component, pageProps }) => {
                     <Footer />
                 </div>
             </div>
-        </div>
+        </>
     )
-})
+}
 
 const loadServiceWorker = () =>
     window.addEventListener('load', () =>
@@ -91,10 +110,16 @@ const loadServiceWorker = () =>
         ),
     )
 
-function MyApp({ Component, pageProps }) {
+/**
+ * @type {React.FC<{Component: React.ComponentType<any>, pageProps: any}>}
+ */
+const MyApp = ({ Component, pageProps }) => {
     useEffect(() => {
         if ('serviceWorker' in navigator) loadServiceWorker()
     }, [])
+
+    const initLocation = useStore((state) => state.location().init)
+    useEffect(() => initLocation(), [])
 
     const ualProviderProps = useWallets(
         '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
@@ -102,11 +127,11 @@ function MyApp({ Component, pageProps }) {
         config.market_name,
     )
 
-    const container = useMemo(() => <AppContainer pageProps={pageProps} Component={Component} />)
-
     return (
         <MarketWrapper>
-            <UALProvider {...ualProviderProps}>{container}</UALProvider>
+            <UALProvider {...ualProviderProps}>
+                <AppContainer pageProps={pageProps} Component={Component} />
+            </UALProvider>
         </MarketWrapper>
     )
 }

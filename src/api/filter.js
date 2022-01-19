@@ -8,7 +8,7 @@ import { query } from './query'
  * @property {string=} user
  * @property {string=} schema
  * @property {string=} name
- * @property {string=} limit
+ * @property {(number | string)=} limit
  * @property {string=} orderDir
  * @property {string=} sortBy
  * @property {string=} asset_id
