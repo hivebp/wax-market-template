@@ -63,6 +63,7 @@ class InvalidTypeError extends Error {
  * @param {(val: unknown) => val is Data} guard
  */
 // the given guard function is a stub and will need replacing by each resource
+// @ts-ignore
 const createResource = (fetcher, guard = Array.isArray) =>
     create((set, get) => ({
         data: [],
