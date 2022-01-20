@@ -2,7 +2,10 @@ import cn from 'classnames'
 import NextLink from 'next/link'
 import React from 'react'
 
-export default function Link({ children, className, href, external }) {
+/**
+ * @type {React.FC<{ className?: string, href: string, external?: boolean }>}
+ **/
+export const Link = ({ children, className, href, external }) => {
     const linkClassNames = cn(
         'block',
         'focus-visible:ring-1 focus-visible:ring-inset',
@@ -22,3 +25,5 @@ export default function Link({ children, className, href, external }) {
         </NextLink>
     )
 }
+
+export default Link

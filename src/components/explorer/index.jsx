@@ -2,9 +2,10 @@ import cn from 'classnames'
 import React, { useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import Page from '../common/layout/Page'
+import { useQuerystring } from '../helpers/Helpers'
 import TabItem from '../tabs/TabItem'
-import CollectionList from './AssetList'
-import AssetList from './CollectionList'
+import AssetList from './AssetList'
+import CollectionList from './CollectionList'
 
 /**
  * @typedef {'collections' | 'assets'} ExplorerTab
@@ -39,7 +40,14 @@ export const getTabFromString = (maybeTab) => (maybeTab && isExplorerTab(maybeTa
  * @type {React.FC<{ tab: ExplorerTab }>}
  */
 export const Explorer = (props) => {
+    const [, updateQuerystring] = useQuerystring()
     const [tabKey, setTabKey] = useState(props.tab)
+    /** @type {(tab: ExplorerTab) => void} */
+    const switchTab = (tab) => {
+        console.log(`switching to tab: ${tab}`)
+        updateQuerystring({ tab })
+        setTabKey(tab)
+    }
 
     return (
         <Page>
@@ -52,16 +60,21 @@ export const Explorer = (props) => {
                 )}
                 defaultActiveKey={tabKey}
                 id="collection-switch"
-                onSelect={(k) => setTabKey(getTabFromString(k))}
+                onSelect={(k) => switchTab(getTabFromString(k))}
             >
                 <Tab
                     eventKey="collections"
                     title={<TabItem target={'collections'} tabKey={tabKey} title={'Collections'} />}
+                    unmountOnExit
                 >
-                    {tabKey === 'collections' && <CollectionList />}
+                    <CollectionList />
                 </Tab>
-                <Tab eventKey="assets" title={<TabItem target={'assets'} tabKey={tabKey} title={'Assets'} />}>
-                    {tabKey === 'assets' && <AssetList />}
+                <Tab
+                    eventKey="assets"
+                    title={<TabItem target={'assets'} tabKey={tabKey} title={'Assets'} />}
+                    unmountOnExit
+                >
+                    <AssetList />
                 </Tab>
             </Tabs>
         </Page>

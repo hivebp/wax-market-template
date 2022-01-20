@@ -4,7 +4,10 @@ import config from '../../config.json'
 import Link from '../common/util/input/Link'
 import LazyLoad from '../helpers/LazyLoad'
 
-function CollectionCard(props) {
+/**
+ * @type {React.FC<{ collection: import('../../api/fetch').CollectionData }>}
+ */
+export const CollectionCard = (props) => {
     const collectionItem = props['collection']
 
     const { name, img, collection_name } = collectionItem

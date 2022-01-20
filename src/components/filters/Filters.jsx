@@ -90,9 +90,8 @@ const Filters = (props) => {
         () => (!collection || collection === '*' ? collections : [collection]),
         [collection, collections],
     )
-    const schemaDropdownOptions = useMemo(() => {
-        console.log(schemaData)
-        return [
+    const schemaDropdownOptions = useMemo(
+        () => [
             { value: '', label: '-' },
             ...schemaData
                 .filter((item) => item.collection.collection_name === collection)
@@ -101,8 +100,9 @@ const Filters = (props) => {
                     value: item.schema_name,
                     label: item.schema_name,
                 })),
-        ]
-    }, [schemaData, filteredCollectionList])
+        ],
+        [schemaData, filteredCollectionList],
+    )
 
     const compareValues = (a, b) => {
         if (a.toUpperCase() > b.toUpperCase()) {
