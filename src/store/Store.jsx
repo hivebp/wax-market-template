@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react'
 import create from 'zustand'
-import { getAssets, getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
+import { getAssets, getCollectionData, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import { queryParams } from '../api/query'
 // import { queryParams } from '../api/query'
 import reducer from './reducer'
@@ -96,7 +96,11 @@ const createResource = (fetcher, guard = Array.isArray) =>
                 set({ state: RESOURCE_STATE_LOADING, lastRequest: { param, controller } })
                 const data = await fetcher(param, controller)
                 if (guard(data)) set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), data })
-                else set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), error: new InvalidTypeError(data) })
+                else {
+                    const error = new InvalidTypeError(data)
+                    set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), error })
+                    console.error(error)
+                }
             }
 
             start()
@@ -119,10 +123,10 @@ const createResource = (fetcher, guard = Array.isArray) =>
  * @template Data
  * @param {Promise<{ data: Data }>} result
  **/
-const getDataPropertyFromResult = async (result) => await result.data
+const getDataPropertyFromResult = async (result) => (await result).data
 
 /** @type {(collections: string[]) => Promise<import('../api/fetch').CollectionData[]>} */
-const fetchCollectionsData = (...args) => getDataPropertyFromResult(getCollections(...args))
+const fetchCollectionsData = (...args) => getDataPropertyFromResult(getCollectionData(...args))
 
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Template[]>} */
 const fetchTemplates = (...args) => getDataPropertyFromResult(getTemplates(...args))

@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
-import { getCollections } from '../../api/fetch'
+import { getCollectionData } from '../../api/fetch'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 import CollectionCard from './CollectionCard'
@@ -21,7 +21,7 @@ function CollectionList(props) {
 
     useEffect(() => {
         if (initialized) {
-            getCollections(state.collections).then((res) => receiveCollections(res))
+            getCollectionData(state.collections).then((res) => receiveCollections(res))
         }
     }, [initialized])
 

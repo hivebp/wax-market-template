@@ -4,7 +4,7 @@ import React, { useContext, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import 'regenerator-runtime/runtime'
 import { Anchor } from 'ual-anchor'
-import { getCollections, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
+import { getCollectionData, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
 import Footer from '../components/footer'
 import MarketWrapper, { Context } from '../components/marketwrapper'
 import Navigation from '../components/navigation/Navigation'
@@ -62,7 +62,7 @@ const useWallets = (chainId, apiEndpoint, appName) => {
  */
 const disptachCollectionsData = (dispatch, collections) => {
     dispatch({ type: 'SET_COLLECTIONS', payload: collections })
-    dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollections(collections) })
+    dispatch({ type: 'SET_COLLECTION_DATA', payload: getCollectionData(collections) })
     dispatch({ type: 'SET_TEMPLATE_DATA', payload: getTemplates({ collections: collections, limit: 1000 }) })
     dispatch({ type: 'SET_SCHEMA_DATA', payload: getSchemas({ collections: collections }) })
     if (packs_contracts.length) dispatch({ type: 'SET_PACK_DATA', payload: getPacks({ collections: collections }) })

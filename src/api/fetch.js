@@ -313,7 +313,7 @@ export const getPrices = createGetter(
  * @param {string[]} collections
  * @returns {Promise<APIResponse<CollectionData>>}
  */
-export const getCollections = (collections) =>
+export const getCollectionData = (collections) =>
     // @ts-ignore
     get(`${atomic_api}/atomicassets/v1/collections`, {
         page: '1',
