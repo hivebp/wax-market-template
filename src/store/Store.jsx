@@ -44,19 +44,29 @@ export const RESOURCE_STATE_LOADED = 'loaded'
 /**
  * @typedef {Object} ResourceStoreState
  * @property {ReturnType<FetchFunction>[]} data
+ * @property {Error | undefined} error
  * @property {ResourceState} state
  * @property {undefined} lastLoaded
  * @property {VoidFunction} load
  * @property {(...args: Parameters<FetchFunction>) => ReturnType<FetchFunction>} getData
  */
 
+class InvalidTypeError extends Error {
+    constructor(/** @type {any} */ data) {
+        super(`Invalid type: ${typeof data}`)
+    }
+}
+
 /**
  * @template Data
  * @param {(param: any, controller: AbortController) => Promise<Data>} fetcher
+ * @param {(val: unknown) => val is Data} guard
  */
-const createResource = (fetcher) =>
+// the given guard function is a stub and will need replacing by each resource
+const createResource = (fetcher, guard = Array.isArray) =>
     create((set, get) => ({
         data: [],
+        error: undefined,
         state: RESOURCE_STATE_INITIAL,
         lastLoaded: undefined,
         lastRequest: undefined,
@@ -85,15 +95,14 @@ const createResource = (fetcher) =>
                 // initiate the request, save request info
                 set({ state: RESOURCE_STATE_LOADING, lastRequest: { param, controller } })
                 const data = await fetcher(param, controller)
-                set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), data: data })
+                if (guard(data)) set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), data })
+                else set({ state: RESOURCE_STATE_LOADED, lastLoaded: Date.now(), error: new InvalidTypeError(data) })
             }
 
             start()
             return () => {
                 const { data, state } = get()
-                console.log({ state, data })
                 if (state === RESOURCE_STATE_LOADING) {
-                    console.log('>>> aborting')
                     set({ state: data.length ? RESOURCE_STATE_LOADED : RESOURCE_STATE_INITIAL })
                     controller.abort()
                 }
@@ -106,18 +115,30 @@ const createResource = (fetcher) =>
         },
     }))
 
+/**
+ * @template Data
+ * @param {Promise<{ data: Data }>} result
+ **/
+const getDataPropertyFromResult = async (result) => await result.data
+
 /** @type {(collections: string[]) => Promise<import('../api/fetch').CollectionData[]>} */
-const fetchCollectionsData = async (...args) => (await getCollections(...args)).data
+const fetchCollectionsData = (...args) => getDataPropertyFromResult(getCollections(...args))
+
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Template[]>} */
-const fetchTemplates = async (...args) => (await getTemplates(...args)).data
+const fetchTemplates = (...args) => getDataPropertyFromResult(getTemplates(...args))
+
+/** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Schema[]>} */
+// @ts-ignore
+const fetchSchemas = (...args) => getDataPropertyFromResult(getSchemas(...args))
+
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Asset[]>} */
 // @ts-ignore
-const fetchAssets = async (...args) => (await getAssets(...args)).data
+const fetchAssets = (...args) => getDataPropertyFromResult(getAssets(...args))
 
 const useCollectionStore = createResource(loadCollections)
 const useCollectionDataStore = createResource(fetchCollectionsData)
 const useTemplateStore = createResource(fetchTemplates)
-const useSchemaStore = createResource(getSchemas)
+const useSchemaStore = createResource(fetchSchemas)
 const usePackStore = createResource(getPacks)
 const useAssetStore = createResource(fetchAssets)
 

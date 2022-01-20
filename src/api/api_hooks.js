@@ -56,6 +56,7 @@ export const useSchemas = () => {
         error: null,
     }))
     useEffect(() => {
+        console.log('useSchemas', collections)
         if (collections.length) return load({ collections })
     }, [collections])
     return { data, loading, error }

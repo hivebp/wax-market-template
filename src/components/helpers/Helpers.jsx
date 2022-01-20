@@ -66,7 +66,6 @@ const getDefaultSortByPageName = (pageName) => {
  * @returns {import('../../api/filter').FilterType}
  */
 export const getFilters = (values, collections, pageName, page = 1) => {
-    console.log(values, collections)
     const collection = values['collection'] ? values['collection'] : '*'
     const schema = pageName === 'packs' ? 'boxes' : values['schema'] ? values['schema'] : ''
     const name = values['name'] ? values['name'] : ''

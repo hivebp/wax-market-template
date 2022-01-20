@@ -1,5 +1,6 @@
 import cn from 'classnames'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useCollections, useSchemas, useTemplates } from '../../api/api_hooks'
 import { useUAL } from '../../hooks/ual'
 import CollectionDropdown from '../collectiondropdown'
 import DropdownItem from '../collectiondropdown/DropdownItem'
@@ -45,9 +46,9 @@ const Filters = (props) => {
 
     const sortBy = values['sort'] ?? props.defaultSort ?? 'name_asc'
 
-    const [state, dispatch] = useContext(Context)
+    const [state] = useContext(Context)
 
-    const [schemaDropdownOptions, setSchemaDropdownOptions] = useState(null)
+    // const [schemaDropdownOptions, setSchemaDropdownOptions] = useState(null)
     const [nameDropdownOptions, setNameDropdownOptions] = useState(null)
     const [rarityDropdownOptions, setRarityDropdownOptions] = useState(null)
     const [variantDropdownOptions, setVariantDropdownOptions] = useState(null)
@@ -64,25 +65,44 @@ const Filters = (props) => {
         },
     ]
 
-    const [schemaData, setSchemaData] = useState(null)
-    const [templateData, setTemplateData] = useState(null)
+    const { data: collections } = useCollections()
+    const { data: schemaData, loading: schemasLoading } = useSchemas()
+    const { data: templateData, loading: templatesLoading } = useTemplates()
 
-    const getSchemasResult = (collection) => {
-        if (schemaData['success']) {
-            const schemaOptions = [{ value: '', label: '-' }]
-            schemaData['data']
-                .filter((item) => item['collection']['collection_name'] === collection)
-                .sort((a, b) => compareValues(a['schema_name'], b['schema_name']))
-                .map((item) =>
-                    schemaOptions.push({
-                        value: item['schema_name'],
-                        label: item['schema_name'],
-                    }),
-                )
+    // const getSchemasResult = (collection) => {
+    //     if (schemaData['success']) {
+    //         const schemaOptions = [{ value: '', label: '-' }]
+    //         schemaData['data']
+    //             .filter((item) => item['collection']['collection_name'] === collection)
+    //             .sort((a, b) => compareValues(a['schema_name'], b['schema_name']))
+    //             .map((item) =>
+    //                 schemaOptions.push({
+    //                     value: item['schema_name'],
+    //                     label: item['schema_name'],
+    //                 }),
+    //             )
 
-            setSchemaDropdownOptions(schemaOptions)
-        }
-    }
+    //         setSchemaDropdownOptions(schemaOptions)
+    //     }
+    // }
+
+    const filteredCollectionList = useMemo(
+        () => (!collection || collection === '*' ? collections : [collection]),
+        [collection, collections],
+    )
+    const schemaDropdownOptions = useMemo(() => {
+        console.log(schemaData)
+        return [
+            { value: '', label: '-' },
+            ...schemaData
+                .filter((item) => item.collection.collection_name === collection)
+                .sort((a, b) => a.schema_name.localeCompare(b.schema_name))
+                .map((item) => ({
+                    value: item.schema_name,
+                    label: item.schema_name,
+                })),
+        ]
+    }, [schemaData, filteredCollectionList])
 
     const compareValues = (a, b) => {
         if (a.toUpperCase() > b.toUpperCase()) {
@@ -94,82 +114,82 @@ const Filters = (props) => {
         }
     }
 
-    const getTemplatesResult = (collection) => {
-        const names = []
-        const rarities = []
-        const variants = []
-        if (templateData['success']) {
-            templateData['data']
-                .filter((item) => item['collection']['collection_name'] === collection)
-                .map((item) => {
-                    const data = item['immutable_data']
-                    const itemSchema = item['schema']
-                    if (
-                        data['name'] &&
-                        !names.includes(data['name']) &&
-                        (!schema || (itemSchema && itemSchema['schema_name'] === schema)) &&
-                        (!rarity || (data['rarity'] && data['rarity'] === rarity)) &&
-                        (!variant || (data['variant'] && data['variant'] === variant))
-                    ) {
-                        names.push(data['name'])
-                    }
-                    if (
-                        data['rarity'] &&
-                        !rarities.includes(data['rarity']) &&
-                        (!schema || (itemSchema && itemSchema['schema_name'] === schema)) &&
-                        (!variant || (data['variant'] && data['variant'] === variant)) &&
-                        (!name || (data['name'] && data['name'] === name))
-                    ) {
-                        rarities.push(data['rarity'])
-                    }
-                    if (
-                        data['variant'] &&
-                        !variants.includes(data['variant']) &&
-                        (!schema || (itemSchema && itemSchema['schema_name'] === schema)) &&
-                        (!rarity || (data['rarity'] && data['rarity'] === rarity)) &&
-                        (!name || (data['name'] && data['name'] === name))
-                    ) {
-                        variants.push(data['variant'])
-                    }
-                })
-            if (names.length > 0) {
-                const options = [{ value: '', label: '-' }]
-                names
-                    .sort((a, b) => compareValues(a, b))
-                    .map((name) => {
-                        options.push({
-                            value: name,
-                            label: name,
-                        })
-                    })
-                setNameDropdownOptions(options)
-            }
-            if (rarities.length > 0) {
-                const options = [{ value: '', label: '-' }]
-                rarities
-                    .sort((a, b) => a.toUpperCase() - b.toUpperCase())
-                    .map((rarity) =>
-                        options.push({
-                            value: rarity,
-                            label: rarity,
-                        }),
-                    )
-                setRarityDropdownOptions(options)
-            }
-            if (variants.length > 0) {
-                const options = [{ value: '', label: '-' }]
-                variants
-                    .sort((a, b) => a.toUpperCase() - b.toUpperCase())
-                    .map((variant) =>
-                        options.push({
-                            value: variant,
-                            label: variant,
-                        }),
-                    )
-                setVariantDropdownOptions(options)
-            }
-        }
-    }
+    // const getTemplatesResult = (collection) => {
+    //     const names = []
+    //     const rarities = []
+    //     const variants = []
+    //     if (templateData['success']) {
+    //         templateData['data']
+    //             .filter((item) => item['collection']['collection_name'] === collection)
+    //             .map((item) => {
+    //                 const data = item['immutable_data']
+    //                 const itemSchema = item['schema']
+    //                 if (
+    //                     data['name'] &&
+    //                     !names.includes(data['name']) &&
+    //                     (!schema || (itemSchema && itemSchema['schema_name'] === schema)) &&
+    //                     (!rarity || (data['rarity'] && data['rarity'] === rarity)) &&
+    //                     (!variant || (data['variant'] && data['variant'] === variant))
+    //                 ) {
+    //                     names.push(data['name'])
+    //                 }
+    //                 if (
+    //                     data['rarity'] &&
+    //                     !rarities.includes(data['rarity']) &&
+    //                     (!schema || (itemSchema && itemSchema['schema_name'] === schema)) &&
+    //                     (!variant || (data['variant'] && data['variant'] === variant)) &&
+    //                     (!name || (data['name'] && data['name'] === name))
+    //                 ) {
+    //                     rarities.push(data['rarity'])
+    //                 }
+    //                 if (
+    //                     data['variant'] &&
+    //                     !variants.includes(data['variant']) &&
+    //                     (!schema || (itemSchema && itemSchema['schema_name'] === schema)) &&
+    //                     (!rarity || (data['rarity'] && data['rarity'] === rarity)) &&
+    //                     (!name || (data['name'] && data['name'] === name))
+    //                 ) {
+    //                     variants.push(data['variant'])
+    //                 }
+    //             })
+    //         if (names.length > 0) {
+    //             const options = [{ value: '', label: '-' }]
+    //             names
+    //                 .sort((a, b) => compareValues(a, b))
+    //                 .map((name) => {
+    //                     options.push({
+    //                         value: name,
+    //                         label: name,
+    //                     })
+    //                 })
+    //             setNameDropdownOptions(options)
+    //         }
+    //         if (rarities.length > 0) {
+    //             const options = [{ value: '', label: '-' }]
+    //             rarities
+    //                 .sort((a, b) => a.toUpperCase() - b.toUpperCase())
+    //                 .map((rarity) =>
+    //                     options.push({
+    //                         value: rarity,
+    //                         label: rarity,
+    //                     }),
+    //                 )
+    //             setRarityDropdownOptions(options)
+    //         }
+    //         if (variants.length > 0) {
+    //             const options = [{ value: '', label: '-' }]
+    //             variants
+    //                 .sort((a, b) => a.toUpperCase() - b.toUpperCase())
+    //                 .map((variant) =>
+    //                     options.push({
+    //                         value: variant,
+    //                         label: variant,
+    //                     }),
+    //                 )
+    //             setVariantDropdownOptions(options)
+    //         }
+    //     }
+    // }
 
     const initialized =
         state.collections !== null &&
@@ -180,20 +200,20 @@ const Filters = (props) => {
         state.schemaData !== undefined
 
     useEffect(() => {
-        if (!schemaData && state.schemaData) state.schemaData.then((res) => setSchemaData(res))
-        if (!templateData && state.templateData) state.templateData.then((res) => setTemplateData(res))
+        // if (!schemaData && state.schemaData) state.schemaData.then((res) => setSchemaData(res))
+        // if (!templateData && state.templateData) state.templateData.then((res) => setTemplateData(res))
         if (
             typeof window !== 'undefined' &&
             ((collection && collection !== '*') || (state.collections && state.collections.length === 1)) &&
             initialized
         ) {
-            const filterCollection = state.collections.filter((item) =>
-                !collection || collection === '*' ? true : item === collection,
-            )[0]
-            if (schemaData) getSchemasResult(filterCollection)
-            if (templateData) getTemplatesResult(filterCollection)
+            // const filterCollection = state.collections.filter((item) =>
+            //     !collection || collection === '*' ? true : item === collection,
+            // )[0]
+            // if (schemaData) getSchemasResult(filterCollection)
+            // if (templateData) getTemplatesResult(filterCollection)
         } else {
-            setSchemaDropdownOptions([])
+            // setSchemaDropdownOptions([])
         }
     }, [collection, schemaData, templateData, initialized])
 
