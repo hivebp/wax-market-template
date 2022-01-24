@@ -3,7 +3,7 @@ import React from 'react'
 import Auctions from '../../components/auctions'
 
 /**
- * @type {import('next').NextPage<{ bidder: string, winner: string }>}
+ * @type {import('next').NextPage<{ bidder?: string, winner?: string }>}
  */
 const AuctionsPage = (props) => {
     return <Auctions {...props} />

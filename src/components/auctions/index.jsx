@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
+import { useCollections } from '../../api/api_hooks'
 import { getAuctions, getWonAuctions } from '../../api/fetch'
 import config from '../../config.json'
 import AssetCard from '../assetcard/AssetCard'
@@ -13,8 +14,12 @@ import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 import Pagination from '../pagination/Pagination'
 
-const Auctions = (props) => {
-    const [state, dispatch] = useContext(Context)
+/**
+ * @type {React.FC<{ bidder?: string, winner?: string }>}
+ */
+export const Auctions = (props) => {
+    const { data: collections } = useCollections()
+    const [, dispatch] = useContext(Context)
 
     const [listings, setListings] = useState([])
     const [page, setPage] = useState(1)
@@ -33,8 +38,6 @@ const Auctions = (props) => {
 
     const schema = values['schema'] ? values['schema'] : ''
 
-    const initialized = state.collections !== null && state.collections !== undefined
-
     const [showScrollUpIcon, setShowScrollUpIcon] = useState(false)
 
     const getResult = (result) => {
@@ -45,13 +48,13 @@ const Auctions = (props) => {
     const initAuctions = async (page) => {
         setIsLoading(true)
         if (winner)
-            getWonAuctions(getFilters(values, state.collections, 'auctions', page)).then((result) => getResult(result))
-        else getAuctions(getFilters(values, state.collections, 'auctions', page)).then((result) => getResult(result))
+            getWonAuctions(getFilters(values, collections, 'auctions', page)).then((result) => getResult(result))
+        else getAuctions(getFilters(values, collections, 'auctions', page)).then((result) => getResult(result))
     }
 
     useEffect(() => {
-        if (initialized) initAuctions(page)
-    }, [page, initialized, schema])
+        if (collections.length) initAuctions(page)
+    }, [page, collections.length])
 
     const handleScroll = (e) => {
         let element = e.target

@@ -8,7 +8,19 @@ export const reset = () => {
     expect(waitingRequests).toHaveLength(0)
     expect(expectedCalls).toHaveLength(0)
     expect(calls.every((call) => call.valid)).toBeTruthy()
+    waitingRequests = []
+    expectedCalls = []
+    calls = []
 }
+
+const MATCH_FIFO = 'fifo'
+const MATCH_URL = 'url'
+let matchMode = MATCH_FIFO
+
+/**
+ * @param {'fifo' | 'url'} mode
+ */
+export const setMatchMode = (mode) => (matchMode = mode)
 
 /**
  * Debug report for `afterEach` or just somewhere in your tests
@@ -135,11 +147,35 @@ const getResponse = (url, call) => {
     return createResponse(result.url ?? url, result.result, result.status)
 }
 
+/**
+ * @param {string} url
+ * @returns {Call | FetchFn<MaybeResponse> | undefined}
+ */
+const findNextCall = (url) => {
+    switch (matchMode) {
+        case MATCH_FIFO:
+            return expectedCalls.shift()
+        case MATCH_URL: {
+            const index = expectedCalls.findIndex((call) => {
+                if (typeof call === 'function') return false
+                return call.url === url
+            })
+            if (index === -1) {
+                console.error(`Unable to find matching request for ${url}`)
+                return undefined
+            }
+            const call = expectedCalls[index]
+            expectedCalls = [...expectedCalls.slice(0, index), ...expectedCalls.slice(index + 1)]
+            return call
+        }
+    }
+}
+
 /** The heart and soul of this creation… */
 global.fetch = async (input, init) => {
     const url = input.toString()
     const response = await new Promise(async (resolve) => {
-        const call = expectedCalls.shift()
+        const call = findNextCall(url)
 
         if (!call) console.error(`unexpected fetch request: ${url}`)
         const response = getResponse(url, typeof call === 'function' ? call(input, init) : call)
@@ -149,6 +185,8 @@ global.fetch = async (input, init) => {
             flush: () => resolve(response),
         })
     })
+
+    expect(url).toEqual(response.url)
 
     calls.push({
         url,
