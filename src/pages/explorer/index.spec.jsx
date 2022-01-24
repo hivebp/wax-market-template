@@ -1,6 +1,6 @@
 import { act, render } from '@testing-library/react'
 import { flush, on, reset, waitingRequests } from '../../__mocks__/fetch'
-import ExplorerPage from './index'
+import ExplorerPage from './index.page'
 
 describe('::ExplorerPage', () => {
     // afterEach(report)

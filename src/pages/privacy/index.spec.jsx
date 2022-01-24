@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import Privacy from './index'
+import Privacy from './index.page'
 
 describe('::ExplorerPage', () => {
     it('renders without crashing', async () => {

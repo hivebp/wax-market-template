@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import Faq from './index'
+import Faq from './index.page'
 
 describe('::ExplorerPage', () => {
     it('renders without crashing', async () => {
