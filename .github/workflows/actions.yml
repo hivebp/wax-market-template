@@ -38,7 +38,7 @@ jobs:
 
             # Install modules
             - name: Install modules
-              run: npm ci
+              run: npm install
               env:
                   CI: true
 
