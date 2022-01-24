@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`::AuctionIdPage renders as an error 1`] = `
+<div>
+  <p
+    data-testid="error"
+  >
+    An error occurred on client
+  </p>
+</div>
+`;

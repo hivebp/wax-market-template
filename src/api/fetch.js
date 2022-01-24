@@ -280,6 +280,32 @@ export const getSchemas = createGetter(
  * @property {string} updated_at_time
  */
 
+/**
+ * @typedef {Object} Auction
+ * @property {string} auctionId
+ * @property {string} market_contract
+ * @property {string} assets_contract
+ * @property {string} auction_id
+ * @property {string} seller
+ * @property {string | null} buyer
+ * @property {{ token_contract: string, token_symbol: string, token_precision: number, amount: string }} price
+ * @property {Asset[]} assets
+ * @property {any[]} bids
+ * @property {string} maker_marketplace
+ * @property {string | null} taker_marketplace
+ * @property {boolean} claimed_by_buyer
+ * @property {boolean} claimed_by_seller
+ * @property {CollectionData} collection
+ * @property {string} end_time
+ * @property {boolean} is_seller_contract
+ * @property {string} updated_at_block
+ * @property {string} updated_at_time
+ * @property {string} created_at_block
+ * @property {string} created_at_time
+ * @property {number} state
+}
+ */
+
 /** @type {(filters: import("./filter").FilterType) => Promise<APIResponse<Template>>}  */
 // @ts-ignore
 export const getTemplates = createGetter(

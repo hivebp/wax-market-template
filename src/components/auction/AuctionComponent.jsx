@@ -2,6 +2,7 @@ import cn from 'classnames'
 import React, { useState } from 'react'
 import { getAuctionsById } from '../../api/fetch'
 import config from '../../config.json'
+import ErrorPage from '../../pages/_error.page'
 import AssetDetails from '../asset/AssetDetails'
 import AssetImage from '../asset/AssetImage'
 import Bids from '../auctions/Bids'
@@ -10,13 +11,18 @@ import Header from '../common/util/Header'
 import { formatPrice } from '../helpers/Helpers'
 import MarketButtons from '../marketbuttons'
 
-const AuctionComponent = (props) => {
+/**
+ * @type {React.FC<{ auction: import('../../api/fetch').Auction }>}
+ */
+export const AuctionComponent = (props) => {
     const [auction, setAuction] = useState(props.auction)
 
     const [listed, setListed] = useState(false)
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [bidPlaced, setBidPlaced] = useState(false)
+
+    if (!auction) return <ErrorPage></ErrorPage>
 
     const asset = auction.assets[0]
 
