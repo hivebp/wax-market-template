@@ -3,6 +3,9 @@ import React from 'react'
 import { getAuction } from '../../../api/fetch'
 import AuctionComponent from '../../../components/auction/AuctionComponent'
 
+/**
+ * @type {import('next').NextPage<{ auction?: import('../../../api/fetch').Auction}>}
+ */
 const AuctionPage = (props) => {
     return <AuctionComponent {...props} />
 }

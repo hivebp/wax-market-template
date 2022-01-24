@@ -11,6 +11,7 @@ export const reset = () => {
     waitingRequests = []
     expectedCalls = []
     calls = []
+    matchMode = MATCH_FIFO
 }
 
 const MATCH_FIFO = 'fifo'
