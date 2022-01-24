@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useAssets, useCollections } from '../../api/api_hooks'
 import AssetCard from '../assetcard/AssetCard'
 import AssetListContent from '../common/layout/Content'
@@ -14,23 +14,20 @@ import Pagination from '../pagination/Pagination'
 const AssetList = () => {
     const { data: collections, loading: collectionsLoading } = useCollections()
     const [values] = useQuerystring()
-
     const [page, setPage] = useState(1)
-
-    const [filters, setFilters] = useState(getFilters(values, collections, 'assets', page))
-    const { data: assets, loading: assetsLoading } = useAssets(filters)
-
-    const loading = collectionsLoading || assetsLoading
-
-    useEffect(() => {
+    const filters = useMemo(() => {
         console.log('update filters')
-        setFilters(getFilters(values, collections, 'assets', page))
+        return getFilters(values, collections, 'assets', page)
     }, [values, collections, page])
+
+    const { data: assets, loading: assetsLoading, error } = useAssets(filters)
+    const loading = collectionsLoading || assetsLoading
 
     const pageination = useMemo(() => <Pagination items={assets} page={page} setPage={setPage} />, [assets, page])
 
     return (
         <AssetListContent>
+            <pre>{error && error.message}</pre>
             <div className={cn('w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5', 'max-w-filter')}>
                 <Filters
                     defaultSort="created_desc"

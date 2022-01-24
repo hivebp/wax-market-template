@@ -7,13 +7,28 @@ import { query } from './query'
 export const { atomic_api, api_endpoint, packs_contracts, default_collection } = config
 
 /**
- *
+ * @param {string} url
+ * @param {RequestInit=} init
+ * @returns {Promise<unknown>}
+ */
+const sendRequest = async (url, init) => {
+    try {
+        const response = await fetch(url, init)
+        return response.json()
+    } catch (err) {
+        console.error(`Unable to fetch ${init?.method ?? 'GET'} '${url}'`)
+        if (init?.body) console.dir(init?.body)
+        console.error(err)
+    }
+}
+
+/**
  * @param {string} url
  * @param {any=} data
  * @param {RequestInit=} init
  * @returns {Promise<unknown>}
  */
-export const get = (url, data, init) => fetch(query(url, data), init).then((res) => res.json())
+export const get = (url, data, init) => sendRequest(query(url, data), init)
 
 /**
  *
@@ -22,10 +37,10 @@ export const get = (url, data, init) => fetch(query(url, data), init).then((res)
  * @returns {Promise<unknown>}
  */
 export const post = (url, data) =>
-    fetch(url, {
+    sendRequest(url, {
         method: 'post',
         body: JSON.stringify(data),
-    }).then((res) => res.json())
+    })
 
 /**
  *
@@ -71,14 +86,11 @@ export const useFetch = (url, method = 'GET', bodyData = undefined, autofetch = 
         setState((state) => ({ ...state, loading: true, controller }))
 
         try {
-            /** @type {Response} */
-            const response = await fetch(url, {
+            const data = await sendRequest(url, {
                 signal: controller.signal,
                 method,
                 body: bodyData ? JSON.stringify(bodyData) : undefined,
             })
-
-            const data = await response.json()
 
             setState({
                 data,
@@ -197,18 +209,24 @@ export const getSchemas = createGetter(
  */
 
 /**
+ * @typedef {Object} Format
+ * @property {string} name
+ * @property {string} type
+ */
+
+/**
  * @typedef {Object} Template
  * @property {CollectionData} collection
  * @property {string} contract
  * @property {string} created_at_block
  * @property {string} created_at_time
- * @property {any} immutable_data
+ * @property {Recrod<string, string>} immutable_data
  * @property {boolean} is_burnable
  * @property {boolean} is_transferable
  * @property {string} issued_supply
  * @property {string} max_supply
  * @property {string} name
- * @property {any} schema
+ * @property {{ created_at_block: string, created_at_time: string, format: Format[], schema_name: string }} schema
  * @property {string} template_id
  */
 

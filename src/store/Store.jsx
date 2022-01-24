@@ -155,7 +155,8 @@ const useLocationStore = create((set, get) => ({
      * @returns {string} new pathname
      **/
     updateQuery: (queryparams) => {
-        set({ query: queryparams })
+        // this needs to create a new object to ensure the equality check used by useEffect and useMemo will work as expected by the users
+        set({ query: { ...queryparams } })
         const path = `${get().pathname}?${new URLSearchParams(queryparams)}`
         return path
     },

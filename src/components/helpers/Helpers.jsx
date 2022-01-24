@@ -11,7 +11,7 @@ import { useStore } from '../../store/Store'
  */
 
 /**
- * @type {() => [QueryParams, (queryparams: QueryParams) => void]}
+ * @type {() => [QueryParams, (queryparams: QueryParams, useCurrentQueryParams?: boolean) => void]}
  */
 export const useQuerystring =
     typeof window === 'undefined'
@@ -26,9 +26,10 @@ export const useQuerystring =
               /**
                * @param {QueryParams} queryparams
                */
-              const updateQueryString = (queryparams) => {
-                  console.log(queryparams)
-                  const newPath = updateQuery(queryparams)
+              const updateQueryString = (queryparams, useCurrentQueryParams = false) => {
+                  const newQueryParams = useCurrentQueryParams ? { ...query, ...queryparams } : queryparams
+                  console.log(newQueryParams)
+                  const newPath = updateQuery(newQueryParams)
                   router.push(newPath, undefined, { shallow: true })
               }
               return [query, updateQueryString]

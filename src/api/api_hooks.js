@@ -6,7 +6,7 @@ import { useStore } from '../store/Store'
  * @typedef {Object} QueryHookResult
  * @property {ResultData} data
  * @property {boolean} loading
- * @property {any} error
+ * @property {undefined | Error} error
  */
 
 /** @returns {QueryHookResult<string[]>} */
@@ -14,7 +14,7 @@ export const useCollections = () =>
     useStore((state) => ({
         data: state.collections().getData(),
         loading: state.collections().state === 'loading',
-        error: null,
+        error: state.collections().error,
     }))
 
 /** @returns {QueryHookResult<import('./fetch').CollectionData[]>} */
@@ -24,7 +24,7 @@ export const useCollectionData = () => {
         load: state.collectionData().load,
         data: state.collectionData().data,
         loading: state.collectionData().state === 'loading',
-        error: null,
+        error: state.collectionData().error,
     }))
     useEffect(() => {
         if (collections.length) return load(collections)
@@ -32,33 +32,40 @@ export const useCollectionData = () => {
     return { data, loading, error }
 }
 
-/** @returns {QueryHookResult<import('./fetch').Template[]>} */
-export const useTemplates = () => {
+/**
+ * 🛑 This implementation allows for only one active filter at a time!
+ * @param {import('./filter').FilterType=} filter
+ * @returns {QueryHookResult<import('./fetch').Template[]>}
+ **/
+export const useTemplates = (filter) => {
     const { data: collections } = useCollections()
     const { load, data, loading, error } = useStore((state) => ({
         load: state.templates().load,
         data: state.templates().data,
         loading: state.templates().state === 'loading',
-        error: null,
+        error: state.templates().error,
     }))
     useEffect(() => {
-        if (collections.length) return load({ collections, limit: 1000 })
+        if (collections.length) return load({ collections, limit: 1000, ...filter })
     }, [collections])
     return { data, loading, error }
 }
-/** @returns {QueryHookResult<import('./fetch').Schema[]>} */
-export const useSchemas = () => {
+/**
+ * 🛑 This implementation allows for only one active filter at a time!
+ * @param {import('./filter').FilterType=} filter
+ * @returns {QueryHookResult<import('./fetch').Schema[]>}
+ **/
+export const useSchemas = (filter) => {
     const { data: collections } = useCollections()
     const { load, data, loading, error } = useStore((state) => ({
         load: state.schemas().load,
         data: state.schemas().data,
         loading: state.schemas().state === 'loading',
-        error: null,
+        error: state.schemas().error,
     }))
     useEffect(() => {
-        console.log('useSchemas', collections)
-        if (collections.length) return load({ collections })
-    }, [collections])
+        if (collections.length) return load({ collections, ...filter })
+    }, [filter, collections])
     return { data, loading, error }
 }
 /** @returns {QueryHookResult<import('./fetch').Pack[]>} */
@@ -68,7 +75,7 @@ export const usePacks = () => {
         load: state.packs().load,
         data: state.packs().data,
         loading: state.packs().state === 'loading',
-        error: null,
+        error: state.packs().error,
     }))
     useEffect(() => {
         if (collections.length) return load({ collections })
@@ -86,7 +93,7 @@ export const useAssets = (filter = undefined) => {
         load: state.assets().load,
         data: state.assets().data,
         loading: state.assets().state === 'loading',
-        error: null,
+        error: state.assets().error,
     }))
     useEffect(() => {
         if (filter) return load(filter)

@@ -44,7 +44,6 @@ export const Explorer = (props) => {
     const [tabKey, setTabKey] = useState(props.tab)
     /** @type {(tab: ExplorerTab) => void} */
     const switchTab = (tab) => {
-        console.log(`switching to tab: ${tab}`)
         updateQuerystring({ tab })
         setTabKey(tab)
     }
