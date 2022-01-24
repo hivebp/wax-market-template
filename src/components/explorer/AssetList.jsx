@@ -27,7 +27,6 @@ const AssetList = () => {
 
     return (
         <AssetListContent>
-            <pre>{error && error.message}</pre>
             <div className={cn('w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5', 'max-w-filter')}>
                 <Filters
                     defaultSort="created_desc"
