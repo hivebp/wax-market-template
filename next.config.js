@@ -1,6 +1,7 @@
 const ANALYZE = false
 
 module.exports = {
+    pageExtensions: ['page.tsx', 'page.ts', 'page.jsx', 'page.js'],
     webpack: (config, { isServer }) => {
         if (ANALYZE) {
             const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
