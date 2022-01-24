@@ -15,13 +15,9 @@ describe('::ExplorerPage', () => {
         const { container } = render(<ExplorerPage tab="collections" />)
         expect(waitingRequests).toHaveLength(1)
         expect(container).toMatchSnapshot()
-        await act(async () => {
-            flush(1)
-        })
+        await act(async () => flush(1))
         expect(container).toMatchSnapshot()
-        await act(async () => {
-            flush(1)
-        })
+        await act(async () => flush(1))
         expect(container).toMatchSnapshot()
     })
 })

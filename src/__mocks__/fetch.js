@@ -1,11 +1,18 @@
+// Should never happen 😇 You are missing a status code in your `on(…)` calls.
 const INVALID_STATUS = 599
 
+/**
+ * Call to clean up the state of this. Wrap it in `afterEach(() => {…}` or like `afterEach(reset)`
+ */
 export const reset = () => {
     expect(waitingRequests).toHaveLength(0)
     expect(expectedCalls).toHaveLength(0)
     expect(calls.every((call) => call.valid)).toBeTruthy()
 }
 
+/**
+ * Debug report for `afterEach` or just somewhere in your tests
+ */
 export const report = () => {
     console.log({ waitingRequests, expectedCalls, calls })
 }
@@ -14,13 +21,13 @@ export const report = () => {
  * List of all calls made
  * @type {(Call & { valid: boolean })[]}
  */
-let calls = []
+export let calls = []
 
 /**
  * List of all currently expected calls to be made in the future
  * @type {(Call | (FetchFn<MaybeResponse>))[]}
  */
-let expectedCalls = []
+export let expectedCalls = []
 
 /**
  * List of all currently active Requests to be flushed
@@ -128,6 +135,7 @@ const getResponse = (url, call) => {
     return createResponse(result.url ?? url, result.result, result.status)
 }
 
+/** The heart and soul of this creation… */
 global.fetch = async (input, init) => {
     const url = input.toString()
     const response = await new Promise(async (resolve) => {
@@ -153,6 +161,7 @@ global.fetch = async (input, init) => {
 }
 
 /**
+ * Register a response in the request chain. This will be picked up in order of requests that are made. Don't forget to `act(() => flush(1))` these.
  * @param {string} url
  * @param {any | MaybeResponse} response
  * @param {number} [status]
@@ -171,7 +180,7 @@ export const on = (response, url = '*', status = 200) => {
 }
 
 /**
- * Flushes {n} requests
+ * Flushes {n} requests. Should be wrapped in `act(() => {…})`-calls. This will allow the react test renderer to keep up with content changes.
  * @param {number} [n]
  */
 export const flush = (n = waitingRequests.length) => {
