@@ -123,14 +123,15 @@ const createResource = (fetcher, guard = Array.isArray) =>
 /**
  * @template Data
  * @param {Promise<{ data: Data }>} result
+ * @param {Data} fallback
  **/
-const getDataPropertyFromResult = async (result) => (await result).data
+const getDataPropertyFromResult = async (result, fallback) => (await result)?.data ?? fallback
 
 /** @type {(collections: string[]) => Promise<import('../api/fetch').CollectionData[]>} */
-const fetchCollectionsData = (...args) => getDataPropertyFromResult(getCollectionData(...args))
+const fetchCollectionsData = (...args) => getDataPropertyFromResult(getCollectionData(...args), [])
 
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Template[]>} */
-const fetchTemplates = (...args) => getDataPropertyFromResult(getTemplates(...args))
+const fetchTemplates = (...args) => getDataPropertyFromResult(getTemplates(...args), [])
 
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Schema[]>} */
 // @ts-ignore
