@@ -1,0 +1,55 @@
+name: 'Github Action Jobs'
+
+# Controls when the workflow will run
+on:
+    # Triggers the workflow on push or pull request events but only for the main branch
+    push:
+        branches: [main, action]
+    pull_request:
+        branches: [main]
+
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [17.4]
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Cache node_modules
+              id: cache-modules
+              uses: actions/cache@v2.1.7
+              with:
+                  path: node_modules
+                  key: ${{ matrix.node-version }}-${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2.5.1
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            # Install modules
+            - name: Install modules
+              run: npm ci
+              env:
+                  CI: true
+
+            # Builds all the parts and applications
+            - name: Build app
+              run: npm run build
+              env:
+                  CI: true
+
+            # Runs the tests
+            - name: Run the ci tests
+              run: npm run test
+              env:
+                  CI: true
