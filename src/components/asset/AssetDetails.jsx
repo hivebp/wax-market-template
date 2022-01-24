@@ -4,6 +4,9 @@ import { isValidDate } from '../../api/date'
 import config from '../../config.json'
 import Link from '../common/util/input/Link'
 
+/**
+ * @type {React.FC<{ asset: import('../../api/fetch').Asset }>}
+ */
 const AssetDetails = (props) => {
     const asset = props.asset
 
