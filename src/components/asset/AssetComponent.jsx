@@ -8,8 +8,7 @@ import Page from '../common/layout/Page'
 import Header from '../common/util/Header'
 
 /**
- *
- * @type {React.FC<{ asset?: any }>}
+ * @type {React.FC<{ asset?: import('../../api/fetch').Asset }>}
  */
 export const AssetComponent = (props) => {
     if (!props.asset) return <ErrorPage />

@@ -47,14 +47,24 @@ exports[`::AssetIdPage with asset renders 1`] = `
             <h4
               class="inline-flex text-primary mb-4"
             >
-              
+              <div
+                class="h-4 mr-3 rounded-lg overflow-hidden"
+              >
+                <img
+                  alt="none"
+                  class="collection-img"
+                  src="https://ipfs.hivebp.io/ipfs/test-image.svg"
+                />
+              </div>
               <a
                 class="block focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-primary cursor-pointer"
-                href="/collection/undefined"
+                href="/collection/test-collection"
               >
                 <div
                   class="NextLink"
-                />
+                >
+                  test-collection
+                </div>
               </a>
             </h4>
             <h2
@@ -108,7 +118,7 @@ exports[`::AssetIdPage with asset renders 1`] = `
                     <div
                       class="inline-flex leading-6"
                     >
-                      test-supply
+                      2
                     </div>
                   </td>
                 </tr>
