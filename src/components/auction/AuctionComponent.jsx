@@ -12,7 +12,7 @@ import { formatPrice } from '../helpers/Helpers'
 import MarketButtons from '../marketbuttons'
 
 /**
- * @type {React.FC<{ auction: import('../../api/fetch').Auction }>}
+ * @type {React.FC<{ auction?: import('../../api/fetch').Auction }>}
  */
 export const AuctionComponent = (props) => {
     const [auction, setAuction] = useState(props.auction)
@@ -57,11 +57,11 @@ export const AuctionComponent = (props) => {
     }
 
     return (
-        <Page id="AssetPage">
+        <Page>
             <Header title={title} description={description} image={image} />
             <div className={cn('container mx-auto pt-10')}>
-                {auction.assets.map((asset) => (
-                    <div className="grid grid-cols-6 gap-10 h-auto w-full">
+                {auction.assets.map((asset, i) => (
+                    <div key={i} className="grid grid-cols-6 gap-10 h-auto w-full">
                         <div className="col-start-2 col-span-2">
                             <AssetImage asset={asset} />
                         </div>

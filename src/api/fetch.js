@@ -282,7 +282,6 @@ export const getSchemas = createGetter(
 
 /**
  * @typedef {Object} Auction
- * @property {string} auctionId
  * @property {string} market_contract
  * @property {string} assets_contract
  * @property {string} auction_id

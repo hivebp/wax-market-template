@@ -1,4 +1,8 @@
 /**
+ * @typedef {import("../api/fetch").Auction} Auction
+ */
+
+/**
  * @typedef {import("../api/fetch").CollectionData} CollectionData
  */
 
@@ -100,4 +104,36 @@ export const asset = (partial = {}) => ({
     collection: collection(partial.collection),
     schema: schema(partial.schema),
     template: template(partial.template),
+})
+
+/**
+ * @param {Partial<Auction>} [partial]
+ * @returns {Auction}
+ */
+export const auction = (partial = {}) => ({
+    assets: partial.assets ?? [asset()],
+    assets_contract: 'test-asset-contract',
+    auction_id: 'test-auction-id',
+    bids: [],
+    buyer: 'test-buyer',
+    claimed_by_buyer: false,
+    claimed_by_seller: false,
+    collection: collection(partial.collection),
+    created_at_block: '1',
+    created_at_time: '1',
+    end_time: '666',
+    is_seller_contract: false,
+    maker_marketplace: 'test-maker',
+    market_contract: 'test-maker-contract',
+    price: {
+        amount: '999',
+        token_contract: 'test-contract',
+        token_precision: 1001,
+        token_symbol: 'WAX',
+    },
+    seller: 'test-seller',
+    state: 2,
+    taker_marketplace: 'test-marketplace',
+    updated_at_block: '2',
+    updated_at_time: '2',
 })
