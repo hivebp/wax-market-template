@@ -3,8 +3,8 @@ import React from 'react'
 /**
  * @type {import('next').NextPage<{ tab?: string }>}
  */
-const Privacy = (props) => {
+export const PrivacyPage = (props) => {
     return <div></div>
 }
 
-export default Privacy
+export default PrivacyPage

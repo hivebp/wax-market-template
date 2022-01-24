@@ -3,12 +3,15 @@ import React from 'react'
 import { getAsset } from '../../../api/fetch'
 import AssetComponent from '../../../components/asset/AssetComponent'
 
-const Asset = (props) => {
+/**
+ * @type {import('next').NextPage<{ asset?: import('../../../api/fetch').Asset}>}
+ */
+export const AssetPage = (props) => {
     return <AssetComponent {...props} />
 }
 
-Asset.getInitialProps = async (ctx) => {
-    const paths = ctx.asPath.split('/')
+AssetPage.getInitialProps = async (ctx) => {
+    const paths = ctx?.asPath?.split('/') ?? []
     const assetId =
         paths[paths.length - 1].indexOf('?') > 0
             ? paths[paths.length - 1].substr(0, paths[paths.length - 1].indexOf('?'))
@@ -17,9 +20,10 @@ Asset.getInitialProps = async (ctx) => {
     const asset = await getAsset(assetId)
 
     const values = qs.parse(paths[2].replace(`${assetId}?`, ''))
+    // @ts-ignore
     values['asset'] = asset && asset.data
 
     return values
 }
 
-export default Asset
+export default AssetPage

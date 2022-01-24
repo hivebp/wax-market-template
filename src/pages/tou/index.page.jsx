@@ -3,8 +3,8 @@ import React from 'react'
 /**
  * @type {import('next').NextPage}
  */
-const Tou = (props) => {
+export const TermsOfUsePage = (props) => {
     return <div></div>
 }
 
-export default Tou
+export default TermsOfUsePage

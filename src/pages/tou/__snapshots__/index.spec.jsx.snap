@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`::ExplorerPage renders without crashing 1`] = `
+exports[`::TermsOfUsePage renders without crashing 1`] = `
 <div>
   <div />
 </div>

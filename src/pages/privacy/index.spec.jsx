@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react'
-import Privacy from './index.page'
+import PrivacyPage from './index.page'
 
-describe('::ExplorerPage', () => {
+describe('::PrivacyPage', () => {
     it('renders without crashing', async () => {
-        const { container } = render(<Privacy />)
+        const { container } = render(<PrivacyPage />)
         expect(container).toMatchSnapshot()
     })
 })

@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react'
-import Faq from './index.page'
+import FrequentlyAskedQuestionsPage from './index.page'
 
-describe('::ExplorerPage', () => {
+describe('::FrequentlyAskedQuestionsPage', () => {
     it('renders without crashing', async () => {
-        const { container } = render(<Faq />)
+        const { container } = render(<FrequentlyAskedQuestionsPage />)
         expect(container).toMatchSnapshot()
     })
 })

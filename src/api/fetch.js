@@ -255,15 +255,15 @@ export const getSchemas = createGetter(
  * @property {string} asset_id
  * @property {any[]} auctions
  * @property {any[]} backed_tokens
- * @property {any} burned_at_block
- * @property {any} burned_at_time
+ * @property {string} [burned_at_block]
+ * @property {string} [burned_at_time]
  * @property {any} burned_by_account
  * @property {CollectionData} collection
  * @property {string} contract
  * @property {any} data
  * @property {any} immutable_data
- * @property {true} is_burnable
- * @property {true} is_transferable
+ * @property {boolean} is_burnable
+ * @property {boolean} is_transferable
  * @property {string} minted_at_block
  * @property {string} minted_at_time
  * @property {any} mutable_data

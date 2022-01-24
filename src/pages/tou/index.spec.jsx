@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react'
-import Tou from './index.page'
+import TermsOfUsePage from './index.page'
 
-describe('::ExplorerPage', () => {
+describe('::TermsOfUsePage', () => {
     it('renders without crashing', async () => {
-        const { container } = render(<Tou />)
+        const { container } = render(<TermsOfUsePage />)
         expect(container).toMatchSnapshot()
     })
 })

@@ -4,7 +4,11 @@ import React from 'react'
  * @type {import('next').NextPage<{ statusCode?: number }>}
  */
 const ErrorPage = ({ statusCode }) => {
-    return <p>{statusCode ? `An error ${statusCode} occurred on server` : 'An error occurred on client'}</p>
+    return (
+        <p data-testid="error">
+            {statusCode ? `An error ${statusCode} occurred on server` : 'An error occurred on client'}
+        </p>
+    )
 }
 
 ErrorPage.getInitialProps = ({ res, err }) => {

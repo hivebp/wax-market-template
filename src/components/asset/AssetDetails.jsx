@@ -11,7 +11,7 @@ const AssetDetails = (props) => {
 
     const parsedDate = new Date(minted_at_time)
 
-    const date = isValidDate(parsedDate) ? format(date, 'yyyy-MM-dd HH:mm:ss') : ''
+    const date = isValidDate(parsedDate) ? format(parsedDate, 'yyyy-MM-dd HH:mm:ss') : ''
 
     return (
         <div className="text-sm text-white overflow-auto">
@@ -36,24 +36,26 @@ const AssetDetails = (props) => {
             </div>
 
             <table className="w-full my-auto text-lg font-normal">
-                <tr>
-                    <td className="text-left w-1/3">ID:</td>
-                    <td className="text-right overflow-x-auto leading-5 max-w-td">{asset_id}</td>
-                </tr>
-                <tr>
-                    <td className="text-left w-1/3">Issued Supply:</td>
-                    <td className="text-right overflow-x-auto leading-5 max-w-td">
-                        <div className="inline-flex leading-6">{asset.template.issued_supply}</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td className="text-left w-1/3">Schema:</td>
-                    <td className="text-right overflow-x-auto leading-5 max-w-td">{schema.schema_name}</td>
-                </tr>
-                <tr>
-                    <td className="text-left w-1/3">Minted at:</td>
-                    <td className="text-right overflow-x-auto leading-5 max-w-td">{date}</td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td className="text-left w-1/3">ID:</td>
+                        <td className="text-right overflow-x-auto leading-5 max-w-td">{asset_id}</td>
+                    </tr>
+                    <tr>
+                        <td className="text-left w-1/3">Issued Supply:</td>
+                        <td className="text-right overflow-x-auto leading-5 max-w-td">
+                            <div className="inline-flex leading-6">{asset.template.issued_supply}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="text-left w-1/3">Schema:</td>
+                        <td className="text-right overflow-x-auto leading-5 max-w-td">{schema.schema_name}</td>
+                    </tr>
+                    <tr>
+                        <td className="text-left w-1/3">Minted at:</td>
+                        <td className="text-right overflow-x-auto leading-5 max-w-td">{date}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     )
