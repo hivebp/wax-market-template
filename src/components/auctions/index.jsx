@@ -70,7 +70,7 @@ export const Auctions = (props) => {
     const scrollUp = () => {
         if (typeof window !== 'undefined') {
             const element = document.getElementById('AuctionPage')
-            element.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
+            element?.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
         }
     }
 

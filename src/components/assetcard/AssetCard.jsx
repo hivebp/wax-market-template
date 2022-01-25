@@ -1,10 +1,12 @@
 import { ArrowLeft, ArrowRight } from '@material-ui/icons'
 import cn from 'classnames'
-import React, { useEffect, useState } from 'react'
-import { millisecondsToString } from '../../api/date'
+import React, { useState } from 'react'
+import ContentLoader from 'react-content-loader'
 import { getAsset, getAuctionsById, getListingsById } from '../../api/fetch'
 import config from '../../config.json'
+import { withLazy } from '../../hoc/Lazy'
 import { useUAL } from '../../hooks/ual'
+import { AuctionTimer } from '../auction/AuctionTimer'
 import Link from '../common/util/input/Link'
 import SvgIcon from '../common/util/SvgIcon'
 import { formatMintInfo } from '../helpers/Helpers'
@@ -13,8 +15,33 @@ import CardDetails from './CardDetails'
 import CardImage from './CardImage'
 import MoreOptions from './MoreOptions'
 
+const AssetCardLoader = () => (
+    <ContentLoader
+        speed={2}
+        width={224}
+        height={402}
+        viewBox="0 0 224 402"
+        backgroundColor="#f3f3f3"
+        foregroundColor="#ecebeb"
+        backgroundOpacity={0.06}
+        foregroundOpacity={0.12}
+    >
+        <circle cx="16" cy="16" r="8" />
+        <rect x="34" y="9" rx="3" ry="3" width="151" height="14" />
+        <rect x="0" y="39" rx="3" ry="3" width="222" height="222" />
+        <rect x="9" y="273" rx="3" ry="3" width="201" height="21" />
+    </ContentLoader>
+)
 /**
- * @type {import('react').FC<{ listing?: any, assets: any[], index: number | string, sale?: string, page: string }>}
+ * @typedef {{listing?: any;assets: Asset[];index: number | string;sale?: string;page: string;}} AssetCardProps
+ */
+
+/**
+ * @typedef {import('../../api/fetch').Asset} Asset
+ */
+
+/**
+ * @type {React.FC<AssetCardProps>}
  */
 export const AssetCard = (props) => {
     const [listing, setListing] = useState(props['listing'])
@@ -23,6 +50,7 @@ export const AssetCard = (props) => {
 
     const [selectedAsset, setSelectedAsset] = useState(0)
 
+    /** @type {Asset} */
     const asset = assets[selectedAsset]
 
     const index = props['index']
@@ -30,8 +58,7 @@ export const AssetCard = (props) => {
     const [update, setUpdate] = useState({})
     const [frontVisible, setFrontVisible] = useState(true)
     const ual = useUAL()
-    const activeUser = ual['activeUser']
-    const userName = activeUser ? activeUser['accountName'] : null
+    const userName = ual?.activeUser?.accountName ?? null
     const [showMenu, setShowMenu] = useState(false)
     const [error, setError] = useState(null)
     const [bought, setBought] = useState(false)
@@ -41,8 +68,6 @@ export const AssetCard = (props) => {
     const [listed, setListed] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [transferred, setTransferred] = useState(false)
-    const [auctionInterval, setAuctionInterval] = useState(null)
-    const [auctionTimeLeft, setAuctionTimeLeft] = useState(undefined)
     const sale = props['sale']
     const page = props['page']
 
@@ -58,29 +83,6 @@ export const AssetCard = (props) => {
         : asset.sales && asset.sales.length > 0
         ? asset.sales[0]['sale_id']
         : null
-
-    useEffect(() => {
-        if (auction_id) {
-            if (auctionInterval) clearInterval(auctionInterval)
-
-            const interval = 1000
-
-            setAuctionInterval(
-                setInterval(function () {
-                    const diffInMilliseconds = end_time - Date.now()
-
-                    if (diffInMilliseconds < 0) {
-                        clearInterval(auctionInterval)
-                        return setAuctionTimeLeft(0)
-                    }
-
-                    setAuctionTimeLeft(diffInMilliseconds)
-                }, interval),
-            )
-
-            return () => clearInterval(auctionInterval)
-        }
-    }, [auction_id])
 
     const handleBought = (buyInfo) => {
         if (buyInfo) {
@@ -250,9 +252,7 @@ export const AssetCard = (props) => {
                             <div className="h-4 rounded-lg overflow-hidden">
                                 <img src={config.ipfs + collection['img']} className="collection-img" alt="none" />
                             </div>
-                        ) : (
-                            ''
-                        )}
+                        ) : null}
                         <div className="font-light ml-2 mr-auto opacity-80 hover:opacity-100 truncate">
                             {collection_name}
                         </div>
@@ -300,13 +300,7 @@ export const AssetCard = (props) => {
                     {`Bundle ${selectedAsset + 1}/${assets.length}`}
                 </div>
             )}
-            <div
-                className={cn(
-                    'aspect-w-1 aspect-h-1 overflow-hidden',
-                    { 'cursor-pointer': frontVisible },
-                    { 'cursor-pointer hidden': !frontVisible },
-                )}
-            >
+            <div className={cn('aspect-w-1 aspect-h-1 overflow-hidden cursor-pointer', { hidden: !frontVisible })}>
                 {assets.length > 1 && (
                     <div
                         className={cn(
@@ -382,9 +376,7 @@ export const AssetCard = (props) => {
                     isLoading={isLoading}
                     page={page}
                 />
-            ) : (
-                ''
-            )}
+            ) : null}
 
             <div
                 className={cn(
@@ -402,13 +394,10 @@ export const AssetCard = (props) => {
                     <SvgIcon icon={<ArrowRight fontSize="large" />} />
                 )}
             </div>
-            {auctionTimeLeft !== undefined && !canceled && (
-                <div className={cn('text-center')}>
-                    {auctionTimeLeft ? millisecondsToString(auctionTimeLeft) : ' - '}
-                </div>
-            )}
+
+            {canceled ? null : <AuctionTimer endTime={end_time} />}
         </div>
     )
 }
 
-export default AssetCard
+export default withLazy(AssetCard, AssetCardLoader)

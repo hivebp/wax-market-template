@@ -1,9 +1,10 @@
 import { Menu, Transition } from '@headlessui/react'
 import cn from 'classnames'
 import { useRouter } from 'next/router'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { getRefundBalance, getWaxBalance } from '../../api/fetch'
 import config from '../../config.json'
+import { useUAL } from '../../hooks/ual'
 import Link from '../common/util/input/Link'
 import Logo from '../common/util/Logo'
 import { formatNumber } from '../helpers/Helpers'
@@ -58,19 +59,14 @@ const Navigation = React.memo((props) => {
     const [balance, setBalance] = useState(0)
     const [refundBalance, setRefundBalance] = useState(0)
 
-    const { ual = { activeUser: null } } = props
+    const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
     const { claimRefund, isLoading } = useClaimRefund(userName, activeUser, setBalance, setRefundBalance)
 
-    const performLogin = async () => {
-        ual?.showModal()
-    }
-
-    const performLogout = () => {
-        ual?.logout()
-    }
+    const performLogin = useMemo(() => ual?.showModal, [ual.showModal])
+    const performLogout = useMemo(() => ual?.logout, [ual.logout])
 
     useEffect(() => {
         // when there is no userName, this would ask for any users balances
