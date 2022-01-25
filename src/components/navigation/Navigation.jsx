@@ -79,7 +79,7 @@ const Navigation = React.memo((props) => {
     }, [userName])
 
     return (
-        <div className={cn('fixed w-full h-48 md:h-28', 'bg-page shadow-sm border-b border-paper', 'z-30')}>
+        <div className="fixed w-full h-36 md:h-28 bg-page shadow-sm border-b border-paper z-30">
             <div className={cn('relative container mx-auto', 'flex flex-col md:flex-row justify-between items-center')}>
                 <Logo />
                 <div

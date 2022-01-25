@@ -76,7 +76,7 @@ export const Auctions = (props) => {
         <Page onScroll={(e) => handleScroll(e)} id="AuctionPage">
             <Header title={config.market_title} description={config.market_description} image={config.market_image} />
             <MarketContent>
-                <div className={cn('w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5', 'max-w-filter')}>
+                <div className="w-full md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter">
                     <Filters
                         {...props}
                         defaultSort="ending_asc"
@@ -111,7 +111,7 @@ export const Auctions = (props) => {
                         ]}
                     />
                 </div>
-                <div className={cn('w-full sm:2/3 md:w-3/4')}>
+                <div className={cn('w-full md:w-3/4')}>
                     <Pagination items={listings && listings.data} page={page} setPage={setPage} />
                     {isLoading ? (
                         <LoadingIndicator />
