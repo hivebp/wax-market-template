@@ -302,7 +302,29 @@ export const getSchemas = createGetter(
  * @property {string} created_at_block
  * @property {string} created_at_time
  * @property {number} state
-}
+ */
+
+/**
+ * @typedef {Object} BlenderizerBlend
+ * @property {string} collection
+ * @property {number[]} mixture
+ * @property {string} owner
+ * @property {number} target
+ */
+
+/**
+ * This is just guesswork
+ * @typedef {[string, { amount: number, template_id: string, collection_name: string }]} NeftyBlendIngredient
+ */
+/**
+
+ * This is just guesswork
+ * @typedef {Object} NeftyBlend
+ * @property {string} name
+ * @property {string} blend_id 
+ * @property {string} collection_name
+ * @property {string} display_data
+ * @property {NeftyBlendIngredient[]} ingredients
  */
 
 /** @type {(filters: import("./filter").FilterType) => Promise<APIResponse<Template>>}  */
@@ -657,6 +679,9 @@ export const getBlend = createTableGetter(
     firstRow,
 )
 
+/**
+ * @returns {Promise<BlenderizerBlend>}
+ */
 export const getBlenderizer = createTableGetter(
     (/** @type {string} */ templateId) => ({
         json: true,

@@ -3,11 +3,14 @@ import React from 'react'
 import { getBlend } from '../../../api/fetch'
 import BlendComponent from '../../../components/blends/BlendComponent'
 
-const BlendPage = (props) => {
+/**
+ * @type {import('next').NextPage<{ blend: import('../../../api/fetch').NeftyBlend }>}
+ */
+const BlendIdPage = (props) => {
     return <BlendComponent {...props} />
 }
 
-BlendPage.getInitialProps = async (ctx) => {
+BlendIdPage.getInitialProps = async (ctx) => {
     const paths = ctx.asPath.split('/')
     const blendId =
         paths[paths.length - 1].indexOf('?') > 0
@@ -21,4 +24,4 @@ BlendPage.getInitialProps = async (ctx) => {
     return values
 }
 
-export default BlendPage
+export default BlendIdPage

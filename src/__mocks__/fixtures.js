@@ -137,3 +137,19 @@ export const auction = (partial = {}) => ({
     updated_at_block: '2',
     updated_at_time: '2',
 })
+
+/**
+ * @typedef {import("../api/fetch").NeftyBlend} NeftyBlend
+ */
+
+/**
+ * @param {Partial<NeftyBlend>} [partial]
+ * @returns {NeftyBlend}
+ */
+export const neftyblend = (partial = {}) => ({
+    blend_id: 'test-blend-id',
+    collection_name: 'test-collection',
+    display_data: '{}',
+    ingredients: [],
+    name: 'test-blend',
+})
