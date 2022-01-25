@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight } from '@material-ui/icons'
 import cn from 'classnames'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import ContentLoader from 'react-content-loader'
 import { getAsset, getAuctionsById, getListingsById } from '../../api/fetch'
 import config from '../../config.json'
@@ -33,7 +33,12 @@ const AssetCardLoader = () => (
     </ContentLoader>
 )
 /**
- * @typedef {{listing?: any;assets: Asset[];index: number | string;sale?: string;page: string;}} AssetCardProps
+ * @typedef {Object} AssetCardProps
+ * @property {any} [listing]
+ * @property {Asset[]} assets
+ * @property {number | string} index
+ * @property {string} [sale]
+ * @property {string} page
  */
 
 /**
@@ -50,8 +55,7 @@ export const AssetCard = (props) => {
 
     const [selectedAsset, setSelectedAsset] = useState(0)
 
-    /** @type {Asset} */
-    const asset = assets[selectedAsset]
+    const asset = useMemo(() => assets[selectedAsset], [selectedAsset])
 
     const index = props['index']
 

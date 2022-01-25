@@ -36,8 +36,6 @@ export const Auctions = (props) => {
 
     if (!values['sort']) values['sort'] = 'ending_asc'
 
-    const schema = values['schema'] ? values['schema'] : ''
-
     const [showScrollUpIcon, setShowScrollUpIcon] = useState(false)
 
     const getResult = (result) => {
@@ -119,10 +117,10 @@ export const Auctions = (props) => {
                         <LoadingIndicator />
                     ) : (
                         <div
-                            className={cn(
-                                'relative w-full mb-24',
-                                'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4',
-                            )}
+                            className={cn('relative w-full mb-24', 'grid gap-4')}
+                            style={{
+                                gridTemplateColumns: 'repeat( auto-fit, minmax(15rem, 1fr) )',
+                            }}
                         >
                             {listings && listings['success']
                                 ? listings['data'].map((listing, index) => (

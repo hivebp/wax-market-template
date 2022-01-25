@@ -75,6 +75,9 @@ module.exports = {
                 'collection-card': "url('/collection_card/Main.svg')",
             }),
         },
+        screens: {
+            assets: '500px',
+        },
     },
     variants: {
         extend: {
