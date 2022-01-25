@@ -2,11 +2,14 @@ import qs from 'qs'
 import React from 'react'
 import Auctions from '../../../components/auctions'
 
-const BidsPage = (props) => {
+/**
+ * @type {import('next').NextPage<{ bidder?: string, winner?: string }>}
+ */
+const BidsUserPage = (props) => {
     return <Auctions {...props} />
 }
 
-BidsPage.getInitialProps = async (ctx) => {
+BidsUserPage.getInitialProps = async (ctx) => {
     const c = ctx.query.user
 
     const paths = ctx.asPath.split('/')
@@ -18,4 +21,4 @@ BidsPage.getInitialProps = async (ctx) => {
     return values
 }
 
-export default BidsPage
+export default BidsUserPage
