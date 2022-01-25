@@ -1,3 +1,6 @@
+import React from 'react'
+
+/** @type {React.FC<React.SVGProps<SVGSVGElement>>} */
 export const InstagramIcon = (props) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -12,6 +15,7 @@ export const InstagramIcon = (props) => (
     </svg>
 )
 
+/** @type {React.FC<React.SVGProps<SVGSVGElement>>} */
 export const TwitterIcon = (props) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -26,6 +30,7 @@ export const TwitterIcon = (props) => (
     </svg>
 )
 
+/** @type {React.FC<React.SVGProps<SVGSVGElement>>} */
 export const TelegramIcon = (props) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -40,6 +45,7 @@ export const TelegramIcon = (props) => (
     </svg>
 )
 
+/** @type {React.FC<React.SVGProps<SVGSVGElement>>} */
 export const DiscordIcon = (props) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
