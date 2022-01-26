@@ -1,28 +1,21 @@
-import qs from 'qs'
 import React from 'react'
-import { getBlenderizer, getTemplate } from '../../../../api/fetch'
+import { ensureString } from '../../../../api/utils'
 import BlenderizerComponent from '../../../../components/blends/BlenderizerComponent'
 
+/**
+ * @type {import('next').NextPage<Partial<import('../../../../components/blends/BlenderizerComponent').BlenderizerInitialProps>>}
+ */
 const BlenderizerPage = (props) => {
+    if (!props.collectionName) return <div>No collection name provided</div>
+    if (!props.templateId) return <div>No template id provided</div>
     return <BlenderizerComponent {...props} />
 }
 
-BlenderizerPage.getInitialProps = async (ctx) => {
-    const paths = ctx.asPath.split('/')
-    const templateId =
-        paths[paths.length - 1].indexOf('?') > 0
-            ? paths[paths.length - 1].substr(0, paths[paths.length - 1].indexOf('?'))
-            : paths[paths.length - 1]
-    const collectionName = paths[paths.length - 2]
-
-    const values = qs.parse(paths[2].replace(`${templateId}?`, ''))
-
-    const template = await getTemplate({ templateId, collectionName })
-
-    values['template'] = template && template['success'] && template['data']
-    values['blend'] = await getBlenderizer(templateId)
-
-    return values
+BlenderizerPage.getInitialProps = (ctx) => {
+    return {
+        templateId: ensureString(ctx.query.template_id),
+        collectionName: ensureString(ctx.query.collection),
+    }
 }
 
 export default BlenderizerPage

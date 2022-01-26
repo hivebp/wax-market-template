@@ -12,6 +12,9 @@ import { Context } from '../marketwrapper'
 import MyAssetList from './MyAssetList'
 import TemplateIngredient from './TemplateIngredient'
 
+/**
+ * @type {React.FC<{ blend: import('../../api/fetch').NeftyBlend }>}
+ */
 const BlendComponent = (props) => {
     const blend = props.blend
     const [state, dispatch] = useContext(Context)
@@ -162,7 +165,7 @@ const BlendComponent = (props) => {
                                         'shadow-md bg-paper',
                                     )}
                                 >
-                                    <AssetImage asset={{ data: { img: image } }} />
+                                    <AssetImage img={image} />
                                     <div className={cn('absolute w-full bottom-4 left-1/2 transform -translate-x-1/2')}>
                                         {name}
                                     </div>

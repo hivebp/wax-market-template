@@ -23,6 +23,6 @@ export const withLazy = (Component, Fallback) => (props) => {
                     <Fallback />
                 </div>
             ),
-        [visible],
+        [visible, props],
     )
 }

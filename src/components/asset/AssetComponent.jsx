@@ -27,7 +27,7 @@ export const AssetComponent = (props) => {
             <div className={cn('container mx-auto pt-10')}>
                 <div className="flex flex-col items-center md:justify-center md:flex-row h-auto px-10">
                     <div className="w-full md:w-2/5">
-                        <AssetImage asset={asset} />
+                        <AssetImage backimg={asset.data.backimg} img={asset.data.img} video={asset.data.video} />
                     </div>
                     <div className="w-full md:w-3/5 md:px-10">
                         <AssetDetails asset={asset} />

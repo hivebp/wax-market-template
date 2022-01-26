@@ -1,6 +1,6 @@
 import cn from 'classnames'
-import React, { useContext, useEffect, useState } from 'react'
-import { getCollection, getTemplate } from '../../api/fetch'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { createUseGetter, getBlenderizer, getCollection, getTemplate } from '../../api/fetch'
 import { useUAL } from '../../hooks/ual'
 import AssetImage from '../asset/AssetImage'
 import CheckIndicator from '../check/CheckIndicator'
@@ -12,9 +12,16 @@ import { Context } from '../marketwrapper'
 import MyAssetList from './MyAssetList'
 import TemplateIngredient from './TemplateIngredient'
 
-const BlenderizerComponent = (props) => {
-    const blend = props.blend
-    const template = props.template
+/**
+ * @typedef {Object} BlenderizerProps
+ * @property {import('../../api/fetch').BlenderizerBlend} blend
+ * @property {import('../../api/fetch').Template} template
+ */
+
+/**
+ * @type {React.FC<BlenderizerProps>}
+ */
+const BlenderizerComponent = ({ blend, template }) => {
     const [state, dispatch] = useContext(Context)
 
     const [collection, setCollection] = useState(null)
@@ -25,6 +32,7 @@ const BlenderizerComponent = (props) => {
 
     const { mixture, target } = blend
 
+    console.log({ blend, template })
     const collection_name = template.collection.collection_name
 
     const ual = useUAL()
@@ -32,6 +40,11 @@ const BlenderizerComponent = (props) => {
     const userName = activeUser ? activeUser['accountName'] : null
 
     const selectedAssets = state.selectedAssets
+
+    const asset = useMemo(() => {
+        // @TODO fetch some asset to show
+        return null
+    }, [])
 
     /** @type {{ template: any, assignedAsset: any }[]} */
     const templatesNeeded = []
@@ -163,7 +176,11 @@ const BlenderizerComponent = (props) => {
                                         'shadow-md bg-paper',
                                     )}
                                 >
-                                    <AssetImage asset={template} />
+                                    <AssetImage
+                                        backimg={template.immutable_data.img_back}
+                                        img={template.immutable_data.img}
+                                        video={template.immutable_data.video}
+                                    />
                                     <div className={cn('relative w-full bottom-3 left-1/2 transform -translate-x-1/2')}>
                                         {name}
                                     </div>
@@ -211,7 +228,6 @@ const BlenderizerComponent = (props) => {
                                 <div className="text-left p-2 text-xl">My Assets</div>
                                 <MyAssetList
                                     templates={templates}
-                                    {...props}
                                     templatesNeeded={templatesNeeded.filter((template) => !template.assignedAsset)}
                                 />
                             </div>
@@ -223,4 +239,25 @@ const BlenderizerComponent = (props) => {
     )
 }
 
-export default BlenderizerComponent
+/**
+ * @typedef {Object} BlenderizerInitialProps
+ * @property {string} templateId
+ * @property {string} collectionName
+ */
+
+/**
+ * @type {React.FC<BlenderizerInitialProps>}
+ */
+const BlenderizerInitial = (props) => {
+    const { data: template, loading: templateLoading } = createUseGetter(getTemplate)(props)
+    const { data: blend, loading: blendLoading } = createUseGetter(getBlenderizer)(props.templateId)
+
+    if (templateLoading || blendLoading) return <LoadingIndicator />
+
+    if (!template) return <div>Unable to Load Template</div>
+    if (!blend) return <div>Unable to Load Blend</div>
+
+    return <BlenderizerComponent blend={blend} template={template} />
+}
+
+export default BlenderizerInitial

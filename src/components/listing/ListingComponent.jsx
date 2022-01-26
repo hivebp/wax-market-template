@@ -73,7 +73,7 @@ const ListingComponent = (props) => {
                 {listing.assets.map((asset) => (
                     <div className="grid grid-cols-6 gap-10 h-auto w-full">
                         <div className="col-start-2 col-span-2">
-                            <AssetImage asset={asset} />
+                            <AssetImage backimg={asset.data.backimg} img={asset.data.img} video={asset.data.video} />
                         </div>
                         <div className="col-span-2">
                             <AssetDetails asset={asset} />

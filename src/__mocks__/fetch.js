@@ -154,6 +154,7 @@ const getResponse = (url, call) => {
  */
 const findNextCall = (url) => {
     switch (matchMode) {
+        default:
         case MATCH_FIFO:
             return expectedCalls.shift()
         case MATCH_URL: {

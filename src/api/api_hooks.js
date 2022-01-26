@@ -28,7 +28,7 @@ export const useCollectionData = () => {
     }))
     useEffect(() => {
         if (collections.length) return load(collections)
-    }, [collections])
+    }, [collections, load])
     return { data, loading, error }
 }
 
@@ -47,9 +47,10 @@ export const useTemplates = (filter) => {
     }))
     useEffect(() => {
         if (collections.length) return load({ collections, limit: 1000, ...filter })
-    }, [collections])
+    }, [filter, collections, load])
     return { data, loading, error }
 }
+
 /**
  * 🛑 This implementation allows for only one active filter at a time!
  * @param {import('./filter').FilterType=} filter
@@ -65,9 +66,10 @@ export const useSchemas = (filter) => {
     }))
     useEffect(() => {
         if (collections.length) return load({ collections, ...filter })
-    }, [filter, collections])
+    }, [filter, collections, load])
     return { data, loading, error }
 }
+
 /** @returns {QueryHookResult<import('./fetch').Pack[]>} */
 export const usePacks = () => {
     const { data: collections } = useCollections()
@@ -79,7 +81,7 @@ export const usePacks = () => {
     }))
     useEffect(() => {
         if (collections.length) return load({ collections })
-    }, [collections])
+    }, [collections, load])
     return { data, loading, error }
 }
 
@@ -97,6 +99,6 @@ export const useAssets = (filter = undefined) => {
     }))
     useEffect(() => {
         if (filter) return load(filter)
-    }, [filter])
+    }, [filter, load])
     return { data, loading, error }
 }

@@ -1,6 +1,14 @@
 import React, { createContext, useReducer } from 'react'
 import create from 'zustand'
-import { getAssets, getCollectionData, getPacks, getSchemas, getTemplates, loadCollections } from '../api/fetch'
+import {
+    getAssets,
+    getCollectionData,
+    getDataPropertyFromResult,
+    getPacks,
+    getSchemas,
+    getTemplates,
+    loadCollections,
+} from '../api/fetch'
 import { queryParams } from '../api/query'
 // import { queryParams } from '../api/query'
 import reducer from './reducer'
@@ -119,13 +127,6 @@ const createResource = (fetcher, guard = Array.isArray) =>
             return data
         },
     }))
-
-/**
- * @template Data
- * @param {Promise<{ data: Data }>} result
- * @param {Data} fallback
- **/
-const getDataPropertyFromResult = async (result, fallback) => (await result)?.data ?? fallback
 
 /** @type {(collections: string[]) => Promise<import('../api/fetch').CollectionData[]>} */
 const fetchCollectionsData = (...args) => getDataPropertyFromResult(getCollectionData(...args), [])

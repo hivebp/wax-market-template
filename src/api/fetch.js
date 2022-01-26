@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import config from '../config.json'
 import { getCollectionHex } from './fetch_utils'
 import { filter } from './filter'
@@ -12,13 +12,27 @@ export const { atomic_api, api_endpoint, packs_contracts, default_collection } =
  * @returns {Promise<unknown>}
  */
 const sendRequest = async (url, init) => {
+    let response
     try {
-        const response = await fetch(url, init)
-        return response.json()
+        response = await fetch(url, init)
+        if (response.ok) return response.json()
+        const text = await response.text()
+        console.error({
+            url,
+            body: init?.body,
+            ok: response.ok,
+            status: response.status,
+            text: text.slice(0, 300),
+        })
+        return null
     } catch (err) {
+        console.log('error:')
+        console.error(err)
+        console.log(response?.body)
         console.error(`Unable to fetch ${init?.method ?? 'GET'} '${url}'`)
         if (init?.body) console.dir(init?.body)
         console.error(err)
+        return null
     }
 }
 
@@ -67,7 +81,6 @@ export const useFetch = (url, method = 'GET', bodyData = undefined, autofetch = 
      * @property {unknown | undefined} data
      * @property {boolean} loading
      * @property {any | undefined} error
-     * @property {AbortController | undefined} controller
      */
 
     /** @type {FetchState} */
@@ -75,28 +88,33 @@ export const useFetch = (url, method = 'GET', bodyData = undefined, autofetch = 
         data: undefined,
         error: undefined,
         loading: false,
-        controller: undefined,
     }
+
+    /** @type {React.MutableRefObject<AbortController | undefined>} */
+    const controller = useRef()
     const [state, setState] = useState(initialState)
 
-    const request = async () => {
-        if (state.controller) state.controller.abort()
+    const request = useCallback(async () => {
+        controller.current?.abort()
 
-        const controller = new AbortController()
-        setState((state) => ({ ...state, loading: true, controller }))
+        controller.current = new AbortController()
+        setState((state) => ({ ...state, loading: true }))
 
         try {
             const data = await sendRequest(url, {
-                signal: controller.signal,
+                signal: controller.current.signal,
                 method,
                 body: bodyData ? JSON.stringify(bodyData) : undefined,
             })
+
+            if (!data) {
+                return setState((state) => ({ ...state, loading: false, error: 'No data' }))
+            }
 
             setState({
                 data,
                 error: undefined,
                 loading: false,
-                controller: undefined,
             })
         } catch (err) {
             if (hasCode(err) && err.code === 'ECONNABORTED') return
@@ -104,20 +122,16 @@ export const useFetch = (url, method = 'GET', bodyData = undefined, autofetch = 
                 data: state.data,
                 error: hasCode(err) && err.code === 'ECONNABORTED' ? undefined : err,
                 loading: false,
-                controller: undefined,
             }))
         }
 
         return controller
-    }
+    }, [bodyData, method, url])
 
-    useEffect(() => {
-        return () => state.controller?.abort()
-    }, [state.controller])
-
+    useEffect(() => () => controller.current?.abort(), [])
     useEffect(() => {
         if (autofetch) request()
-    }, [])
+    }, [autofetch, request])
 
     return { data: state.data, error: state.error, loading: state.loading, fetch: request }
 }
@@ -134,6 +148,13 @@ export const useGet = (url, data) => useFetch(query(url, data), 'GET', undefined
  * @returns {UseFetchResult}
  */
 export const usePost = (url, data) => useFetch(url, 'POST', data, true)
+
+/**
+ * @template Data
+ * @param {Promise<{ data: Data }> | { data: Data }} result
+ * @param {Data} fallback
+ **/
+export const getDataPropertyFromResult = async (result, fallback) => (await result)?.data ?? fallback
 
 /**
  * @param {any} result
@@ -168,20 +189,53 @@ const createTableGetter =
         mapFn(await post(`${api_endpoint}/v1/chain/get_table_rows`, dataGenerator(...args)))
 
 /**
+ * @template Params
+ * @template Result
+ * @typedef {(param: Params, controller?: AbortController | undefined) => Promise<Result>} TableGetter
+ */
+
+/**
  * Creates a function that fetches the resulting path and returns the json data of the response.
  * @template PathGenerator - Function that generates the path to fetch data from
+ * @template Result - Maybe Convertion result
  * @param {PathGenerator} pathGenerator
- * @return {(param: Parameters<PathGenerator>[0], controller?: AbortController) => Promise<unknown>}
+ * @param {(result: any) => Result} mapFn - default Identity
+ * @return {TableGetter<Parameters<PathGenerator>[0], any>}
  */
 const createGetter =
-    (pathGenerator) =>
+    (pathGenerator, mapFn = (val) => val) =>
     async (param, controller = new AbortController()) =>
         // @ts-ignore
-        get(`${atomic_api}${pathGenerator(param)}`, undefined, { signal: controller.signal })
+        get(`${atomic_api}${pathGenerator(param)}`, undefined, { signal: controller.signal }).then(mapFn)
 
 export const getSchemas = createGetter(
     (/** @type {import("./filter").FilterType=} */ filters) => `/atomicassets/v1/schemas?${filter(filters)}`,
 )
+
+/**
+ * @template Params
+ * @template Result
+ * @param {(param: Params, controller?: AbortController) => Promise<Result>} getter
+ * @returns {(param: Params) => { data: Result | undefined, loading: boolean, error: any }}
+ */
+export const createUseGetter = (getter) => (props) => {
+    const [data, setData] = useState(undefined)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(undefined)
+
+    const refProps = useRef(props)
+
+    useEffect(() => {
+        setLoading(true)
+        getter(refProps.current, new AbortController())
+            // @ts-ignore
+            .then((data) => setData(data))
+            .catch((error) => setError(error))
+            .finally(() => setLoading(false))
+    }, [])
+
+    return { loading, error, data }
+}
 
 /**
  * @template Data
@@ -359,10 +413,11 @@ export const getAuctionsById = createGetter(
     (/** @type {string} */ assetId) => `/atomicmarket/v1/auctions?&limit=1&asset_id=${assetId}`,
 )
 
-// @TODO this needs to be fixed, move from (string, string) to ({ templateId, collectionName })
+/** @type {TableGetter<{templateId: string, collectionName: string }, Template>} */
 export const getTemplate = createGetter(
     /** @param {{templateId: string, collectionName: string }} */
     ({ collectionName, templateId }) => `/atomicassets/v1/templates/${collectionName}/${templateId}`,
+    (data) => getDataPropertyFromResult(data, null),
 )
 export const getAsset = createGetter((/** @type {string} */ assetId) => `/atomicmarket/v1/assets/${assetId}`)
 export const getCollection = createGetter(
@@ -661,6 +716,7 @@ export const getDelphiMedian = createTableGetter(
     (result) => firstRow(result)?.median || null,
 )
 
+/** @type {TableGetter<string, NeftyBlend>} */
 export const getBlend = createTableGetter(
     (/** @type {string} */ blendId) => ({
         json: true,
@@ -679,18 +735,16 @@ export const getBlend = createTableGetter(
     firstRow,
 )
 
-/**
- * @returns {Promise<BlenderizerBlend>}
- */
+/** @type {TableGetter<string, BlenderizerBlend>} */
 export const getBlenderizer = createTableGetter(
-    (/** @type {string} */ templateId) => ({
+    (/** @type {string} */ blendId) => ({
         json: true,
         code: 'blenderizerx',
         scope: 'blenderizerx',
         table: 'blenders',
         table_key: '',
-        lower_bound: templateId,
-        upper_bound: templateId,
+        lower_bound: blendId,
+        upper_bound: blendId,
         index_position: 1,
         key_type: '',
         limit: 1,
