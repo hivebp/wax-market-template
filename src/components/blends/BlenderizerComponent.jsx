@@ -1,6 +1,7 @@
 import cn from 'classnames'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { createUseGetter, getBlenderizer, getCollection, getTemplate } from '../../api/fetch'
+import React, { useContext, useMemo, useState } from 'react'
+import { useTemplates } from '../../api/api_hooks'
+import { createUseGetter, getBlenderizer, getTemplate } from '../../api/fetch'
 import { useUAL } from '../../hooks/ual'
 import AssetImage from '../asset/AssetImage'
 import CheckIndicator from '../check/CheckIndicator'
@@ -13,9 +14,17 @@ import MyAssetList from './MyAssetList'
 import TemplateIngredient from './TemplateIngredient'
 
 /**
+ * @typedef {import('../../api/fetch').Asset} Asset
+ */
+
+/**
+ * @typedef {import('../../api/fetch').Template} Template
+ */
+
+/**
  * @typedef {Object} BlenderizerProps
  * @property {import('../../api/fetch').BlenderizerBlend} blend
- * @property {import('../../api/fetch').Template} template
+ * @property {Template} template
  */
 
 /**
@@ -24,95 +33,55 @@ import TemplateIngredient from './TemplateIngredient'
 const BlenderizerComponent = ({ blend, template }) => {
     const [state, dispatch] = useContext(Context)
 
-    const [collection, setCollection] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const isLoading = false
     const [isLoadingBlend, setIsLoadingBlend] = useState(false)
     const [wasBlended, setWasBlended] = useState(false)
-    const [templates, setTemplates] = useState([])
+    // const [templates, setTemplates] = useState([])
+    const { data: templates } = useTemplates()
 
     const { mixture, target } = blend
-
-    console.log({ blend, template })
-    const collection_name = template.collection.collection_name
 
     const ual = useUAL()
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
-    const selectedAssets = state.selectedAssets
+    /** @type {[Asset[], (asset: Asset[]) => void]} */
+    // @ts-ignore - setSelectedAssets is not strictly correctly typed but as a subset, should be good enough
+    const [selectedAssets, setSelectedAssets] = useState([])
 
-    const asset = useMemo(() => {
-        // @TODO fetch some asset to show
-        return null
-    }, [])
+    const templatesNeeded = useMemo(() => {
+        /** @type {{ template: Template, assignedAsset: Asset | null }[]} */
+        const templatesNeeded = []
+        const availableAssets = [...selectedAssets]
 
-    /** @type {{ template: any, assignedAsset: any }[]} */
-    const templatesNeeded = []
-    /** @type {string[]} */
-    const searchTemplates = []
-    /** @type {string[]} */
-    const assignedAssetIds = []
-
-    mixture.map((ingredient) => {
-        let assignedAsset = null
-
-        selectedAssets &&
-            selectedAssets.map((asset) => {
-                if (
-                    !assignedAsset &&
-                    !assignedAssetIds.includes(asset['asset_id']) &&
-                    asset.template.template_id.toString() === ingredient.toString()
-                ) {
-                    assignedAsset = asset
-                    assignedAssetIds.push(asset['asset_id'])
-                }
-            })
-
-        if (!Object.keys(searchTemplates).includes(ingredient)) {
-            searchTemplates[ingredient] = {
-                collection_name: collection_name,
-            }
+        /** @type {(template: Template) => Asset | null} */
+        const findAndTakeAsset = (template) => {
+            const index = availableAssets.findIndex((asset) => asset.template.template_id === template.template_id)
+            // did not find the asset
+            if (index === -1) return null
+            // found the asset
+            const asset = availableAssets[index]
+            // remove the asset from the available assets
+            availableAssets.splice(index, 1)
+            return asset
         }
-
-        templates.map((template) => {
-            if (template.template_id.toString() === ingredient.toString()) {
-                templatesNeeded.push({
-                    template: template,
-                    assignedAsset: assignedAsset,
-                })
-            }
+        mixture.forEach((templateId) => {
+            const template = templates.find((template) => template.template_id.toString() === templateId.toString())
+            if (template) templatesNeeded.push({ template, assignedAsset: findAndTakeAsset(template) })
         })
-    })
+        return templatesNeeded
+    }, [selectedAssets, templates, mixture])
 
-    const { image, name } = template
-
-    const title = `Check out the Blend for ${name}`
-
-    const parseTemplates = (res) => {
-        const temps = []
-
-        res.map((template) => {
-            if (template && template.success) {
-                temps.push(template.data)
-            }
-        })
-
-        setTemplates(temps)
-        setIsLoading(false)
-        setIsLoadingBlend(false)
+    /** @type {(asset: Asset | null) => void} */
+    const unselect = (asset) => {
+        if (!asset) return
+        const index = selectedAssets.findIndex((selectedAsset) => selectedAsset.asset_id === asset.asset_id)
+        if (index === -1) return
+        selectedAssets.splice(index, 1)
+        setSelectedAssets([...selectedAssets])
     }
 
-    useEffect(() => {
-        Promise.all(
-            Object.keys(searchTemplates).map((template_id) => {
-                return getTemplate({ templateId: template_id, collectionName: searchTemplates[template_id] })
-            }),
-        ).then((res) => parseTemplates(res))
-
-        getCollection(collection_name).then((res) => res && res.success && setCollection(res.data))
-
-        dispatch({ type: 'SET_SELECTED_ASSETS', payload: null })
-    }, [collection_name, wasBlended])
+    const title = `Check out the Blend for ${template.name}`
 
     const blendMore = async () => {
         setWasBlended(false)
@@ -160,7 +129,7 @@ const BlenderizerComponent = ({ blend, template }) => {
 
     return (
         <Page id="BlendPage">
-            <Header title={title} image={image} description={''} />
+            <Header title={title} image={template.immutable_data.img} description={''} />
             {isLoading ? (
                 <LoadingIndicator />
             ) : (
@@ -179,10 +148,10 @@ const BlenderizerComponent = ({ blend, template }) => {
                                     <AssetImage
                                         backimg={template.immutable_data.img_back}
                                         img={template.immutable_data.img}
-                                        video={template.immutable_data.video}
+                                        // video={template.immutable_data.video}
                                     />
                                     <div className={cn('relative w-full bottom-3 left-1/2 transform -translate-x-1/2')}>
-                                        {name}
+                                        {template.name}
                                     </div>
                                 </div>
                             </div>
@@ -215,8 +184,13 @@ const BlenderizerComponent = ({ blend, template }) => {
                                         {isLoading ? (
                                             <LoadingIndicator />
                                         ) : (
-                                            templatesNeeded.map((template, index) => (
-                                                <TemplateIngredient template={template} index={index} />
+                                            templatesNeeded.map(({ template, assignedAsset }, index) => (
+                                                <TemplateIngredient
+                                                    key={index}
+                                                    template={template}
+                                                    selected={!!assignedAsset}
+                                                    onRemove={() => unselect(assignedAsset)}
+                                                />
                                             ))
                                         )}
                                     </div>
@@ -227,8 +201,11 @@ const BlenderizerComponent = ({ blend, template }) => {
                             <div className="mt-5 bg-paper px-4 py-2 rounded">
                                 <div className="text-left p-2 text-xl">My Assets</div>
                                 <MyAssetList
-                                    templates={templates}
-                                    templatesNeeded={templatesNeeded.filter((template) => !template.assignedAsset)}
+                                    templatesNeeded={templatesNeeded
+                                        .filter((template) => !template.assignedAsset)
+                                        .map((template) => template.template)}
+                                    setSelectedAssets={setSelectedAssets}
+                                    selectedAssets={selectedAssets}
                                 />
                             </div>
                         )}
@@ -251,7 +228,6 @@ const BlenderizerComponent = ({ blend, template }) => {
 const BlenderizerInitial = (props) => {
     const { data: template, loading: templateLoading } = createUseGetter(getTemplate)(props)
     const { data: blend, loading: blendLoading } = createUseGetter(getBlenderizer)(props.templateId)
-
     if (templateLoading || blendLoading) return <LoadingIndicator />
 
     if (!template) return <div>Unable to Load Template</div>

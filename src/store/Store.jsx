@@ -80,7 +80,7 @@ const createResource = (fetcher, guard = Array.isArray) =>
         lastLoaded: undefined,
         lastRequest: undefined,
         load: (/** @type {any} */ param) => {
-            const { state, lastRequest } = get()
+            const { state, lastRequest, data } = get()
             // if we are already loaded, check if the params are the same
             switch (state) {
                 case RESOURCE_STATE_LOADED: {
@@ -140,7 +140,7 @@ const fetchSchemas = (...args) => getDataPropertyFromResult(getSchemas(...args))
 
 /** @type {(collections: import('../api/filter').FilterType) => Promise<import('../api/fetch').Asset[]>} */
 // @ts-ignore
-const fetchAssets = (...args) => getDataPropertyFromResult(getAssets(...args))
+const fetchAssets = async (...args) => getDataPropertyFromResult(getAssets(...args), [])
 
 const useCollectionStore = createResource(loadCollections)
 const useCollectionDataStore = createResource(fetchCollectionsData)

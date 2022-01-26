@@ -184,12 +184,9 @@ export const claimPack = async (pack, asset, activeUser) => {
     return result_templates
 }
 
-export const formatMintInfo = (mint) => {
-    if (!mint) {
-        return false
-    }
-
-    return (
+/** @type {React.FC<{mint: string}>} */
+export const MintInfo = ({ mint }) =>
+    !mint ? null : (
         <div
             className={cn(
                 'bg-secondary',
@@ -201,7 +198,8 @@ export const formatMintInfo = (mint) => {
             # {mint}
         </div>
     )
-}
+
+export const formatMintInfo = (mint) => <MintInfo mint={mint} />
 
 export const formatNumber = (value) => {
     const number = parseInt(value)

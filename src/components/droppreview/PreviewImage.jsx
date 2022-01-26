@@ -1,47 +1,40 @@
 import React from 'react'
 import config from '../../config.json'
 
-function PreviewImage(props) {
-    const index = props['index']
-    const asset = props['asset']
+/**
+ * @type {React.FC<{ data: Partial<{ immutable_data: any, mutable_data: any}> }>}
+ */
+export const PreviewImage = ({ data: { immutable_data, mutable_data } }) => {
+    const data = immutable_data ?? mutable_data
 
-    const data = Object.keys(asset).includes('immutable_data') ? asset['immutable_data'] : asset['mutable_data']
+    if (!data) return null
 
-    const image = asset['immutable_data']['img']
-        ? asset['immutable_data']['img'].includes('http')
-            ? asset['immutable_data']['img']
-            : config.ipfs + asset['immutable_data']['img']
-        : ''
-    let video = asset['immutable_data']['video']
-        ? asset['immutable_data']['video'].includes('http')
-            ? asset['immutable_data']['video']
-            : asset['immutable_data']['video'].includes('http')
-            ? asset['immutable_data']['video']
-            : config.ipfs + data['video']
-        : ''
+    const { img, video } = data
+
+    if (!img && !video) return null
+
+    const imageSrc = img.includes('http') ? img : config.ipfs + img
+    const videoSrc = undefined // video.includes('http') ? video : config.ipfs + video
 
     return (
         <div className="flex content-center">
-            {image ? (
-                <img className="preview-img my-auto" src={image} alt="none" />
-            ) : video ? (
+            {/* {video ? (
                 <video
                     className="w-full"
-                    id={'video' + index}
                     width="190"
                     height="190"
                     loop
                     autoPlay={true}
                     muted={true}
                     playsInline={true}
-                    poster={image ? image : ''}
+                    poster={img ? imageSrc : undefined}
                 >
-                    <source src={video} />
+                    <source src={videoSrc} />
                     Your browser does not support the video tag.
                 </video>
             ) : (
-                ''
-            )}
+                )} */}
+            <img className="preview-img my-auto" src={imageSrc} alt="none" />
         </div>
     )
 }

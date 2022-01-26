@@ -57,7 +57,7 @@ function DropPreview(props) {
                         {assets &&
                             assets.map((asset, i) => (
                                 <div key={i} className="flex flex-1 h-full">
-                                    <PreviewImage {...props} asset={asset} />
+                                    <PreviewImage data={asset} />
                                 </div>
                             ))}
                     </div>

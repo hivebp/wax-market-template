@@ -146,10 +146,25 @@ export const auction = (partial = {}) => ({
  * @param {Partial<NeftyBlend>} [partial]
  * @returns {NeftyBlend}
  */
-export const neftyblend = (partial = {}) => ({
+export const neftyBlend = (partial = {}) => ({
     blend_id: 'test-blend-id',
     collection_name: 'test-collection',
     display_data: '{}',
     ingredients: [],
     name: 'test-blend',
+})
+
+/**
+ * @typedef {import("../api/fetch").BlenderizerBlend} BlenderizerBlend
+ */
+
+/**
+ * @param {Partial<BlenderizerBlend>} [partial]
+ * @returns {BlenderizerBlend}
+ */
+export const blenderizerBlend = (partial = {}) => ({
+    collection: 'test-collection',
+    mixture: [1, 2, 3, 4, 5],
+    owner: 'test-owner',
+    target: 1234567890,
 })

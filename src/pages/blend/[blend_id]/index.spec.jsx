@@ -11,7 +11,7 @@ describe('::BlendIdPage', () => {
     it('renders correctly', async () => {
         on({ data: {} }, 'https://wax.api.atomicassets.io/atomicassets/v1/collections/test-collection')
 
-        const { container } = render(<BlendIdPage blend={fixtures.neftyblend()} />)
+        const { container } = render(<BlendIdPage blend={fixtures.neftyBlend()} />)
         expect(container).toMatchSnapshot()
         await act(async () => flush(1))
         expect(container).toMatchSnapshot()

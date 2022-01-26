@@ -13,6 +13,10 @@ import MyAssetList from './MyAssetList'
 import TemplateIngredient from './TemplateIngredient'
 
 /**
+ * @typedef {import('../../api/fetch').Asset} Asset
+ */
+
+/**
  * @type {React.FC<{ blend: import('../../api/fetch').NeftyBlend }>}
  */
 const BlendComponent = (props) => {
@@ -30,7 +34,9 @@ const BlendComponent = (props) => {
     const activeUser = ual['activeUser']
     const userName = activeUser ? activeUser['accountName'] : null
 
-    const selectedAssets = state.selectedAssets
+    /** @type {[Asset[], (asset: Asset[]) => void]} */
+    // @ts-ignore - setSelectedAssets is not strictly correctly typed but as a subset, should be good enough
+    const [selectedAssets, setSelectedAssets] = useState([])
 
     /** @type {{ template: any, assignedAsset: any }[]} */
     const templatesNeeded = []
@@ -212,9 +218,11 @@ const BlendComponent = (props) => {
                             <div className="mt-5 bg-paper px-4 py-2 rounded">
                                 <div className="text-left p-2 text-xl">My Assets</div>
                                 <MyAssetList
-                                    templates={templates}
-                                    {...props}
-                                    templatesNeeded={templatesNeeded.filter((template) => !template.assignedAsset)}
+                                    templatesNeeded={templatesNeeded
+                                        .filter((template) => !template.assignedAsset)
+                                        .map((template) => template.template)}
+                                    setSelectedAssets={setSelectedAssets}
+                                    selectedAssets={selectedAssets}
                                 />
                             </div>
                         )}

@@ -1,57 +1,40 @@
 import cn from 'classnames'
-import React, { useContext, useEffect } from 'react'
+import React from 'react'
 import PreviewImage from '../droppreview/PreviewImage'
-import { Context } from '../marketwrapper'
 
-function TemplateIngredient(props) {
-    const template = props['template']
-    const index = props['index']
-    const [state, dispatch] = useContext(Context)
+/**
+ * @typedef {import('../../api/fetch').Template} Template
+ */
 
-    const selectedAssets = state.selectedAssets
+/**
+ * @typedef {Object} TemplateIngredientProps
+ * @property {Template} template
+ * @property {boolean} [selected]
+ * @property {(template: Template) => void} onRemove
+ */
 
-    const selected = template.assignedAsset && template.assignedAsset.asset_id
-
-    useEffect(() => {
-        if (!selected) {
-        }
-    }, [selected])
-
-    const removeAsset = (asset) => {
-        if (asset) {
-            const newSelectedAssets = []
-            selectedAssets &&
-                selectedAssets.map((ass) => {
-                    if (ass.asset_id !== asset.asset_id) {
-                        newSelectedAssets.push(ass)
-                    }
-                })
-            dispatch({ type: 'SET_SELECTED_ASSETS', payload: newSelectedAssets })
-        }
-    }
-
-    return (
-        <div
-            className={cn(
-                'relative w-full mx-auto rounded-md overflow-hidden',
-                'flex flex-col',
-                'text-base break-words',
-                'backdrop-filter backdrop-blur-sm border',
-                'shadow-md bg-paper',
-                { 'border-primary': selected },
-            )}
-            id={'AssetPreview_' + index}
-            onClick={() => removeAsset(template.assignedAsset)}
-        >
-            <div className={cn('')}>
-                <div className={cn('w-full')}>
-                    <PreviewImage {...props} asset={template.template} />
-                </div>
-                <div>{template.template.name}</div>
-                <div>Template: {template.template.template_id}</div>
+/** @type {React.FC<TemplateIngredientProps>} */
+export const TemplateIngredient = ({ template, selected = false, onRemove }) => (
+    <div
+        className={cn(
+            'relative w-full mx-auto rounded-md overflow-hidden',
+            'flex flex-col',
+            'text-base break-words',
+            'backdrop-filter backdrop-blur-sm border',
+            'transition-all',
+            { 'border-primary bg-primary bg-opacity-40': selected },
+            { 'bg-paper': !selected },
+        )}
+        onClick={() => onRemove(template)}
+    >
+        <div className={cn('')}>
+            <div className={cn('w-full')}>
+                <PreviewImage data={template} />
             </div>
+            <div>{template.name}</div>
+            <div>Template: {template.template_id}</div>
         </div>
-    )
-}
+    </div>
+)
 
 export default TemplateIngredient

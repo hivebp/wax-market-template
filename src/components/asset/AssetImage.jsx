@@ -18,14 +18,20 @@ const AssetImage = ({ backimg, img, video }) => {
 
     const mediaElement = useMemo(
         () =>
-            selectedMedia.type === 'video' ? (
-                <video width="400" height="400" controls autoPlay={true} muted={false}>
-                    <source src={config.ipfs + selectedMedia.media} />
-                    Your browser does not support the video tag.
-                </video>
-            ) : (
-                <img className="max-w-full max-h-img-asset m-auto" src={config.ipfs + selectedMedia.media} alt="none" />
-            ),
+            selectedMedia ? (
+                selectedMedia.type === 'video' ? (
+                    <video width="400" height="400" controls autoPlay={true} muted={false}>
+                        <source src={config.ipfs + selectedMedia.media} />
+                        Your browser does not support the video tag.
+                    </video>
+                ) : (
+                    <img
+                        className="max-w-full max-h-img-asset m-auto"
+                        src={config.ipfs + selectedMedia.media}
+                        alt="none"
+                    />
+                )
+            ) : null,
         [selectedMedia],
     )
 
@@ -35,6 +41,7 @@ const AssetImage = ({ backimg, img, video }) => {
             <div className="absolute flex justify-evenly w-full bottom-5 t-img-btn">
                 {mediaFormats.map((_, index) => (
                     <div
+                        key={index}
                         className="h-6 text-base align-middle text-white cursor-pointer bg-transparent outline-none border-none"
                         onClick={() => setImagePosition(index)}
                     >

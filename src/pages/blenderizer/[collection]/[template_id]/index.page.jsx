@@ -5,10 +5,10 @@ import BlenderizerComponent from '../../../../components/blends/BlenderizerCompo
 /**
  * @type {import('next').NextPage<Partial<import('../../../../components/blends/BlenderizerComponent').BlenderizerInitialProps>>}
  */
-const BlenderizerPage = (props) => {
-    if (!props.collectionName) return <div>No collection name provided</div>
-    if (!props.templateId) return <div>No template id provided</div>
-    return <BlenderizerComponent {...props} />
+const BlenderizerPage = ({ collectionName, templateId }) => {
+    if (!collectionName) return <div>No collection name provided</div>
+    if (!templateId) return <div>No template id provided</div>
+    return <BlenderizerComponent collectionName={collectionName} templateId={templateId} />
 }
 
 BlenderizerPage.getInitialProps = (ctx) => {

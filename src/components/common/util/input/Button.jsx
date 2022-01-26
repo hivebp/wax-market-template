@@ -1,7 +1,8 @@
 import cn from 'classnames'
 import React from 'react'
 
-export default function Button({ children, className, disabled, onClick, id }) {
+/** @type {React.FC<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>>} */
+export const Button = ({ children, className, disabled, onClick, id }) => {
     return (
         <button
             id={id}
@@ -21,3 +22,5 @@ export default function Button({ children, className, disabled, onClick, id }) {
         </button>
     )
 }
+
+export default Button

@@ -26,12 +26,13 @@ const sendRequest = async (url, init) => {
         })
         return null
     } catch (err) {
-        console.log('error:')
-        console.error(err)
-        console.log(response?.body)
-        console.error(`Unable to fetch ${init?.method ?? 'GET'} '${url}'`)
-        if (init?.body) console.dir(init?.body)
-        console.error(err)
+        console.error({
+            url,
+            body: init?.body,
+            ok: false,
+            status: 'error',
+            text: err,
+        })
         return null
     }
 }

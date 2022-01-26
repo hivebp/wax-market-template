@@ -176,9 +176,8 @@ const findNextCall = (url) => {
 /** The heart and soul of this creation… */
 global.fetch = async (input, init) => {
     const url = input.toString()
+    const call = findNextCall(url)
     const response = await new Promise(async (resolve) => {
-        const call = findNextCall(url)
-
         if (!call) console.error(`unexpected fetch request: ${url}`)
         const response = getResponse(url, typeof call === 'function' ? call(input, init) : call)
 

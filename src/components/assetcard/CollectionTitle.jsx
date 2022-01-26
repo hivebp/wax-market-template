@@ -1,14 +1,12 @@
 import cn from 'classnames'
-import React from 'react'
+import React, { useMemo } from 'react'
 import config from '../../config.json'
 import Link from '../common/util/input/Link'
 
-function CollectionTitle(props) {
-    const collection = props['collection']
-    const hasLink = props['hasLink']
-
-    return (
-        <Link href={'/collection/' + collection['collection_name']} hasLink={hasLink}>
+/** @type {React.FC<{ collection: import('../../api/fetch').CollectionData, hasLink?: boolean }>} */
+const CollectionTitle = ({ collection, hasLink = false }) => {
+    const content = useMemo(
+        () => (
             <div
                 className={cn(
                     'relative flex items-center leading-4 p-2',
@@ -25,8 +23,10 @@ function CollectionTitle(props) {
                 )}
                 <div className="font-light ml-2 mr-auto opacity-60 truncate">{collection['collection_name']}</div>
             </div>
-        </Link>
+        ),
+        [collection],
     )
+    return hasLink ? <Link href={'/collection/' + collection['collection_name']}>{content}</Link> : content
 }
 
 export default CollectionTitle

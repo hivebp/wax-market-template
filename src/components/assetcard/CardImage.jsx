@@ -1,14 +1,9 @@
 import cn from 'classnames'
-import React, { useEffect } from 'react'
+import React from 'react'
 import config from '../../config.json'
 
-/**
- * @type {import('react').FC<{ index: string | number, asset: any }>}
- **/
-const CardImage = (props) => {
-    const index = props['index']
-    const asset = props['asset']
-
+/** @type {React.FC<{ asset: import('../../api/fetch').Asset }>} **/
+const CardImage = ({ asset }) => {
     const data = 'data' in asset ? asset['data'] : asset['immutable_data']
 
     const image = data['img'] ? (data['img'].includes('http') ? data['img'] : config.ipfs + data['img']) : ''
@@ -18,8 +13,6 @@ const CardImage = (props) => {
         video = data['video'].includes('http') ? data['video'] : config.ipfs + data['video']
     }
 
-    useEffect(() => {}, [index, video])
-
     return (
         <div className="flex content-center">
             {image ? (
@@ -28,7 +21,6 @@ const CardImage = (props) => {
                 video && (
                     <video
                         className={cn('w-full')}
-                        id={'video' + index}
                         width="190"
                         height="190"
                         loop
