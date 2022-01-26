@@ -18,7 +18,9 @@ export const PreviewImage = ({ data: { immutable_data, mutable_data } }) => {
 
     return (
         <div className="flex content-center">
-            {/* {video ? (
+            {img ? (
+                <img className="preview-img my-auto" src={imageSrc} alt="none" />
+            ) : (
                 <video
                     className="w-full"
                     width="190"
@@ -32,9 +34,7 @@ export const PreviewImage = ({ data: { immutable_data, mutable_data } }) => {
                     <source src={videoSrc} />
                     Your browser does not support the video tag.
                 </video>
-            ) : (
-                )} */}
-            <img className="preview-img my-auto" src={imageSrc} alt="none" />
+            )}
         </div>
     )
 }
