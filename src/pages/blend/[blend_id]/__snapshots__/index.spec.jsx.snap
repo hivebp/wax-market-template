@@ -20,4 +20,73 @@ exports[`::BlendIdPage renders correctly 1`] = `
 </div>
 `;
 
-exports[`::BlendIdPage renders correctly 2`] = `<div />`;
+exports[`::BlendIdPage renders correctly 2`] = `
+<div>
+  <div
+    class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
+    id="BlendPage"
+  >
+    <div
+      class="container mx-auto pt-10"
+    >
+      <div
+        class="w-full h-auto text-center md:px-10"
+      >
+        <div
+          class="flex items-center justify-center h-auto"
+        >
+          <div
+            class="w-full md:w-96 flex flex-col items-center"
+          >
+            <div
+              class="relative w-full text-center rounded-md overflow-hidden text-base break-words backdrop-filter backdrop-blur-sm border border-paper shadow-md bg-paper"
+            >
+              <div
+                class="relative flex justify-center asset-img w-full h-auto border p-4 pb-16 border-none"
+              >
+                <div
+                  class="absolute flex justify-evenly w-full bottom-5 t-img-btn"
+                />
+              </div>
+              <div
+                class="absolute w-full bottom-4 left-1/2 transform -translate-x-1/2"
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          class="focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-primary transition-opacity duration-200 opacity-75 hover:opacity-100 cursor-pointer cursor-not-allowed py-1 px-8 text-secondary mt-3 mb-3 mx-auto cursor-pointer text-sm font-bold leading-relaxed uppercase rounded-3xl outline-none bg-paper"
+          disabled=""
+        >
+          Blend
+        </button>
+        
+        <div
+          class="bg-paper px-4 py-2 rounded"
+        >
+          <div
+            class="text-left p-2 text-xl"
+          >
+            Ingredients
+          </div>
+          <div
+            class="w-full grid grid-cols-4 md:grid-cols-6 2xl:grid-cols-8 gap-2 md:gap-10"
+          />
+        </div>
+        <div
+          class="mt-5 bg-paper px-4 py-2 rounded"
+        >
+          <div
+            class="text-left p-2 text-xl"
+          >
+            My Assets
+          </div>
+          <div
+            class="w-full grid grid-cols-4 md:grid-cols-6 2xl:grid-cols-8 gap-2 md:gap-10"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

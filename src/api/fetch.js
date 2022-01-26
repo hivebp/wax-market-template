@@ -221,13 +221,12 @@ export const getSchemas = createGetter(
  */
 export const createUseGetter = (getter) => (props) => {
     const [data, setData] = useState(undefined)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState(undefined)
 
     const refProps = useRef(props)
 
     useEffect(() => {
-        setLoading(true)
         getter(refProps.current, new AbortController())
             // @ts-ignore
             .then((data) => setData(data))

@@ -164,7 +164,7 @@ export const neftyBlend = (partial = {}) => ({
  */
 export const blenderizerBlend = (partial = {}) => ({
     collection: 'test-collection',
-    mixture: [1, 2, 3, 4, 5],
+    mixture: [1, 2],
     owner: 'test-owner',
     target: 1234567890,
 })

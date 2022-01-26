@@ -228,6 +228,7 @@ const BlenderizerComponent = ({ blend, template }) => {
 const BlenderizerInitial = (props) => {
     const { data: template, loading: templateLoading } = createUseGetter(getTemplate)(props)
     const { data: blend, loading: blendLoading } = createUseGetter(getBlenderizer)(props.templateId)
+
     if (templateLoading || blendLoading) return <LoadingIndicator />
 
     if (!template) return <div>Unable to Load Template</div>

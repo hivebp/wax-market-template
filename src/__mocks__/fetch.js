@@ -37,8 +37,12 @@ export const report = () => {
 export let calls = []
 
 /**
+ * @typedef {{match: FetchFn<boolean>, response: any, status: number}} ExpectedCall
+ */
+
+/**
  * List of all currently expected calls to be made in the future
- * @type {(Call | (FetchFn<MaybeResponse>))[]}
+ * @type {ExpectedCall[]}
  */
 export let expectedCalls = []
 
@@ -61,6 +65,7 @@ export let waitingRequests = []
  * @typedef {Object} Call
  * @property {string} [url]
  * @property {number} [status]
+ * @property {any} [body]
  * @property {MaybeResponse} response
  **/
 
@@ -149,21 +154,17 @@ const getResponse = (url, call) => {
 }
 
 /**
- * @param {string} url
- * @returns {Call | FetchFn<MaybeResponse> | undefined}
+ * @type {FetchFn<ExpectedCall | undefined>}
  */
-const findNextCall = (url) => {
+const findNextCall = (input, init) => {
     switch (matchMode) {
         default:
         case MATCH_FIFO:
             return expectedCalls.shift()
         case MATCH_URL: {
-            const index = expectedCalls.findIndex((call) => {
-                if (typeof call === 'function') return false
-                return call.url === url
-            })
+            const index = expectedCalls.findIndex(({ match }) => match(input, init))
             if (index === -1) {
-                console.error(`Unable to find matching request for ${url}`)
+                console.error(`Unable to find matching request for ${input} [${init?.body}]`)
                 return undefined
             }
             const call = expectedCalls[index]
@@ -176,10 +177,10 @@ const findNextCall = (url) => {
 /** The heart and soul of this creation… */
 global.fetch = async (input, init) => {
     const url = input.toString()
-    const call = findNextCall(url)
+    const expectedCall = findNextCall(input, init)
     const response = await new Promise(async (resolve) => {
-        if (!call) console.error(`unexpected fetch request: ${url}`)
-        const response = getResponse(url, typeof call === 'function' ? call(input, init) : call)
+        if (!expectedCall) console.error(`unexpected fetch request: ${url}`)
+        const response = getResponse(url, expectedCall?.response)
 
         waitingRequests.push({
             url,
@@ -201,13 +202,13 @@ global.fetch = async (input, init) => {
 
 /**
  * Register a response in the request chain. This will be picked up in order of requests that are made. Don't forget to `act(() => flush(1))` these.
- * @param {string} url
  * @param {any | MaybeResponse} response
+ * @param {string | FetchFn<boolean>} url
  * @param {number} [status]
  */
 export const on = (response, url = '*', status = 200) => {
     expectedCalls.push({
-        url,
+        match: typeof url === 'string' ? (init) => init.toString() === url : url,
         response:
             typeof response === 'function'
                 ? response

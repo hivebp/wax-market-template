@@ -28,11 +28,6 @@ exports[`::AssetIdPage with asset renders 1`] = `
           <div
             class="relative flex justify-center asset-img w-full h-auto border p-4 pb-16 border-none"
           >
-            <img
-              alt="none"
-              class="max-w-full max-h-img-asset m-auto"
-              src="https://ipfs.hivebp.io/ipfs/undefined"
-            />
             <div
               class="absolute flex justify-evenly w-full bottom-5 t-img-btn"
             />
