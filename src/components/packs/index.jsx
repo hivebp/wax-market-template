@@ -12,7 +12,7 @@ const Packs = (props) => {
 
     const keys = ['mypacks', 'unclaimed']
 
-    const [tabKey, setTabKey] = useState(
+    const [activeTab, setTabKey] = useState(
         typeof window !== 'undefined'
             ? values['tab'] && keys.includes(values['tab'])
                 ? values['tab']
@@ -23,7 +23,7 @@ const Packs = (props) => {
     )
 
     const initTabs = async (key, initial = false) => {
-        if (key !== tabKey || initial) {
+        if (key !== activeTab || initial) {
             const query = values
 
             delete query['order_dir']
@@ -38,8 +38,8 @@ const Packs = (props) => {
     }
 
     useEffect(() => {
-        initTabs(tabKey, true)
-    }, [tabKey])
+        initTabs(activeTab, true)
+    }, [activeTab])
 
     return (
         <Page>
@@ -51,18 +51,23 @@ const Packs = (props) => {
                         'text-sm lg:text-base text-neutral',
                         'border border-paper',
                     )}
-                    defaultActiveKey={tabKey}
+                    defaultActiveKey={activeTab}
                     id="collection-switch"
                     onSelect={(k) => initTabs(k)}
                 >
-                    <Tab eventKey="mypacks" title={<TabItem target={'mypacks'} tabKey={tabKey} title={'My Packs'} />}>
-                        {tabKey === 'mypacks' && <MyPacksList {...props} />}
+                    <Tab
+                        eventKey="mypacks"
+                        title={<TabItem target={'mypacks'} tabKey={activeTab} title={'My Packs'} />}
+                        unmountOnExit
+                    >
+                        <MyPacksList {...props} />
                     </Tab>
                     <Tab
                         eventKey="unclaimed"
-                        title={<TabItem target={'unclaimed'} tabKey={tabKey} title={'Unclaimed Packs'} />}
+                        title={<TabItem target={'unclaimed'} tabKey={activeTab} title={'Unclaimed Packs'} />}
+                        unmountOnExit
                     >
-                        {tabKey === 'unclaimed' && <UnclaimedPacksList {...props} />}
+                        <UnclaimedPacksList {...props} />
                     </Tab>
                 </Tabs>
             </div>

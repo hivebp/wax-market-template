@@ -1,17 +1,11 @@
-import qs from 'qs'
 import React from 'react'
 import Blends from '../../components/blends'
 
+/**
+ * @type {import('next').NextPage}
+ */
 const BlendsPage = (props) => {
-    return <Blends {...props} />
-}
-
-BlendsPage.getInitialProps = async (ctx) => {
-    const paths = ctx.asPath.split('/')
-
-    const values = qs.parse(paths[1].replace('?', ''))
-
-    return values
+    return <Blends />
 }
 
 export default BlendsPage

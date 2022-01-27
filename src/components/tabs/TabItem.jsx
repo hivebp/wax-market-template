@@ -1,13 +1,14 @@
 import cn from 'classnames'
 import React from 'react'
 
-function TabItem(props) {
+/** @type {React.FC<{ title: string, tabKey: string, target: string }>} */
+const TabItem = (props) => {
     const { title, tabKey, target } = props
 
     return (
         <div
             className={cn(
-                'flex justify-center w-full h-full overflow-hidden rounded-md pl-5',
+                'flex justify-center w-full h-full overflow-hidden rounded-md',
                 'text-white text-base md:text-lg text-center no-underline font-normal opacity-100',
                 'transition-opacity duration-500',
                 'hover:text-white hover:opacity-100 hover:underline',

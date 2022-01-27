@@ -92,7 +92,7 @@ const createResource = (fetcher, guard = Array.isArray) =>
                 }
                 case RESOURCE_STATE_LOADING: {
                     if (lastRequest?.param === param) {
-                        console.debug('called load again with the same params')
+                        // console.debug('called load again with the same params')
                         return () => lastRequest.controller.abort()
                     }
                     // params changed, abort the previous request and start a new one
@@ -150,7 +150,7 @@ const usePackStore = createResource(getPacks)
 const useAssetStore = createResource(fetchAssets)
 
 const useLocationStore = create((set, get) => ({
-    pathname: typeof window === 'undefined' ? '/' : window.location.pathname,
+    pathname: () => (typeof window === 'undefined' ? '/' : window.location.pathname),
     query: queryParams(),
     /**
      * @param {import('../api/query').QueryParams} queryparams
@@ -159,13 +159,10 @@ const useLocationStore = create((set, get) => ({
     updateQuery: (queryparams) => {
         // this needs to create a new object to ensure the equality check used by useEffect and useMemo will work as expected by the users
         set({ query: { ...queryparams } })
-        const path = `${get().pathname}?${new URLSearchParams(queryparams)}`
+        const path = `${get().pathname()}?${new URLSearchParams(queryparams)}`
         return path
     },
-    init:
-        typeof window === 'undefined'
-            ? () => {}
-            : () => set({ pathname: window.location.pathname, query: queryParams() }),
+    init: typeof window === 'undefined' ? () => {} : () => set({ query: queryParams() }),
 }))
 
 export const useStore = create(() => ({

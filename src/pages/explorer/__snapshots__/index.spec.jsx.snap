@@ -5,70 +5,269 @@ exports[`::ExplorerPage renders without crashing 1`] = `
   <div
     class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
   >
-    <ul
-      class="border-tabs flex  h-12 my-10 rounded-md text-sm lg:text-base text-neutral border border-paper nav nav-tabs"
-      role="tablist"
-    >
-      <li
-        class="nav-item"
-        role="presentation"
-      >
-        <button
-          aria-controls="collection-switch-tabpane-collections"
-          aria-selected="true"
-          class="nav-link active"
-          data-rr-ui-event-key="collections"
-          id="collection-switch-tab-collections"
-          role="tab"
-          type="button"
-        >
-          <div
-            class="flex justify-center w-full h-full overflow-hidden rounded-md pl-5 text-white text-base md:text-lg text-center no-underline font-normal opacity-100 transition-opacity duration-500 hover:text-white hover:opacity-100 hover:underline selected:text-white selected:opacity-100 opacity-100 bg-primary text-secondary"
-          >
+    <div>
+      <h3>
+        Tabs
+      </h3>
+      <pre>
+        {
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "defaultActiveKey": "collections"
+}
+      </pre>
+      <div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "collections",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
             <div
-              class="my-auto px-5"
+              class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            />
+          </div>
+        </div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "assets",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="md:flex md:flex-row relative pt-6 px-6 pb-6"
             >
-              Collections
+              <div
+                class="w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter"
+              >
+                <div>
+                  <header
+                    class="flex items-center mb-4"
+                  >
+                    <button
+                      class="transition-transform transform-gpu rotate-180"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        style="display: block;"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                        />
+                      </svg>
+                    </button>
+                    <h3
+                      class="text-neutral font-bold text-xl border-b-4 border-primary"
+                    >
+                      Filters
+                    </h3>
+                  </header>
+                  <div
+                    class="overflow-hidden transition-height h-0"
+                  >
+                    <div />
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Schema
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Name
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Rarity
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Variant
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Sort By
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder is-selected"
+                            >
+                              Created (Newest)
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="w-full sm:2/3 md:w-3/4"
+              >
+                <div
+                  class="flex justify-center m-auto"
+                >
+                  <img
+                    alt="Loading"
+                    class="w-8 h-8 m-auto animate-spin duration-1000"
+                    data-testid="loading-spinner"
+                    src="/Loader.svg"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </button>
-      </li>
-      <li
-        class="nav-item"
-        role="presentation"
-      >
-        <button
-          aria-controls="collection-switch-tabpane-assets"
-          class="nav-link"
-          data-rr-ui-event-key="assets"
-          id="collection-switch-tab-assets"
-          role="tab"
-          tabindex="-1"
-          type="button"
-        >
-          <div
-            class="flex justify-center w-full h-full overflow-hidden rounded-md pl-5 text-white text-base md:text-lg text-center no-underline font-normal opacity-100 transition-opacity duration-500 hover:text-white hover:opacity-100 hover:underline selected:text-white selected:opacity-100"
-          >
-            <div
-              class="my-auto px-5"
-            >
-              Assets
-            </div>
-          </div>
-        </button>
-      </li>
-    </ul>
-    <div
-      class="tab-content"
-    >
-      <div
-        aria-labelledby="collection-switch-tab-collections"
-        class="tab-pane active"
-        id="collection-switch-tabpane-collections"
-      >
-        <div
-          class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        />
+        </div>
       </div>
     </div>
   </div>
@@ -80,79 +279,267 @@ exports[`::ExplorerPage renders without crashing 2`] = `
   <div
     class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
   >
-    <ul
-      class="border-tabs flex  h-12 my-10 rounded-md text-sm lg:text-base text-neutral border border-paper nav nav-tabs"
-      role="tablist"
-    >
-      <li
-        class="nav-item"
-        role="presentation"
-      >
-        <button
-          aria-controls="collection-switch-tabpane-collections"
-          aria-selected="true"
-          class="nav-link active"
-          data-rr-ui-event-key="collections"
-          id="collection-switch-tab-collections"
-          role="tab"
-          type="button"
-        >
-          <div
-            class="flex justify-center w-full h-full overflow-hidden rounded-md pl-5 text-white text-base md:text-lg text-center no-underline font-normal opacity-100 transition-opacity duration-500 hover:text-white hover:opacity-100 hover:underline selected:text-white selected:opacity-100 opacity-100 bg-primary text-secondary"
-          >
+    <div>
+      <h3>
+        Tabs
+      </h3>
+      <pre>
+        {
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "defaultActiveKey": "collections"
+}
+      </pre>
+      <div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "collections",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
             <div
-              class="my-auto px-5"
-            >
-              Collections
-            </div>
-          </div>
-        </button>
-      </li>
-      <li
-        class="nav-item"
-        role="presentation"
-      >
-        <button
-          aria-controls="collection-switch-tabpane-assets"
-          class="nav-link"
-          data-rr-ui-event-key="assets"
-          id="collection-switch-tab-assets"
-          role="tab"
-          tabindex="-1"
-          type="button"
-        >
-          <div
-            class="flex justify-center w-full h-full overflow-hidden rounded-md pl-5 text-white text-base md:text-lg text-center no-underline font-normal opacity-100 transition-opacity duration-500 hover:text-white hover:opacity-100 hover:underline selected:text-white selected:opacity-100"
-          >
-            <div
-              class="my-auto px-5"
-            >
-              Assets
-            </div>
-          </div>
-        </button>
-      </li>
-    </ul>
-    <div
-      class="tab-content"
-    >
-      <div
-        aria-labelledby="collection-switch-tab-collections"
-        class="tab-pane active"
-        id="collection-switch-tabpane-collections"
-      >
-        <div
-          class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          <div
-            class="flex justify-center m-auto"
-          >
-            <img
-              alt="Loading"
-              class="w-8 h-8 m-auto animate-spin duration-1000"
-              data-testid="loading-spinner"
-              src="/Loader.svg"
+              class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
             />
+          </div>
+        </div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "assets",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="md:flex md:flex-row relative pt-6 px-6 pb-6"
+            >
+              <div
+                class="w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter"
+              >
+                <div>
+                  <header
+                    class="flex items-center mb-4"
+                  >
+                    <button
+                      class="transition-transform transform-gpu rotate-180"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        style="display: block;"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                        />
+                      </svg>
+                    </button>
+                    <h3
+                      class="text-neutral font-bold text-xl border-b-4 border-primary"
+                    >
+                      Filters
+                    </h3>
+                  </header>
+                  <div
+                    class="overflow-hidden transition-height h-0"
+                  >
+                    <div />
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Schema
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Name
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Rarity
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Variant
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Sort By
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder is-selected"
+                            >
+                              Created (Newest)
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="w-full sm:2/3 md:w-3/4"
+              >
+                <div
+                  class="flex justify-center m-auto"
+                >
+                  <img
+                    alt="Loading"
+                    class="w-8 h-8 m-auto animate-spin duration-1000"
+                    data-testid="loading-spinner"
+                    src="/Loader.svg"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -166,70 +553,1405 @@ exports[`::ExplorerPage renders without crashing 3`] = `
   <div
     class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
   >
-    <ul
-      class="border-tabs flex  h-12 my-10 rounded-md text-sm lg:text-base text-neutral border border-paper nav nav-tabs"
-      role="tablist"
-    >
-      <li
-        class="nav-item"
-        role="presentation"
-      >
-        <button
-          aria-controls="collection-switch-tabpane-collections"
-          aria-selected="true"
-          class="nav-link active"
-          data-rr-ui-event-key="collections"
-          id="collection-switch-tab-collections"
-          role="tab"
-          type="button"
-        >
-          <div
-            class="flex justify-center w-full h-full overflow-hidden rounded-md pl-5 text-white text-base md:text-lg text-center no-underline font-normal opacity-100 transition-opacity duration-500 hover:text-white hover:opacity-100 hover:underline selected:text-white selected:opacity-100 opacity-100 bg-primary text-secondary"
-          >
+    <div>
+      <h3>
+        Tabs
+      </h3>
+      <pre>
+        {
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "defaultActiveKey": "collections"
+}
+      </pre>
+      <div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "collections",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
             <div
-              class="my-auto px-5"
+              class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              Collections
+              <div
+                class="flex justify-center m-auto"
+              >
+                <img
+                  alt="Loading"
+                  class="w-8 h-8 m-auto animate-spin duration-1000"
+                  data-testid="loading-spinner"
+                  src="/Loader.svg"
+                />
+              </div>
             </div>
           </div>
-        </button>
-      </li>
-      <li
-        class="nav-item"
-        role="presentation"
-      >
-        <button
-          aria-controls="collection-switch-tabpane-assets"
-          class="nav-link"
-          data-rr-ui-event-key="assets"
-          id="collection-switch-tab-assets"
-          role="tab"
-          tabindex="-1"
-          type="button"
-        >
-          <div
-            class="flex justify-center w-full h-full overflow-hidden rounded-md pl-5 text-white text-base md:text-lg text-center no-underline font-normal opacity-100 transition-opacity duration-500 hover:text-white hover:opacity-100 hover:underline selected:text-white selected:opacity-100"
-          >
+        </div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "assets",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
             <div
-              class="my-auto px-5"
+              class="md:flex md:flex-row relative pt-6 px-6 pb-6"
             >
-              Assets
+              <div
+                class="w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter"
+              >
+                <div>
+                  <header
+                    class="flex items-center mb-4"
+                  >
+                    <button
+                      class="transition-transform transform-gpu rotate-180"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        style="display: block;"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                        />
+                      </svg>
+                    </button>
+                    <h3
+                      class="text-neutral font-bold text-xl border-b-4 border-primary"
+                    >
+                      Filters
+                    </h3>
+                  </header>
+                  <div
+                    class="overflow-hidden transition-height h-0"
+                  >
+                    <div />
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Schema
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Name
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Rarity
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Variant
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Sort By
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder is-selected"
+                            >
+                              Created (Newest)
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="w-full sm:2/3 md:w-3/4"
+              >
+                <div
+                  class="flex justify-center m-auto"
+                >
+                  <img
+                    alt="Loading"
+                    class="w-8 h-8 m-auto animate-spin duration-1000"
+                    data-testid="loading-spinner"
+                    src="/Loader.svg"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </button>
-      </li>
-    </ul>
-    <div
-      class="tab-content"
-    >
-      <div
-        aria-labelledby="collection-switch-tab-collections"
-        class="tab-pane active"
-        id="collection-switch-tabpane-collections"
-      >
-        <div
-          class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`::ExplorerPage renders without crashing 4`] = `
+<div>
+  <div
+    class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
+  >
+    <div>
+      <h3>
+        Tabs
+      </h3>
+      <pre>
+        {
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "defaultActiveKey": "collections"
+}
+      </pre>
+      <div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "collections",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              <div
+                class="flex justify-center m-auto"
+              >
+                <img
+                  alt="Loading"
+                  class="w-8 h-8 m-auto animate-spin duration-1000"
+                  data-testid="loading-spinner"
+                  src="/Loader.svg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "assets",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="md:flex md:flex-row relative pt-6 px-6 pb-6"
+            >
+              <div
+                class="w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter"
+              >
+                <div>
+                  <header
+                    class="flex items-center mb-4"
+                  >
+                    <button
+                      class="transition-transform transform-gpu rotate-180"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        style="display: block;"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                        />
+                      </svg>
+                    </button>
+                    <h3
+                      class="text-neutral font-bold text-xl border-b-4 border-primary"
+                    >
+                      Filters
+                    </h3>
+                  </header>
+                  <div
+                    class="overflow-hidden transition-height h-0"
+                  >
+                    <div />
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Schema
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Name
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Rarity
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Variant
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Sort By
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder is-selected"
+                            >
+                              Created (Newest)
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="w-full sm:2/3 md:w-3/4"
+              >
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+                <div
+                  class="relative w-full mb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                />
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`::ExplorerPage renders without crashing 5`] = `
+<div>
+  <div
+    class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
+  >
+    <div>
+      <h3>
+        Tabs
+      </h3>
+      <pre>
+        {
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "defaultActiveKey": "collections"
+}
+      </pre>
+      <div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "collections",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              <div
+                class="flex justify-center m-auto"
+              >
+                <img
+                  alt="Loading"
+                  class="w-8 h-8 m-auto animate-spin duration-1000"
+                  data-testid="loading-spinner"
+                  src="/Loader.svg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "assets",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="md:flex md:flex-row relative pt-6 px-6 pb-6"
+            >
+              <div
+                class="w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter"
+              >
+                <div>
+                  <header
+                    class="flex items-center mb-4"
+                  >
+                    <button
+                      class="transition-transform transform-gpu rotate-180"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        style="display: block;"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                        />
+                      </svg>
+                    </button>
+                    <h3
+                      class="text-neutral font-bold text-xl border-b-4 border-primary"
+                    >
+                      Filters
+                    </h3>
+                  </header>
+                  <div
+                    class="overflow-hidden transition-height h-0"
+                  >
+                    <div />
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Schema
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Name
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Rarity
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Variant
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Sort By
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder is-selected"
+                            >
+                              Created (Newest)
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="w-full sm:2/3 md:w-3/4"
+              >
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+                <div
+                  class="relative w-full mb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                />
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`::ExplorerPage renders without crashing 6`] = `
+<div>
+  <div
+    class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
+  >
+    <div>
+      <h3>
+        Tabs
+      </h3>
+      <pre>
+        {
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "defaultActiveKey": "collections"
+}
+      </pre>
+      <div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "collections",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              <div
+                class="flex justify-center m-auto"
+              >
+                <img
+                  alt="Loading"
+                  class="w-8 h-8 m-auto animate-spin duration-1000"
+                  data-testid="loading-spinner"
+                  src="/Loader.svg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "assets",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="md:flex md:flex-row relative pt-6 px-6 pb-6"
+            >
+              <div
+                class="w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter"
+              >
+                <div>
+                  <header
+                    class="flex items-center mb-4"
+                  >
+                    <button
+                      class="transition-transform transform-gpu rotate-180"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        style="display: block;"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                        />
+                      </svg>
+                    </button>
+                    <h3
+                      class="text-neutral font-bold text-xl border-b-4 border-primary"
+                    >
+                      Filters
+                    </h3>
+                  </header>
+                  <div
+                    class="overflow-hidden transition-height h-0"
+                  >
+                    <div />
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Schema
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Name
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Rarity
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Variant
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Sort By
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder is-selected"
+                            >
+                              Created (Newest)
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="w-full sm:2/3 md:w-3/4"
+              >
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+                <div
+                  class="relative w-full mb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                />
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`::ExplorerPage renders without crashing 7`] = `
+<div>
+  <div
+    class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
+  >
+    <div>
+      <h3>
+        Tabs
+      </h3>
+      <pre>
+        {
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "defaultActiveKey": "collections"
+}
+      </pre>
+      <div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "collections",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="lg:justify-evenly px-6 min-h-60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            />
+          </div>
+        </div>
+        <div>
+          <h3>
+            Tab
+          </h3>
+          <pre>
+            {
+  "eventKey": "assets",
+  "unmountOnExit": true
+}
+          </pre>
+          <div>
+            <div
+              class="md:flex md:flex-row relative pt-6 px-6 pb-6"
+            >
+              <div
+                class="w-full sm:1/3 md:w-1/4 md:ml-4 mx-auto p-0 md:p-5 max-w-filter"
+              >
+                <div>
+                  <header
+                    class="flex items-center mb-4"
+                  >
+                    <button
+                      class="transition-transform transform-gpu rotate-180"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root"
+                        focusable="false"
+                        style="display: block;"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+                        />
+                      </svg>
+                    </button>
+                    <h3
+                      class="text-neutral font-bold text-xl border-b-4 border-primary"
+                    >
+                      Filters
+                    </h3>
+                  </header>
+                  <div
+                    class="overflow-hidden transition-height h-0"
+                  >
+                    <div />
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Schema
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Name
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Rarity
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Variant
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder"
+                            >
+                              -
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="mb-6"
+                    >
+                      <div
+                        class="w-full inline-block m-0"
+                      >
+                        <div
+                          class="text-neutral font-normal text-sm mb-2"
+                        >
+                          Sort By
+                        </div>
+                        <div
+                          class="Dropdown-root w-full rounded-lg border border-solid border-paper"
+                        >
+                          <div
+                            aria-haspopup="listbox"
+                            class="Dropdown-control"
+                          >
+                            <div
+                              class="Dropdown-placeholder is-selected"
+                            >
+                              Created (Newest)
+                            </div>
+                            <div
+                              class="Dropdown-arrow-wrapper"
+                            >
+                              <span
+                                class="Dropdown-arrow"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="w-full sm:2/3 md:w-3/4"
+              >
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+                <div
+                  class="relative w-full mb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                />
+                <div
+                  class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -1,107 +1,74 @@
 import cn from 'classnames'
-import { useRouter } from 'next/router'
-import qs from 'qs'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import config from '../../config.json'
 import { useUAL } from '../../hooks/ual'
 import Content from '../common/layout/Content'
 import Page from '../common/layout/Page'
-import { getValues } from '../helpers/Helpers'
+import { getElementFromList, useQuerystring } from '../helpers/Helpers'
 import TabItem from '../tabs/TabItem'
 import BlenderizerList from './BlenderizerList'
 import NeftyBlendsList from './NeftyBlendsList'
 
-const Blends = (props) => {
-    const values = getValues()
+export const BlendTabs = config.blend_contracts
 
-    const keys = config.blend_contracts
-    const ual = useUAL()
+export const getTabFromString = getElementFromList(BlendTabs)
 
-    const activeUser = ual['activeUser'] && ual['activeUser']['accountName']
-    const loggedOut = activeUser === null
-
-    const [tabKey, setTabKey] = useState(
-        typeof window !== 'undefined'
-            ? values['tab'] && keys.includes(values['tab'])
-                ? values['tab']
-                : 'nefty.blends'
-            : props.tab && keys.includes(props.tab)
-            ? props.tab
-            : 'nefty.blends',
+/** @type {React.FC} */
+const LoginWindow = () => {
+    const { showModal } = useUAL()
+    return (
+        <div className="flex justify-center">
+            <button
+                className="hover:text-black hover:bg-primary font-bold py-2 px-4 rounded border-2 border-primary transition-colors"
+                onClick={showModal}
+            >
+                To use the Blend feature you need to login.
+            </button>
+        </div>
     )
+}
 
-    const router = useRouter()
+/** @type {React.FC} */
+export const Blends = (props) => {
+    const [values, updateQuerystring] = useQuerystring()
 
-    const pushQueryString = (qsValue) => {
-        const newPath = window.location.pathname + '?' + qsValue
-
-        router.push(newPath, undefined, { shallow: true })
-    }
-
-    const initTabs = async (key, user, loggedOut, initial = false) => {
-        if (key !== tabKey || initial) {
-            const query = values
-
-            query['tab'] = key
-            if (user) query['user'] = user
-            else delete query['user']
-
-            if (!initial) pushQueryString(qs.stringify(query))
-            setTabKey(key)
-        }
-    }
-
-    useEffect(() => {
-        initTabs(tabKey, activeUser, loggedOut, true)
-    }, [tabKey, activeUser, loggedOut])
-
-    const login = () => {
-        ual.showModal()
-    }
+    const ual = useUAL()
+    const accountName = ual.activeUser?.accountName ?? null
+    const activeTab = useMemo(() => getTabFromString(values.tab), [values.tab])
 
     return (
         <Page>
-            <Content headline="Blends">
+            <Content>
                 <div className="container mx-auto">
-                    {loggedOut ? (
-                        <div onClick={login}>Login</div>
-                    ) : keys.length > 1 ? (
+                    {!ual.activeUser ? (
+                        <LoginWindow />
+                    ) : (
                         <Tabs
                             className={cn(
                                 'border-tabs',
-                                'flex h-12 my-10 rounded-md',
+                                'flex h-12 my-10 rounded-md pl-4',
                                 'text-sm lg:text-base text-neutral',
-                                'border border-paper',
+                                'border border-paper items-center',
                             )}
-                            defaultActiveKey={tabKey}
-                            id="collection-switch"
-                            onSelect={(k) => initTabs(k)}
+                            defaultActiveKey={activeTab}
+                            onSelect={(newTab) => newTab && updateQuerystring({ tab: newTab }, true)}
                         >
                             <Tab
-                                eventKey="nefty.blends"
-                                title={
-                                    <TabItem
-                                        user={activeUser}
-                                        target={'nefty.blends'}
-                                        tabKey={tabKey}
-                                        title={'Nefty Blends'}
-                                    />
-                                }
+                                eventKey="blenderizerx"
+                                title={<TabItem target={'blenderizerx'} tabKey={activeTab} title={'Blenderizer'} />}
+                                unmountOnExit
                             >
-                                {tabKey === 'nefty.blends' && <NeftyBlendsList user={activeUser} {...props} />}
+                                <BlenderizerList user={accountName} {...props} />
                             </Tab>
                             <Tab
-                                eventKey="blenderizer"
-                                title={<TabItem target={'blenderizer'} tabKey={tabKey} title={'Blenderizer'} />}
+                                eventKey="nefty.blends"
+                                title={<TabItem target={'nefty.blends'} tabKey={activeTab} title={'Nefty Blends'} />}
+                                unmountOnExit
                             >
-                                {tabKey === 'blenderizer' && <BlenderizerList user={activeUser} {...props} />}
+                                <NeftyBlendsList user={accountName} {...props} />
                             </Tab>
                         </Tabs>
-                    ) : keys.includes('blenderizerx') ? (
-                        <BlenderizerList user={activeUser} {...props} />
-                    ) : (
-                        <NeftyBlendsList user={activeUser} {...props} />
                     )}
                 </div>
             </Content>

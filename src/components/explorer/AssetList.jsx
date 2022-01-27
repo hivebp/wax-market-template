@@ -15,12 +15,9 @@ const AssetList = () => {
     const { data: collections, loading: collectionsLoading } = useCollections()
     const [values] = useQuerystring()
     const [page, setPage] = useState(1)
-    const filters = useMemo(() => {
-        console.log('update filters')
-        return getFilters(values, collections, 'assets', page)
-    }, [values, collections, page])
+    const filters = useMemo(() => getFilters(values, collections, 'assets', page), [values, collections, page])
 
-    const { data: assets, loading: assetsLoading, error } = useAssets(filters)
+    const { data: assets, loading: assetsLoading } = useAssets(filters)
     const loading = collectionsLoading || assetsLoading
 
     const pageination = useMemo(() => <Pagination items={assets} page={page} setPage={setPage} />, [assets, page])

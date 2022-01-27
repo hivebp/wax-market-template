@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`::BlendsPage renders correctly 1`] = `
+<div>
+  <div
+    class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
+  >
+    <div
+      class="md:flex md:flex-row relative pt-6 px-6 pb-6"
+    >
+      <div
+        class="container mx-auto"
+      >
+        <div>
+          <h3>
+            Tabs
+          </h3>
+          <pre>
+            {
+  "className": "border-tabs flex h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
+  "defaultActiveKey": "blenderizerx"
+}
+          </pre>
+          <div>
+            <div>
+              <h3>
+                Tab
+              </h3>
+              <pre>
+                {
+  "eventKey": "blenderizerx",
+  "unmountOnExit": true
+}
+              </pre>
+              <div>
+                <div
+                  class="w-full grid grid-cols-8 gap-10"
+                >
+                  <div
+                    class="col-span-8 sm:col-span-8"
+                  >
+                    <div
+                      class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                    />
+                    <div
+                      class="relative w-full mb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    />
+                    <div
+                      class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3>
+                Tab
+              </h3>
+              <pre>
+                {
+  "eventKey": "nefty.blends",
+  "unmountOnExit": true
+}
+              </pre>
+              <div>
+                <div
+                  class="w-full grid grid-cols-8 gap-10"
+                >
+                  <div
+                    class="col-span-8 sm:col-span-8"
+                  >
+                    <div
+                      class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                    />
+                    <div
+                      class="relative w-full mb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    />
+                    <div
+                      class="flex justify-evenly cursor-pointer w-1/3 h-4 mr-4 mb-3 ml-auto pb-16 text-base text-neutral font-light"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

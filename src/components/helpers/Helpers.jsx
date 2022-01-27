@@ -6,6 +6,14 @@ import { queryParams } from '../../api/query'
 import config from '../../config.json'
 import { useStore } from '../../store/Store'
 
+
+/**
+ * @param {string[]} elements
+ * @returns {(maybeElement: string | null | undefined) => string}
+ */
+ export const getElementFromList = elements => (maybeElement) => maybeElement && elements.includes(maybeElement) ? maybeElement : elements[0]
+
+
 /**
  * @typedef {import('../../api/query').QueryParams} QueryParams
  */
@@ -30,6 +38,7 @@ export const useQuerystring =
                   const newQueryParams = useCurrentQueryParams ? { ...query, ...queryparams } : queryparams
                   console.log(newQueryParams)
                   const newPath = updateQuery(newQueryParams)
+                  console.log(newPath)
                   router.push(newPath, undefined, { shallow: true })
               }
               return [query, updateQueryString]
