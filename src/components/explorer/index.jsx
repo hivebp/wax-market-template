@@ -25,7 +25,7 @@ export const Explorer = () => {
                     'border-tabs',
                     'flex  h-12 my-10 rounded-md pl-4',
                     'text-sm lg:text-base text-neutral',
-                    'border border-paper',
+                    'border border-paper items-center',
                 )}
                 defaultActiveKey={activeTab}
                 onSelect={(newTab) => newTab && updateQuerystring({ tab: getTabFromString(newTab) }, true)}
