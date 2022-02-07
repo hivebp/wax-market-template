@@ -422,6 +422,7 @@ export const getTemplate = createGetter(
 export const getAsset = createGetter((/** @type {string} */ assetId) => `/atomicmarket/v1/assets/${assetId}`)
 export const getCollection = createGetter(
     (/** @type {string} */ collectionName) => `/atomicassets/v1/collections/${collectionName}`,
+    (data) => getDataPropertyFromResult(data, null),
 )
 export const getSale = createGetter((/** @type {string} */ saleId) => `/atomicmarket/v1/sales/${saleId}`)
 export const getAuction = createGetter((/** @type {string} */ auctionId) => `/atomicmarket/v1/auctions/${auctionId}`)

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import React from 'react'
 
-/** @type {React.FC<{ title: string, description: string, image?: string}>} */
+/** @type {React.FC<{ title: string, description: string, image?: string }>} */
 export const Header = ({ title, description, image }) => (
     <Head>
         <title>{title}</title>

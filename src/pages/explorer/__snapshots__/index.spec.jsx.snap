@@ -11,7 +11,7 @@ exports[`::ExplorerPage renders without crashing 1`] = `
       </h3>
       <pre>
         {
-  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
   "defaultActiveKey": "collections"
 }
       </pre>
@@ -285,7 +285,7 @@ exports[`::ExplorerPage renders without crashing 2`] = `
       </h3>
       <pre>
         {
-  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
   "defaultActiveKey": "collections"
 }
       </pre>
@@ -559,7 +559,7 @@ exports[`::ExplorerPage renders without crashing 3`] = `
       </h3>
       <pre>
         {
-  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
   "defaultActiveKey": "collections"
 }
       </pre>
@@ -844,7 +844,7 @@ exports[`::ExplorerPage renders without crashing 4`] = `
       </h3>
       <pre>
         {
-  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
   "defaultActiveKey": "collections"
 }
       </pre>
@@ -1128,7 +1128,7 @@ exports[`::ExplorerPage renders without crashing 5`] = `
       </h3>
       <pre>
         {
-  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
   "defaultActiveKey": "collections"
 }
       </pre>
@@ -1412,7 +1412,7 @@ exports[`::ExplorerPage renders without crashing 6`] = `
       </h3>
       <pre>
         {
-  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
   "defaultActiveKey": "collections"
 }
       </pre>
@@ -1696,7 +1696,7 @@ exports[`::ExplorerPage renders without crashing 7`] = `
       </h3>
       <pre>
         {
-  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper",
+  "className": "border-tabs flex  h-12 my-10 rounded-md pl-4 text-sm lg:text-base text-neutral border border-paper items-center",
   "defaultActiveKey": "collections"
 }
       </pre>

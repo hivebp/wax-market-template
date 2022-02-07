@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`::CollectionPage renders correctly 1`] = `
+<div>
+  <div
+    class="flex justify-center m-auto"
+  >
+    <img
+      alt="Loading"
+      class="w-8 h-8 m-auto animate-spin duration-1000"
+      data-testid="loading-spinner"
+      src="/Loader.svg"
+    />
+  </div>
+</div>
+`;
+
+exports[`::CollectionPage renders correctly 2`] = `
+<div>
+  <div
+    class="w-full h-auto min-h-full overflow-x-hidden m-auto ml-0 z-10 transition transform duration-200"
+    id="CollectionPage"
+  >
+    <div
+      class="container mx-auto"
+    >
+      <div
+        class="items-center mt-10 grid grid-cols-8 gap-8"
+      >
+        <div
+          class="col-span-8 md:col-span-2 md:col-start-2 relative flex justify-center text-center"
+        >
+          <img
+            alt="none"
+            class="w-full max-w-full mt-auto"
+            src="https://ipfs.hivebp.io/ipfs/test-image.svg"
+          />
+        </div>
+        <div
+          class="col-span-8 md:col-span-4"
+        >
+          <div
+            class="lg:px-10 text-base text-neutral"
+          >
+            <div
+              class="text-5xl mb-8 w-full"
+            >
+              test-collection
+            </div>
+            <div
+              class="text-lg font-normal leading-relaxed"
+            />
+            <table
+              class="mt-8 w-full font-normal"
+            >
+              <tbody>
+                <tr>
+                  <td
+                    class="text-neutral text-left"
+                  >
+                    Collection Name:
+                  </td>
+                  <td
+                    class="text-neutral text-right"
+                  >
+                    test-collection
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    class="text-neutral text-left"
+                  >
+                    Market Fee:
+                  </td>
+                  <td
+                    class="text-neutral text-right"
+                  >
+                    100100
+                    %
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <a
+        class="block focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-primary cursor-pointer"
+        href="/explorer?tab=assets&collection=test-collection"
+      >
+        <h3
+          class="flex mt-20 mb-4 text-3xl text-left text-neutral"
+        >
+          Newest Assets
+        </h3>
+      </a>
+      <div>
+        <div
+          class="relative mt-10 w-full px-0 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-4"
+        >
+          
+          
+          
+        </div>
+      </div>
+      <a
+        class="block focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-primary cursor-pointer"
+        href="/market?collection=test-collection&sort=date_desc"
+      >
+        <h3
+          class="flex mt-20 mb-4 text-3xl text-left text-neutral"
+        >
+          Latest Listings
+        </h3>
+      </a>
+      <div>
+        <div
+          class="relative mt-10 w-full px-0 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-4"
+        >
+          
+          
+          
+        </div>
+      </div>
+      <h3
+        class="flex mt-20 mb-4 text-3xl text-left text-neutral"
+      >
+        Top Sales
+      </h3>
+      <div>
+        <div
+          class="relative mt-10 w-full px-0 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-4"
+        >
+          
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

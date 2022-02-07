@@ -1,22 +1,21 @@
-import qs from 'qs'
 import React from 'react'
-import { getCollection } from '../../../api/fetch'
+import { createUseGetter, getCollection } from '../../../api/fetch'
+import { ensureString } from '../../../api/utils'
 import CollectionComponent from '../../../components/collection/CollectionComponent'
-
+import LoadingIndicator from '../../../components/loadingindicator/LoadingIndicator'
+import config from '../../../config.json'
+/**
+ * @type {import('next').NextPage<{ collection: string | undefined }>}
+ */
 const Collection = (props) => {
-    return <CollectionComponent {...props} />
+    const { data: collection, loading } = createUseGetter(getCollection)(props.collection ?? config.default_collection)
+    if (loading) return <LoadingIndicator />
+    if (!collection) <div>Unable to load Collection</div>
+    return <CollectionComponent collection={collection} />
 }
 
-Collection.getInitialProps = async (ctx) => {
-    const name = ctx.query.collection
-    const paths = ctx.asPath.split('/')
-
-    const collection = await getCollection(name)
-
-    const values = qs.parse(paths[2].replace(`${name}?`, ''))
-    values['collection'] = collection && collection.data
-
-    return values
+Collection.getInitialProps = (ctx) => {
+    return { collection: ensureString(ctx.query.collection) }
 }
 
 export default Collection

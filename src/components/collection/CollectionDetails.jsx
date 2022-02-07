@@ -33,9 +33,7 @@ const CollectionDetails = (props) => {
                                 </div>
                             </td>
                         </tr>
-                    ) : (
-                        ''
-                    )}
+                    ) : null}
                     <tr>
                         <td className="text-neutral text-left">Market Fee:</td>
                         <td className="text-neutral text-right">{market_fee * 100}%</td>
