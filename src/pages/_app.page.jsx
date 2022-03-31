@@ -1,5 +1,5 @@
 import { Wax } from '@eosdacio/ual-wax'
-import { UALProvider } from 'hive-ual-renderer'
+import { UALProvider } from 'ual-reactjs-renderer'
 import React, { useContext, useEffect } from 'react'
 import 'react-dropdown/style.css'
 import 'regenerator-runtime/runtime'
