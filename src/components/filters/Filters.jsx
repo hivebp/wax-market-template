@@ -48,7 +48,7 @@ const makeOptions = (data) => [
  */
 const createInputChangeHandler = (handler) => (event) => handler(event.target.value)
 /**
- * @type {(handler: (value: string) => void) => (option: Option) => void
+ * @type {(handler: (value: string) => void) => (option: Option) => void}
  */
 const createDropdownSelectHandler = (handler) => (option) => handler(option.value)
 
