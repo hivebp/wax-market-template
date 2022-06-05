@@ -10,11 +10,11 @@ The WAX Market Template is an open source, full market demo application based on
 ## Getting started
 
 -   Set up a webserver and install [Node](https://nodejs.org/en/download/).
--   Get this repository by running `git clone https://github.com/hivebp/wax-market-template.git`
--   Go into the directory: `cd wax-market-template`
+-   Get this repository by running `git clone https://github.com/jamesonsite/www.git`
+-   Go into the directory: `cd www`
 -   Run `yarn install`
 -   Run `yarn build`
--   Assuming everything worked correctly, you can start a development server by executing `yarn dev`. Start the webserver in production by running `node server.js`
+-   Assuming everything worked correctly, you can start a development server by executing `yarn dev`. Start the webserver in production by running `yarn start`
 
 ## Configuring your market
 
@@ -43,4 +43,4 @@ The main Styling options can be found in /tailwind.config.js. Edit this file to 
 
 ## Demo
 
-Visit [waxdummymarket.com](https://waxdummymarket.com)
+Visit [dablabs.io](https://dablabs.io)
