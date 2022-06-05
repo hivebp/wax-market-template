@@ -180,7 +180,7 @@ const Filters = (props) => {
         else query.seller = userName
 
         updateQuerystring(query)
-        window.location.reload(false);
+        window.location.reload(false)
     })
 
     const checkBundles = createInputChangeHandler((value) => {
