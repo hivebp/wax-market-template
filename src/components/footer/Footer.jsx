@@ -114,7 +114,7 @@ const Footer = () => {
                         <LinksList links={companyLinks} />
                     </div>
                 </div>
-            </div>
+            </div><img src="https://c.statcounter.com/12755397/0/d7d4f4c9/1/" alt="Web Analytics" referrerPolicy="no-referrer-when-downgrade" />
         </div>
     )
 }
