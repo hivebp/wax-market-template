@@ -4,7 +4,7 @@ import React from 'react'
  * @type {import('next').NextPage}
  */
 export const TermsOfUsePage = (props) => {
-    return <div></div>
+    return <div>Terms of Use</div>
 }
 
 export default TermsOfUsePage
