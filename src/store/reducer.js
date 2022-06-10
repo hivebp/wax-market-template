@@ -1,7 +1,7 @@
 import { initialState } from './state'
 
 /**
- * @typedef {'START_LOADING' | 'FINISH_LOADING' | 'SET_ASSET' | 'SET_AMOUNT' | 'SET_ACTION' | 'SET_TRIGGERED' | 'SET_SWITCHED_TAB' | 'SET_CALLBACK' | 'SET_COLLECTIONS' | 'SET_COLLECTION_DATA' | 'SET_TEMPLATE_DATA' | 'SET_SCHEMA_DATA' | 'SET_UNBOXED' | 'SET_PACK_DATA'} ActionType
+ * @typedef {'START_LOADING' | 'SET_LISTINGS' | 'FINISH_LOADING' | 'SET_ASSET' | 'SET_AMOUNT' | 'SET_ACTION' | 'SET_TRIGGERED' | 'SET_SWITCHED_TAB' | 'SET_CALLBACK' | 'SET_COLLECTIONS' | 'SET_COLLECTION_DATA' | 'SET_TEMPLATE_DATA' | 'SET_SCHEMA_DATA' | 'SET_UNBOXED' | 'SET_PACK_DATA'} ActionType
  */
 
 /**
@@ -52,6 +52,11 @@ const Reducer = (state = initialState, action) => {
                 ...state,
                 collections: action.payload,
             }
+        case 'SET_LISTINGS':
+                return {
+                    ...state,
+                    listing_data: action.payload,
+                }
         case 'SET_COLLECTION_DATA':
             return {
                 ...state,

@@ -8,7 +8,9 @@ import {
     getSchemas,
     getTemplates,
     loadCollections,
+    getListings
 } from '../api/fetch'
+
 import { queryParams } from '../api/query'
 // import { queryParams } from '../api/query'
 import reducer from './reducer'
@@ -128,6 +130,9 @@ const createResource = (fetcher, guard = Array.isArray) =>
         },
     }))
 
+/** @type {(filters: import("../api/filter").FilterType) => Promise<import('../api/fetch').Listings[]>} */
+const fetchListings = (...args) => getDataPropertyFromResult(getListings(...args), [])
+
 /** @type {(collections: string[]) => Promise<import('../api/fetch').CollectionData[]>} */
 const fetchCollectionsData = (...args) => getDataPropertyFromResult(getCollectionData(...args), [])
 
@@ -143,6 +148,7 @@ const fetchSchemas = (...args) => getDataPropertyFromResult(getSchemas(...args))
 const fetchAssets = async (...args) => getDataPropertyFromResult(getAssets(...args), [])
 
 const useCollectionStore = createResource(loadCollections)
+const useListingStore = createResource(fetchListings)
 const useCollectionDataStore = createResource(fetchCollectionsData)
 const useTemplateStore = createResource(fetchTemplates)
 const useSchemaStore = createResource(fetchSchemas)
@@ -173,6 +179,7 @@ export const useStore = create(() => ({
     packs: usePackStore,
     schemas: useSchemaStore,
     templates: useTemplateStore,
+    listings: useListingStore
 }))
 
 /**

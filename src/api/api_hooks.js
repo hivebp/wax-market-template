@@ -31,6 +31,30 @@ export const useCollectionData = () => {
     }, [collections, load])
     return { data, loading, error }
 }
+/** @param {import('./filter').FilterType=} filter
+
+/**
+ * 🛑 This implementation allows for only one active filter at a time!
+ * @param {import('./filter').FilterType=} filter
+* @returns {QueryHookResult<import('./fetch').Listing[]>} 
+ **/
+export const useListings = (filter = undefined) => {
+    debugger;
+    // const { data: collections } = useCollections()
+    const { load, data, loading, error } = useStore((state) => ({
+        load: state.listings().load,
+        data: state.listings().data,
+        loading: state.listings().state === 'loading',
+        error: state.listings().error,
+    }))
+    // useEffect(() => {
+    //     if (collections.length) return load(collections)
+    // }, [collections, load])
+    useEffect(() => {
+        if (filter) return load(filter)
+    }, [filter, load])
+    return { data, loading, error }
+}
 
 /**
  * 🛑 This implementation allows for only one active filter at a time!
@@ -91,6 +115,7 @@ export const usePacks = () => {
  * @returns {QueryHookResult<import('./fetch').Asset[]>}
  **/
 export const useAssets = (filter = undefined) => {
+    debugger;
     const { load, data, loading, error } = useStore((state) => ({
         load: state.assets().load,
         data: state.assets().data,

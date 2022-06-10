@@ -1,5 +1,6 @@
 import cn from 'classnames'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useMemo, useContext, useEffect, useState } from 'react'
+import { useListings, useCollections } from '../../api/api_hooks'
 import { getListings } from '../../api/fetch'
 import config from '../../config.json'
 import AssetCard from '../assetcard/AssetCard'
@@ -8,7 +9,7 @@ import Page from '../common/layout/Page'
 import Header from '../common/util/Header'
 import ScrollUpIcon from '../common/util/ScrollUpIcon'
 import Filters from '../filters/Filters'
-import { getFilters, getValues } from '../helpers/Helpers'
+import { getFilters, getValues, useQuerystring } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
 import Pagination from '../pagination/Pagination'
@@ -16,24 +17,35 @@ import Pagination from '../pagination/Pagination'
 const Market = (props) => {
     const [state, dispatch] = useContext(Context)
 
-    const [listings, setListings] = useState([])
+    const { data: collections, loading: collectionsLoading } = useCollections()
+    console.log("collections }", collections)
+
+    const [values] = useQuerystring()
     const [page, setPage] = useState(1)
-    const [isLoading, setIsLoading] = useState(false)
+    const filters = useMemo(() => getFilters(values, collections, '', page), [values, collections, page])
 
-    const values = getValues()
+    const { data: listings, loading: listingLoading } = useListings(filters)
+    console.log("const { data: listings, loading: listingLoading }", listings)
+    const isLoading = collectionsLoading || listingLoading
 
+    const pageination = useMemo(() => <Pagination items={listings} page={page} setPage={setPage} />, [listings, page])
+
+    // const [isLoading, setIsLoading] = useState(false)
     const initialized = state.collections !== null && state.collections !== undefined
 
     const [showScrollUpIcon, setShowScrollUpIcon] = useState(false)
 
     const getResult = (result) => {
-        setListings(result)
-        setIsLoading(false)
+        debugger
+        console.log('result', result)
+        // setListings(result)
+        dispatch({ type: 'SET_LISTINGS', payload: result })
+        // setIsLoading(false)
     }
 
     const initListings = async (page) => {
-        setIsLoading(true)
-        getListings(getFilters(values, state.collections, page)).then((result) => getResult(result))
+        // setIsLoading(true)
+        // getListings(getFilters(values, state.collections, page)).then((result) => getResult(result))
     }
 
     useEffect(() => {
@@ -88,6 +100,57 @@ const Market = (props) => {
                     />
                 </div>
                 <div className={cn('w-full sm:2/3 md:w-3/4')}>
+                    {isLoading ? (
+                        <LoadingIndicator />
+                    ) : (
+                        <>
+                            {pageination}
+                            <div
+                                className={cn(
+                                    'relative w-full mb-24',
+                                    'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4',
+                                )}
+                            >
+                                {listings ? listings.map((listing, index) => (
+                                          <AssetCard
+                                              {...props}
+                                              key={index}
+                                              index={index}
+                                              listing={listing}
+                                              assets={listing.assets}
+                                          />
+                                      ))
+                                    : 'nodata'}
+                            </div>
+                            {pageination}
+                        </>
+                    )}
+                </div>
+                {/* <div className={cn('w-full sm:2/3 md:w-3/4')}>
+                    {isLoading ? (
+                        <LoadingIndicator />
+                    ) : (
+                        <div
+                            className={cn(
+                                'relative w-full mb-24',
+                                'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4',
+                            )}
+                        >
+                            {state.listing_data
+                                ? state.listing_data['data'].map((listing, index) => (
+                                      <AssetCard
+                                          {...props}
+                                          key={index}
+                                          index={index}
+                                          listing={listing}
+                                          assets={listing.assets}
+                                      />
+                                  ))
+                                : 'nodata'}
+                        </div>
+                    )}
+                </div> */}
+                {/* <div className={cn('w-full sm:2/3 md:w-3/4')}>
                     <Pagination items={listings && listings.data} page={page} setPage={setPage} />
                     {isLoading ? (
                         <LoadingIndicator />
@@ -112,7 +175,7 @@ const Market = (props) => {
                         </div>
                     )}
                     {isLoading ? '' : <Pagination items={listings && listings.data} page={page} setPage={setPage} />}
-                </div>
+                </div> */}
             </MarketContent>
             {showScrollUpIcon ? <ScrollUpIcon onClick={scrollUp} /> : ''}
         </Page>

@@ -7,6 +7,8 @@ import config from '../../config.json'
 import { createCollectionImageOption, createCollectionOption, useQuerystring } from '../helpers/Helpers'
 import LoadingIndicator from '../loadingindicator/LoadingIndicator'
 import { Context } from '../marketwrapper'
+import { getFilters, getValues } from '../helpers/Helpers'
+import { getListings, getCollectionData } from '../../api/fetch'
 
 const { ipfs } = config
 
@@ -19,11 +21,12 @@ const { ipfs } = config
  * @type {React.FC<{ collection: string }>}
  */
 const CollectionDropdown = React.memo((props) => {
+    const page = 1
+    const [state, dispatch] = useContext(Context)
+
     const [values, updateQuerystring] = useQuerystring()
     const { data: collections } = useCollections()
     const { data: collectionData, loading } = useCollectionData()
-
-    const [, dispatch] = useContext(Context)
 
     const { collection } = props
 
@@ -50,7 +53,7 @@ const CollectionDropdown = React.memo((props) => {
     /**
      * @param {Option | null} option
      */
-    const onSelectCollection = (option) => {
+    const onSelectCollection = async (option) => {
         const query = { ...values }
         const collection = option?.value ?? '*'
 
@@ -60,8 +63,20 @@ const CollectionDropdown = React.memo((props) => {
         delete query.variant
         query.collection = collection
 
+        debugger;
         // @TODO LEGACY
+        let cdata = getCollectionData([collection])
+        console.log("cdata", cdata)
+
         dispatch({ type: 'SET_SELECTED_COLLECTION', payload: collection })
+
+        dispatch({ type: 'SET_COLLECTIONS', payload: [collection] })
+        dispatch({ type: 'SET_COLLECTION_DATA', payload: cdata })
+
+        let filters  = await getFilters(values, [collection], '', page)
+        let results = await getListings(filters)
+
+        dispatch({ type: 'SET_LISTINGS', payload: results })
         updateQuerystring(query)
     }
 
