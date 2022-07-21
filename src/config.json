@@ -1,6 +1,6 @@
 {
     "ipfs": "https://ipfs.hivebp.io/ipfs/",
-    "atomic_api": "https://atomic.hivebp.io",
+    "atomic_api": "https://atomic3.hivebp.io",
     "market_name": "dummymarket1",
     "market_url": "https://waxdummymarket.com",
     "default_collection": "official.wax",
